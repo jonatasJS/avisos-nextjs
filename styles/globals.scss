@@ -2,13 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #282a36;
   font-family: "Inter", "Ubuntu", sans-serif;
 }
 
 html,
 body,
 .__next {
+  background-color: #282a36;
   display: flex;
   justify-content: center;
   align-items: center;
