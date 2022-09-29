@@ -6,7 +6,7 @@ export default function Layout({ children }: {
   children: React.ReactNode;
 }) {
   const route = useRouter();
-
+ 
   return (
     <div style={{
       overflowY: route.pathname === "/" ? "hidden" : "auto",

@@ -7,7 +7,7 @@ import styles from "../../styles/Dashboard.module.scss";
 
 interface Todos {
   title: string;
-  body: string;
+  body: string; 
   _id: string;
 }
 
@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [body, setBody] = useState("");
   const [todos, setTodos] = useState<Todos[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { 
     async function getTodos() {
       const { data } = await api.get("/messanges");
       setTodos(data);

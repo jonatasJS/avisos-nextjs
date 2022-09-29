@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 
 export default function Header() {
-  return (
+  return ( 
     <header className={styles.header}>
         <span style={{
           background: "#ff5f5a"

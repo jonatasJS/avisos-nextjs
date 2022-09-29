@@ -9,7 +9,7 @@ import styles from "../styles/Home.module.scss";
 
 interface Todos {
   title: string;
-  body: string;
+  body: string; 
 }
 
 const Home: NextPage = () => {

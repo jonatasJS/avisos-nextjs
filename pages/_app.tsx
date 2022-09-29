@@ -8,7 +8,7 @@ import "../styles/globals.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
+    <Layout> 
       <link
         href="https://emoji-css.afeld.me/emoji.css"
         rel="stylesheet"
