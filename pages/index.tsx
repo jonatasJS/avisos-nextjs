@@ -1,45 +1,42 @@
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 
+import axios from "axios";
+
 import styles from "../styles/Home.module.scss";
 
+interface Todos {
+  title: string;
+  body: string;
+}
+
 const Home: NextPage = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "Todo 1",
-      body: "<strong>Todo</strong> 1 body<br />Todo 1 body",
-    },
-    {
-      id: 2,
-      title: "Todo 2",
-      body: "Todo 2 body",
-    },
-    {
-      id: 3,
-      title: "Todo 3",
-      body: "<strong>Todo</strong> 3 body<br />Todo 1 body",
-    },
-    {
-      id: 4,
-      title: "Todo 4",
-      body: "Todo 4 body",
-    }
-  ]);
+  const [todos, setTodos] = useState<Todos[]>([]);
   const [todo, setTodo] = useState(0);
 
   useEffect(() => {
+    async function getTodos() {
+      const { data } = await axios.get("http://localhost:4000/messanges");
+      setTodos(data);
+      console.log(data);
+    }
+
+    getTodos();
+  }, []);
+
+  useEffect(() => {
     setInterval(() => setTodo((todo) => (todo + 1) % todos.length), 15000);
-  }, [todos.length]);
+    console.log("todo", todo);
+  }, [todo, todos.length]);
 
   return (
     <main className={styles.main}>
       <div className={styles.title}>
-        <h1>{todos[todo].title}</h1>
+        <h1>{todos[todo]?.title}</h1>
       </div>
       <div
         className={styles.description}
-        dangerouslySetInnerHTML={{ __html: todos[todo].body }} 
+        dangerouslySetInnerHTML={{ __html: todos[todo]?.body.replaceAll("\n", "<br />") }}
       >
         {/* <p>{todos[0].body}</p> */}
       </div>
