@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "../styles/globals.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log("process.env.NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL)
+  
   return (
     <Layout> 
       <link
