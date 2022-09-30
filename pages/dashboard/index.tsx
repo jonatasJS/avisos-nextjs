@@ -30,6 +30,10 @@ export default function Dashboard() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    if (!title || !body) return toast.error("Preencha todos os campos", {
+      theme: "dark",
+    });
+
     try {
       const { data } = await api.post("/messanges", {
         title,
@@ -39,11 +43,12 @@ export default function Dashboard() {
       setTodos([...todos, data]);
       setTitle("");
       setBody("");
-      toast.success("Mensagem criada com sucesso!", {
+      toast.success(`Aviso \"${data.title}\" criada com sucesso!`, {
         theme: "dark",
       });
     } catch (error) {
-      toast.error("Erro ao criar mensagem!", {
+      console.log(error);
+      toast.error("Internal Server Error", {
         theme: "dark",
       });
     }
@@ -51,14 +56,14 @@ export default function Dashboard() {
 
   async function handleDelete(id: string) {
     try {
-      await api.delete(`/messange/${id}`);
+      const { data } = await api.delete(`/messange/${id}`);
 
     setTodos(todos.filter((todo) => todo._id !== id));
-    toast.success("Mensagem deletada com sucesso!", {
+    toast.warn(data.message, {
       theme: "dark",
     });
-    } catch {
-      toast.error("Erro ao deletar mensagem!", {
+    } catch(err) {
+      toast.error("Internal Server Error", {
         theme: "dark",
       });
     }
@@ -85,6 +90,7 @@ export default function Dashboard() {
               value={title}
               tabIndex={0}
               placeholder="Digite o título"
+              autoComplete="off"
             />
             <label htmlFor="username">
               <span data-text="Titulo">Titulo</span>
