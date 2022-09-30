@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 
 import api from "../../services/api";
@@ -117,8 +118,15 @@ export default function Dashboard() {
       {!!todos.length && <div className={styles.avisos}>
         <h1>Avisos</h1>
         <div className={styles.avisosContainer}>
-          {todos.map(({ title, body, _id }) => (
-            <div key={_id} className={styles.avisosItem}>
+          {todos.map(({ title, body, _id }, i) => (
+            <motion.div
+              key={_id}
+              className={styles.avisosItem}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              exit={{ opacity: 0, y: 50 }}
+            >
               <h2
                 dangerouslySetInnerHTML={{
                   __html: title,
@@ -151,7 +159,7 @@ export default function Dashboard() {
                   Excluir
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>}
