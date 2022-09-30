@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     // faz mostrar uma por vez a cada 5 segundos
     const interval = setInterval(() => {
       setTodo((todo) => (todo + 1) % todos.length);
-    }, process.env.NODE_ENV === "development" ? 5000 : 15000);
+    }, process.env.NODE_ENV === "development" ? 15000 : 15000);
     return () => clearInterval(interval);
   }, [todo, todos.length]);
 
