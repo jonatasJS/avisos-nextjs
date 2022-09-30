@@ -1,7 +1,7 @@
 .title {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   margin-top: 10px;
   max-width: 100%;
   display: flex;
@@ -30,7 +30,10 @@
   outline: none;
   overflow-y: auto;
   overflow-x: none;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  line-height: 2em;
+  text-align: justify;
+  gap: 20px;
 
   &:-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -47,5 +50,10 @@
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #44475a;
+  }
+
+  div:first-child {
+    border-right: 2px solid #44475a;
+    padding: 10px;
   }
 }

@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     // faz mostrar uma por vez a cada 5 segundos
     const interval = setInterval(() => {
       setTodo((todo) => (todo + 1) % todos.length);
-    }, 5000);
+    }, process.env.NODE_ENV === "development" ? 5000 : 15000);
     return () => clearInterval(interval);
   }, [todo, todos.length]);
 
@@ -43,6 +43,11 @@ const Home: NextPage = () => {
         </div>
         <div
           className={styles.description}
+          style={{
+            display: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "flex" : "block",
+            flexWrap: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "wrap" : "nowrap",
+            textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "left" : "justify",
+          }}
           dangerouslySetInnerHTML={{
             __html: todos[todo]?.body.replaceAll("\n", "<br />").replaceAll(`
             `, "<br />").replaceAll(`
