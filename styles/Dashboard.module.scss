@@ -32,7 +32,6 @@
 }
 
 .form {
-  
   fieldset:first-child {
     margin-bottom: 20px;
   }
@@ -278,11 +277,10 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   font-family: $base-font-family;
   border-radius: 100px;
   outline: 0;
-  transition: background-color $time $bezier,
-  color $time $bezier,
-  transform $time $bezier;
+  transition: background-color $time $bezier, color $time $bezier,
+    transform $time $bezier;
   user-select: none;
-  
+
   &:focus,
   &:active,
   &:hover {
@@ -292,7 +290,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 
   &[title="Excluir"] {
-    background-color: #282A36;
+    background-color: #282a36;
     color: #ffffff;
     margin-bottom: 5%;
     margin-top: 5%;
@@ -341,6 +339,36 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 }
 
+.searchTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px;
+
+  input {
+    font-family: $base-font-family;
+    border: 0;
+    background: none;
+    padding: 10px;
+    font-size: 24px;
+    outline: 0;
+    width: 50%;
+    tap-highlight-color: rgba(0, 0, 0, 0);
+    touch-callout: none;
+    color: #6eb1ff;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    background-color: rgba(0, 0, 0, 0.2) !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 20px;
+      text-align: center;
+    }
+  }
+}
+
 .avisos {
   height: auto;
   max-height: 100%;
@@ -353,7 +381,8 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   border-top: 1px solid #44475a;
   overflow-y: auto;
   overflow-x: hidden;
-  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.2), inset 0 0 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 20px 0 rgba(0, 0, 0, 0.19);
 
   &:-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

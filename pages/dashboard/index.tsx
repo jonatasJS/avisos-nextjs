@@ -8,7 +8,7 @@ import styles from "../../styles/Dashboard.module.scss";
 
 interface Todos {
   title: string;
-  body: string; 
+  body: string;
   _id: string;
 }
 
@@ -16,8 +16,9 @@ export default function Dashboard() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [todos, setTodos] = useState<Todos[]>([]);
+  const [isShowError, setIsShowError] = useState(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     async function getTodos() {
       const { data } = await api.get("/messanges");
       setTodos(data);
@@ -30,9 +31,10 @@ export default function Dashboard() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!title || !body) return toast.error("Preencha todos os campos", {
-      theme: "dark",
-    });
+    if (!title || !body)
+      return toast.error("Preencha todos os campos", {
+        theme: "dark",
+      });
 
     try {
       const { data } = await api.post("/messanges", {
@@ -58,11 +60,11 @@ export default function Dashboard() {
     try {
       const { data } = await api.delete(`/messange/${id}`);
 
-    setTodos(todos.filter((todo) => todo._id !== id));
-    toast.warn(data.message, {
-      theme: "dark",
-    });
-    } catch(err) {
+      setTodos(todos.filter((todo) => todo._id !== id));
+      toast.warn(data.message, {
+        theme: "dark",
+      });
+    } catch (err) {
       toast.error("Internal Server Error", {
         theme: "dark",
       });
@@ -85,6 +87,7 @@ export default function Dashboard() {
           >
             <input
               type="text"
+              autoFocus={true}
               onChange={(e) => setTitle(e.target.value)}
               id="username"
               value={title}
@@ -121,54 +124,91 @@ export default function Dashboard() {
           </div>
         </form>
       </main>
-      {!!todos.length && <div className={styles.avisos}>
-        <h1>Avisos</h1>
-        <div className={styles.avisosContainer}>
-          {todos.map(({ title, body, _id }, i) => (
-            <motion.div
-              key={_id}
-              className={styles.avisosItem}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              exit={{ opacity: 0, y: 50 }}
-            >
-              <h2
-                dangerouslySetInnerHTML={{
-                  __html: title,
-                }}
-              ></h2>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: body
-                    .replaceAll("\n", "<br />")
-                    .replaceAll(
-                      `
+      {!!todos.length && (
+        <div className={styles.avisos}>
+          <h1>Avisos</h1>
+          <div className={styles.searchTitle}>
+            <input
+              type="text"
+              placeholder="Pesquisar por título"
+              onChange={async (e) => {
+                const { value } = e.target;
+                if (!value || value === "") {
+                  const { data } = await api.get("/messanges");
+                  return setTodos(data);
+                }
+
+                const filtered = todos.filter((todo) => {
+                  return todo.title.toLowerCase().includes(value.toLowerCase());
+                });
+
+                if (!filtered.length) {
+                  const { data } = await api.get("/messanges");
+                  setTodos(data);
+                  setIsShowError(true);
+
+                  setTimeout(() => {
+                    setIsShowError(false);
+                  }, 3000);
+
+                  return !isShowError
+                    ? toast.error("Nenhum aviso encontrado", {
+                        theme: "dark",
+                      })
+                    : null;
+                }
+
+                setTodos(filtered);
+              }}
+            />
+          </div>
+          <div className={styles.avisosContainer}>
+            {todos.map(({ title, body, _id }, i) => (
+              <motion.div
+                key={_id}
+                className={styles.avisosItem}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                exit={{ opacity: 0, y: 50 }}
+              >
+                <h2
+                  dangerouslySetInnerHTML={{
+                    __html: title,
+                  }}
+                ></h2>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: body
+                      .replaceAll("\n", "<br />")
+                      .replaceAll(
+                        `
                   `,
-                      "<br />"
-                    )
-                    .replaceAll(
-                      `
+                        "<br />"
+                      )
+                      .replaceAll(
+                        `
                     
                   `,
-                      "<br />"
-                    ),
-                }}
-              ></p>
+                        "<br />"
+                      ),
+                  }}
+                ></p>
 
-              <div className={styles.avisosItemFooter}>
-                <button
-                  onClick={() => handleDelete(_id)}
-                  className={`${styles.btn} exclude`}
-                  title="Excluir"
-                >
-                  Excluir
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                <div className={styles.avisosItemFooter}>
+                  <button
+                    onClick={() => handleDelete(_id)}
+                    className={`${styles.btn} exclude`}
+                    title="Excluir"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>}
+      )}
     </>
   );
 }
