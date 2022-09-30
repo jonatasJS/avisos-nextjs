@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { NextPage } from "next"
+import type { NextPage } from "next";
 
 import api from "../services/api";
 
@@ -27,7 +27,6 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    // faz mostrar uma por vez a cada 5 segundos
     const interval = setInterval(() => {
       setTodo((todo) => (todo + 1) % todos.length);
     }, process.env.NODE_ENV === "development" ? 15000 : 15000);
