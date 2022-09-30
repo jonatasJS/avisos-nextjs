@@ -39,7 +39,9 @@ const Home: NextPage = () => {
       <Header />
       <main className={styles.main}>
         <div className={styles.title}>
-          <h1>{todos[todo]?.title}</h1>
+          <h1 dangerouslySetInnerHTML={{
+            __html: todos[todo]?.title
+          }}></h1>
         </div>
         <div
           className={styles.description}

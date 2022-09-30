@@ -119,7 +119,11 @@ export default function Dashboard() {
         <div className={styles.avisosContainer}>
           {todos.map(({ title, body, _id }) => (
             <div key={_id} className={styles.avisosItem}>
-              <h2>{title}</h2>
+              <h2
+                dangerouslySetInnerHTML={{
+                  __html: title,
+                }}
+              ></h2>
               <p
                 dangerouslySetInnerHTML={{
                   __html: body
