@@ -141,7 +141,8 @@ export default function Dashboard() {
               <div className={styles.avisosItemFooter}>
                 <button
                   onClick={() => handleDelete(_id)}
-                  className={styles.btn}
+                  className={`${styles.btn} exclude`}
+                  title="Excluir"
                 >
                   Excluir
                 </button>
