@@ -51,6 +51,7 @@ const Home: NextPage = () => {
             textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "left" : "justify",
             justifyContent: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "center" : "",
             alignItems: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "start" : "",
+            fontSize: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "1.5rem" : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
             __html: todos[todo]?.body.replaceAll("\n", "<br />").replaceAll(`
