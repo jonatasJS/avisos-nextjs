@@ -48,7 +48,7 @@ const Home: NextPage = () => {
             flexWrap: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "wrap" : "nowrap",
             textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "left" : "justify",
             justifyContent: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "center" : "",
-            alignItems: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "center" : "",
+            alignItems: todos[todo]?.title.toLocaleLowerCase().includes("ramais") ? "start" : "",
           }}
           dangerouslySetInnerHTML={{
             __html: todos[todo]?.body.replaceAll("\n", "<br />").replaceAll(`
