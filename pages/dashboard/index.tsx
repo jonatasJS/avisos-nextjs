@@ -18,11 +18,10 @@ interface Todos {
 }
 
 export default function Dashboard() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
   const [todos, setTodos] = useState<Todos[]>([]);
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function getTodos() {
@@ -60,8 +59,6 @@ export default function Dashboard() {
           });
 
           setTodos([...todos, dataApi]);
-          setTitle("");
-          setBody("");
           toastContainer(
             `Aviso \"${dataApi.title}\" criada com sucesso!`,
             "success"
@@ -129,6 +126,17 @@ export default function Dashboard() {
     setTodos(filtered);
   }
 
+  async function handleRefresh() {
+    try {
+      const { data } = await api.get("/messanges");
+      setTodos(data);
+      searchRef.current && (searchRef.current.value = "");
+      toastContainer("Avisos atualizados com sucesso", "success");
+    } catch (err) {
+      toastContainer("Internal Server Error", "error");
+    }
+  }
+
   return (
     <>
       <header className={styles.header}>
@@ -170,7 +178,12 @@ export default function Dashboard() {
               type="text"
               placeholder="Pesquisar por título"
               onChange={handleSearch}
+              ref={searchRef}
             />
+            <button
+              className={styles.btn}
+              onClick={handleRefresh}
+            >Atualizar</button>
           </div>
           <div className={styles.avisosContainer}>
             {todos.map(({ title, body, _id }, i) => (

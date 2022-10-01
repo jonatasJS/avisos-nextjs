@@ -290,8 +290,6 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     transform $time $bezier;
   user-select: none;
 
-  &:focus,
-  &:active,
   &:hover {
     background-color: #6c6e80;
     color: white;
@@ -304,8 +302,6 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     margin-bottom: 5%;
     margin-top: 5%;
 
-    &:focus,
-    &:active,
     &:hover {
       background-color: #6c6e80;
       color: white;
@@ -352,6 +348,8 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
   margin-top: 30px;
 
@@ -363,8 +361,6 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     font-size: 24px;
     outline: 0;
     width: 50%;
-    tap-highlight-color: rgba(0, 0, 0, 0);
-    touch-callout: none;
     color: #6eb1ff;
     text-align: center;
     border-radius: 10px 10px 0 0;
