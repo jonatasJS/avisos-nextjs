@@ -114,4 +114,12 @@ const Home: NextPage = () => {
   );
 };
 
+export const getStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: true,
+    revalidate: 60,
+  };
+};
+
 export default Home;
