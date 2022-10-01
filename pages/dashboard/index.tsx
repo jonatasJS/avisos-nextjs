@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
@@ -28,7 +28,6 @@ export default function Dashboard() {
     async function getTodos() {
       const { data } = await api.get("/messanges");
       setTodos(data);
-      console.log(data);
     }
 
     getTodos();
@@ -60,7 +59,7 @@ export default function Dashboard() {
         title: Yup.string().required("O título é obrigatório"),
         body: Yup.string().required("A descrição é obrigatória"),
       });
-      
+
       await schema.validate(data, {
         abortEarly: false,
       });
@@ -86,10 +85,13 @@ export default function Dashboard() {
         });
 
         formRef.current?.setErrors(errorMessages);
-        
-        toast.error(error.inner.length > 1 ? "Preenccha todos os campos" : error.message, {
-          theme: "dark",
-        });
+
+        toast.error(
+          error.inner.length > 1 ? "Preenccha todos os campos" : error.message,
+          {
+            theme: "dark",
+          }
+        );
       }
     }
   }
@@ -107,6 +109,36 @@ export default function Dashboard() {
         theme: "dark",
       });
     }
+  }
+
+  async function handleSearch(e: any) {
+    const { value } = e.target;
+    if (!value || value === "") {
+      const { data } = await api.get("/messanges");
+      return setTodos(data);
+    }
+
+    const filtered = todos.filter((todo) => {
+      return todo.title.toLowerCase().includes(value.toLowerCase());
+    });
+
+    if (!filtered.length) {
+      const { data } = await api.get("/messanges");
+      setTodos(data);
+      setIsShowError(true);
+
+      setTimeout(() => {
+        setIsShowError(false);
+      }, 3000);
+
+      return !isShowError
+        ? toast.error("Nenhum aviso encontrado", {
+            theme: "dark",
+          })
+        : null;
+    }
+
+    setTodos(filtered);
   }
 
   return (
@@ -143,35 +175,7 @@ export default function Dashboard() {
             <input
               type="text"
               placeholder="Pesquisar por título"
-              onChange={async (e) => {
-                const { value } = e.target;
-                if (!value || value === "") {
-                  const { data } = await api.get("/messanges");
-                  return setTodos(data);
-                }
-
-                const filtered = todos.filter((todo) => {
-                  return todo.title.toLowerCase().includes(value.toLowerCase());
-                });
-
-                if (!filtered.length) {
-                  const { data } = await api.get("/messanges");
-                  setTodos(data);
-                  setIsShowError(true);
-
-                  setTimeout(() => {
-                    setIsShowError(false);
-                  }, 3000);
-
-                  return !isShowError
-                    ? toast.error("Nenhum aviso encontrado", {
-                        theme: "dark",
-                      })
-                    : null;
-                }
-
-                setTodos(filtered);
-              }}
+              onChange={handleSearch}
             />
           </div>
           <div className={styles.avisosContainer}>
