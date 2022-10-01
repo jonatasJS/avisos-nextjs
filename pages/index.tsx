@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { motion } from "framer-motion";
@@ -38,13 +39,15 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Home</title>
+      </Head>
       <Header />
       <motion.main
         className={styles.main}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.4 }}
-
       >
         <motion.div
           key={todos[todo]?.title}

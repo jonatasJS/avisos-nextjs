@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
@@ -49,10 +50,7 @@ export default function Dashboard() {
         .validate(data, {
           abortEarly: false,
         })
-        .then(async ({
-          title,
-          body,
-        }) => {
+        .then(async ({ title, body }) => {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
@@ -66,7 +64,7 @@ export default function Dashboard() {
           reset();
 
           formRef.current?.setErrors({});
-        })
+        });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errorMessages: { [key: string]: string } = {};
@@ -139,6 +137,9 @@ export default function Dashboard() {
 
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
       <header className={styles.header}>
         <h1>Cadastrar novo aviso</h1>
       </header>
@@ -180,10 +181,9 @@ export default function Dashboard() {
               onChange={handleSearch}
               ref={searchRef}
             />
-            <button
-              className={styles.btn}
-              onClick={handleRefresh}
-            >Atualizar</button>
+            <button className={styles.btn} onClick={handleRefresh}>
+              Atualizar
+            </button>
           </div>
           <div className={styles.avisosContainer}>
             {todos.map(({ title, body, _id }, i) => (
