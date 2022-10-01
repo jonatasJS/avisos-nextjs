@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import * as Yup from "yup";
+import * as Yup from "yup"; 
 import api from "../../services/api";
 
 import styles from "../../styles/Dashboard.module.scss";
