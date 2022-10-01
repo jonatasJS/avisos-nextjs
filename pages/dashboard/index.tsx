@@ -46,20 +46,30 @@ export default function Dashboard() {
         body: Yup.string().required("A descrição é obrigatória"),
       });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+      await schema
+        .validate(data, {
+          abortEarly: false,
+        })
+        .then(async ({
+          title,
+          body,
+        }) => {
+          const { data: dataApi } = await api.post("/messanges", {
+            title,
+            body,
+          });
 
-      const { data: dataApi } = await api.post("/messanges", {
-        title,
-        body,
-      });
+          setTodos([...todos, dataApi]);
+          setTitle("");
+          setBody("");
+          toastContainer(
+            `Aviso \"${dataApi.title}\" criada com sucesso!`,
+            "success"
+          );
+          reset();
 
-      setTodos([...todos, dataApi]);
-      setTitle("");
-      setBody("");
-      toastContainer(`Aviso \"${dataApi.title}\" criada com sucesso!`, 'success');
-      reset();
+          formRef.current?.setErrors({});
+        })
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errorMessages: { [key: string]: string } = {};
