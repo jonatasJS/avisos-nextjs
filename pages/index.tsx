@@ -114,7 +114,7 @@ const Home: NextPage = () => {
   );
 };
 
-export const getStaticPaths = () => {
+export const getStaticProps = () => {
   return {
     paths: [],
     fallback: true,
