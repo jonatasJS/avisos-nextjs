@@ -8,7 +8,7 @@ export default function Header() {
         <motion.span
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0 }}
+          transition={{ duration: 0.3, delay: 0, bounce: 1 }}
           exit={{ opacity: 0, y: -100 }}
 
           style={{
@@ -23,7 +23,7 @@ export default function Header() {
         <motion.span
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.2, bounce: 1 }}
           exit={{ opacity: 0, y: -100 }}
 
           style={{
@@ -38,7 +38,7 @@ export default function Header() {
         <motion.span
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
+          transition={{ duration: 0.3, delay: 0.3, bounce: 1 }}
           exit={{ opacity: 0, y: -100 }}
 
           style={{

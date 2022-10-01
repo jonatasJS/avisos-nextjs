@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { Form } from "@unform/web";
+import * as Yup from "yup";
 
 import api from "../../services/api";
 
 import styles from "../../styles/Dashboard.module.scss";
+import { FormHandles } from "@unform/core";
+import Input from "../../components/FormComponents/Input";
+import TextArea from "../../components/FormComponents/TextArea";
 
 interface Todos {
   title: string;
@@ -17,6 +22,7 @@ export default function Dashboard() {
   const [body, setBody] = useState("");
   const [todos, setTodos] = useState<Todos[]>([]);
   const [isShowError, setIsShowError] = useState(false);
+  const formRef = useRef<FormHandles>(null);
 
   useEffect(() => {
     async function getTodos() {
@@ -28,31 +34,63 @@ export default function Dashboard() {
     getTodos();
   }, []);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (!title || !body)
-      return toast.error("Preencha todos os campos", {
-        theme: "dark",
-      });
+  async function handleSubmit(
+    data: {
+      title: string;
+      body: string;
+    },
+    { reset }: { reset: () => void }
+  ) {
+    // if (!title || !body) {
+    //   formRef.current?.setErrors({
+    //     title: "Title é obrigatório",
+    //     body: "A descrição é obrigatória",
+    //   });
+    //   setIsShowError(true);
+    //   setTimeout(() => {
+    //     setIsShowError(false);
+    //   }, 3000);
+    //   return toast.error("Preencha todos os campos", {
+    //     theme: "dark",
+    //   });
+    // }
 
     try {
-      const { data } = await api.post("/messanges", {
+      const schema = Yup.object().shape({
+        title: Yup.string().required("O título é obrigatório"),
+        body: Yup.string().required("A descrição é obrigatória"),
+      });
+      
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      const { data: dataApi } = await api.post("/messanges", {
         title,
         body,
       });
 
-      setTodos([...todos, data]);
+      setTodos([...todos, dataApi]);
       setTitle("");
       setBody("");
-      toast.success(`Aviso \"${data.title}\" criada com sucesso!`, {
+      toast.success(`Aviso \"${dataApi.title}\" criada com sucesso!`, {
         theme: "dark",
       });
+      reset();
     } catch (error) {
-      console.log(error);
-      toast.error("Internal Server Error", {
-        theme: "dark",
-      });
+      if (error instanceof Yup.ValidationError) {
+        const errorMessages: { [key: string]: string } = {};
+
+        error.inner.forEach((err) => {
+          errorMessages[err.path || 0] = err.message;
+        });
+
+        formRef.current?.setErrors(errorMessages);
+        
+        toast.error(error.inner.length > 1 ? "Preenccha todos os campos" : error.message, {
+          theme: "dark",
+        });
+      }
     }
   }
 
@@ -77,52 +115,26 @@ export default function Dashboard() {
         <h1>Cadastrar novo aviso</h1>
       </header>
       <main className={styles.main}>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <fieldset
-            className={`
-              ${styles.formFieldset}
-              ${styles.uiInput}
-              ${styles.__first}
-            `}
-          >
-            <input
-              type="text"
-              autoFocus={true}
-              onChange={(e) => setTitle(e.target.value)}
-              id="username"
-              value={title}
-              tabIndex={0}
-              placeholder="Digite o título"
-              autoComplete="off"
-            />
-            <label htmlFor="username">
-              <span data-text="Titulo">Titulo</span>
-            </label>
-          </fieldset>
+        <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
+          <Input
+            styles={styles}
+            name="title"
+            label="Título"
+            placeholder="Título do aviso"
+            type="text"
+          />
 
-          <fieldset
-            className={`
-              ${styles.formFieldset}
-              ${styles.uiInput}
-              ${styles.__second}
-            `}
-          >
-            <textarea
-              id="email"
-              tabIndex={0}
-              onChange={(e) => setBody(e.target.value)}
-              value={body}
-              placeholder="Digite a descrição"
-            />
-            <label htmlFor="email">
-              <span data-text="Descrição">Descrição</span>
-            </label>
-          </fieldset>
+          <TextArea
+            styles={styles}
+            name="body"
+            label="Descrição"
+            placeholder="Descrição do aviso"
+          />
 
           <div className={styles.formFooter}>
             <button className={styles.btn}>Cadastrar</button>
           </div>
-        </form>
+        </Form>
       </main>
       {!!todos.length && (
         <div className={styles.avisos}>

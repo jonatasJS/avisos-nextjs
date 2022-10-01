@@ -176,11 +176,9 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 
   input:focus,
-  input.error,
   input:invalid,
   input.filled,
   textarea:focus,
-  textarea.error,
   textarea:invalid,
   textarea.filled {
     & + label {
@@ -241,15 +239,26 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     }
   }
 
-  input.error,
+  input[class="error"],
   input:invalid,
-  textarea.error,
+  textarea[class="error"],
   textarea:invalid {
     color: #e66161;
+
+    &::placeholder {
+      color: #e66161;
+      font-weight: bold;
+    }
 
     & + label {
       &::after {
         background-color: #e66161;
+        font-weight: bold;
+      }
+
+      span {
+        font-weight: bold;
+        color: #e66161;
       }
 
       span::after {
