@@ -10,7 +10,7 @@ import styles from "../../styles/Dashboard.module.scss";
 import { FormHandles } from "@unform/core";
 import Input from "../../components/FormComponents/Input";
 import TextArea from "../../components/FormComponents/TextArea";
-import { toastSuccess } from "../../services/toast";
+import toastContainer from "../../services/toastContainer";
 
 interface Todos {
   title: string;
@@ -73,7 +73,7 @@ export default function Dashboard() {
       setTodos([...todos, dataApi]);
       setTitle("");
       setBody("");
-      toastSuccess(`Aviso \"${dataApi.title}\" criada com sucesso!`, 'success');
+      toastContainer(`Aviso \"${dataApi.title}\" criada com sucesso!`, 'success');
       reset();
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -85,7 +85,7 @@ export default function Dashboard() {
 
         formRef.current?.setErrors(errorMessages);
 
-        toastSuccess(
+        toastContainer(
           error.inner.length > 1 ? "Preenccha todos os campos" : error.message,
           "error"
         );
@@ -102,7 +102,7 @@ export default function Dashboard() {
         theme: "dark",
       });
     } catch (err) {
-      toastSuccess("Internal Server Error", "error");
+      toastContainer("Internal Server Error", "error");
     }
   }
 
@@ -127,7 +127,7 @@ export default function Dashboard() {
       }, 3000);
 
       return !isShowError
-        ? toastSuccess("Nenhum aviso encontrado", "error")
+        ? toastContainer("Nenhum aviso encontrado", "error")
         : null;
     }
 
