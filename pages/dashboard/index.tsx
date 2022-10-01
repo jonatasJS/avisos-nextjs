@@ -40,20 +40,6 @@ export default function Dashboard() {
     },
     { reset }: { reset: () => void }
   ) {
-    // if (!title || !body) {
-    //   formRef.current?.setErrors({
-    //     title: "Title é obrigatório",
-    //     body: "A descrição é obrigatória",
-    //   });
-    //   setIsShowError(true);
-    //   setTimeout(() => {
-    //     setIsShowError(false);
-    //   }, 3000);
-    //   return toast.error("Preencha todos os campos", {
-    //     theme: "dark",
-    //   });
-    // }
-
     try {
       const schema = Yup.object().shape({
         title: Yup.string().required("O título é obrigatório"),
@@ -155,9 +141,15 @@ export default function Dashboard() {
             placeholder="Descrição do aviso"
           />
 
-          <div className={styles.formFooter}>
+          <motion.div
+            className={styles.formFooter}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            exit={{ opacity: 0 }}
+          >
             <button className={styles.btn}>Cadastrar</button>
-          </div>
+          </motion.div>
         </Form>
       </main>
       {!!todos.length && (
