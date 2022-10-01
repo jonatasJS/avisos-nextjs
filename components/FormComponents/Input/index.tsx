@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useField } from "@unform/core";
+import { motion } from "framer-motion";
 
 interface Inputrops {
   name: string;
@@ -28,10 +29,12 @@ export default function Input({
   }, []);
 
   return (
-    <fieldset
-      className={`${styles.uiInput} ${styles.__first} `}
-    >
-      <input
+    <fieldset className={`${styles.uiInput} ${styles.__first} `}>
+      <motion.input
+        initial={{ opacity: 0, x: -200 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, x: -200 }}
         className={error ? "error" : ""}
         type="text"
         ref={inputRef}
@@ -39,15 +42,19 @@ export default function Input({
         autoFocus={true}
         id="username"
         tabIndex={0}
-        placeholder= {placeholder}
+        placeholder={placeholder}
         autoComplete="off"
         {...rest}
       />
-      <label htmlFor="username">
-        <span
-          data-text={label}
-        >{label}</span>
-      </label>
+      <motion.label
+        htmlFor="username"
+        initial={{ opacity: 0, x: -200 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, x: -200 }}
+      >
+        <span data-text={label}>{label}</span>
+      </motion.label>
     </fieldset>
   );
 }

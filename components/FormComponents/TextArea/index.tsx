@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useField } from "@unform/core";
+import { motion } from "framer-motion";
 
 interface Inputrops {
   name: string;
@@ -34,7 +35,11 @@ export default function TextArea({
               ${styles.__second}
             `}
     >
-      <textarea
+      <motion.textarea
+        initial={{ opacity: 0, x: 200 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, x: 200 }}
         id="email"
         ref={inputRef}
         className={error ? "error" : ""}
@@ -43,9 +48,15 @@ export default function TextArea({
         placeholder={placeholder}
         {...rest}
       />
-      <label htmlFor="email">
+      <motion.label
+        htmlFor="email"
+        initial={{ opacity: 0, x: 200 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, x: 200 }}
+      >
         <span data-text={label}>{label}</span>
-      </label>
+      </motion.label>
     </fieldset>
   );
 }
