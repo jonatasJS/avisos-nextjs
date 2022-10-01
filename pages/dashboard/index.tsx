@@ -1,4 +1,4 @@
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
@@ -10,6 +10,7 @@ import styles from "../../styles/Dashboard.module.scss";
 import { FormHandles } from "@unform/core";
 import Input from "../../components/FormComponents/Input";
 import TextArea from "../../components/FormComponents/TextArea";
+import { toastSuccess } from "../../services/toast";
 
 interface Todos {
   title: string;
@@ -72,9 +73,7 @@ export default function Dashboard() {
       setTodos([...todos, dataApi]);
       setTitle("");
       setBody("");
-      toast.success(`Aviso \"${dataApi.title}\" criada com sucesso!`, {
-        theme: "dark",
-      });
+      toastSuccess(`Aviso \"${dataApi.title}\" criada com sucesso!`, 'success');
       reset();
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -86,11 +85,9 @@ export default function Dashboard() {
 
         formRef.current?.setErrors(errorMessages);
 
-        toast.error(
+        toastSuccess(
           error.inner.length > 1 ? "Preenccha todos os campos" : error.message,
-          {
-            theme: "dark",
-          }
+          "error"
         );
       }
     }
@@ -105,9 +102,7 @@ export default function Dashboard() {
         theme: "dark",
       });
     } catch (err) {
-      toast.error("Internal Server Error", {
-        theme: "dark",
-      });
+      toastSuccess("Internal Server Error", "error");
     }
   }
 
@@ -132,9 +127,7 @@ export default function Dashboard() {
       }, 3000);
 
       return !isShowError
-        ? toast.error("Nenhum aviso encontrado", {
-            theme: "dark",
-          })
+        ? toastSuccess("Nenhum aviso encontrado", "error")
         : null;
     }
 
