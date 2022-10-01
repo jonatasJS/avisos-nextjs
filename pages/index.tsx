@@ -21,7 +21,6 @@ const Home: NextPage = () => {
     async function getTodos() {
       const { data } = await api.get("/messanges");
       setTodos(data);
-      console.log(data);
     }
 
     getTodos();
