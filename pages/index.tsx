@@ -117,12 +117,4 @@ const Home: NextPage = () => {
   );
 };
 
-export const getStaticProps = () => {
-  return {
-    paths: [],
-    fallback: true,
-    revalidate: 60,
-  };
-};
-
 export default Home;
