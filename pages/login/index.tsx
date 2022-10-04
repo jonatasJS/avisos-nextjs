@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import Router from "next/router";
-import { io } from "socket.io-client";
+import { socket } from "../_app";
 
 import users from "../../data/database.json";
 
@@ -9,14 +9,8 @@ import toastContainer from "../../services/toastContainer";
 
 import Logo from "../../components/Logo";
 
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
-  transports: ["websocket"],
-});
-
 socket.on("connect", () => {
-  console.log("Connected to socket.io");
-  console.log(socket.id);
-  console.log(process.env.NEXT_PUBLIC_API_URL);
+  console.clear();
 });
 
 export default function Home() {

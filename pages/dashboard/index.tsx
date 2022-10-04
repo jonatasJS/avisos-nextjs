@@ -6,7 +6,7 @@ import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import { FiLogOut } from "react-icons/fi";
 import * as Yup from "yup";
-import { io } from "socket.io-client";
+import { socket } from "../_app";
 
 import users from "../../data/database.json";
 
@@ -23,10 +23,6 @@ interface Todos {
   body: string;
   _id: string;
 }
-
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
-  transports: ["websocket"],
-});
 
 socket.on("addNewTodo", (data: Todos) => {
   toastContainer(
@@ -50,9 +46,7 @@ socket.on("login", (data: Todos) => {
 });
 
 socket.on("connect", () => {
-  console.log("Connected to socket.io");
-  console.log(socket.id);
-  console.log(process.env.NEXT_PUBLIC_API_URL);
+  console.clear();
 });
 
 async function getTodos(setTodos: any) {
@@ -68,13 +62,13 @@ export default function Dashboard() {
   
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
-    console.log(data);
+    console.clear();
     getTodos(setTodos);
   });
 
   // qual o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
-    console.log(data);
+    console.clear();
     getTodos(setTodos);
   });
 
@@ -94,7 +88,7 @@ export default function Dashboard() {
 
   socket.on("newTodo", (todo: Todos) => {
     setTodos((oldTodos) => [...oldTodos, todo]);
-    console.log(todo);
+    console.clear();
   });
 
   useEffect(() => {
