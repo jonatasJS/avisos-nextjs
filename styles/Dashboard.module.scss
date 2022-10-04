@@ -427,6 +427,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .avisosItem {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
@@ -482,6 +483,53 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
   button {
     position: absolute;
-    bottom: 0;
+    bottom: 45px;
   }
 }
+
+.createdBy {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  bottom: 30px;
+  left: 5px;
+  gap: 10px;
+
+  span {
+    margin-left: 5px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: transparent;
+    text-align: center;
+    margin-top: 5%;
+    font-weight: bold;
+  }
+}
+
+.createdAt {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  gap: 10px;
+
+  span {
+    margin-left: 5px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: transparent;
+    text-align: center;
+    margin-top: 5%;
+    font-weight: bold;
+  }
+}
+

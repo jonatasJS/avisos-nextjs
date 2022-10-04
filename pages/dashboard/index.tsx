@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import { FiLogOut } from "react-icons/fi";
+import moment from "moment";
+import { FiClock, FiLogOut, FiUser } from "react-icons/fi";
 import * as Yup from "yup";
 import { socket } from "../_app";
 
@@ -21,28 +22,21 @@ import Logo from "../../components/Logo";
 interface Todos {
   title: string;
   body: string;
+  createdBy: string;
+  createdAt: string;
   _id: string;
 }
 
 socket.on("addNewTodo", (data: Todos) => {
-  toastContainer(
-    `Aviso criado com sucesso!`,
-    "success"
-  );
+  toastContainer(`Aviso criado com sucesso!`, "success");
 });
 
 socket.on("deleteTodo", (data: Todos) => {
-  toastContainer(
-    `Aviso deletado com sucesso!`,
-    "warning"
-  );
+  toastContainer(`Aviso deletado com sucesso!`, "warning");
 });
 
 socket.on("login", (data: Todos) => {
-  toastContainer(
-    `${data} logado!`,
-    "success"
-  );
+  toastContainer(`${data} logado!`, "success");
 });
 
 socket.on("connect", () => {
@@ -59,7 +53,7 @@ export default function Dashboard() {
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  
+
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
     console.clear();
@@ -130,6 +124,7 @@ export default function Dashboard() {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
+            createdBy: user.name,
           });
 
           setTodos([...todos, dataApi]);
@@ -304,7 +299,7 @@ export default function Dashboard() {
             </button>
           </div>
           <div className={styles.avisosContainer}>
-            {todos.map(({ title, body, _id }, i) => (
+            {todos.map(({ title, body, createdBy, createdAt, _id }, i) => (
               <motion.div
                 key={_id}
                 className={styles.avisosItem}
@@ -312,6 +307,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 exit={{ opacity: 0, y: 50 }}
+                title={!!createdBy ? `Criado por: ${createdBy}` : ""}
               >
                 <h2
                   dangerouslySetInnerHTML={{
@@ -336,8 +332,28 @@ export default function Dashboard() {
                   }}
                 ></p>
 
+                {createdBy && (
+                  <>
+                    <div className={styles.createdBy}>
+                      <FiUser size={20} color="#fff" />
+                      <span>{createdBy}</span>
+                    </div>
+                    <div className={styles.createdAt}>
+                      <FiClock
+                        size={20}
+                        color="#fff"
+                        onClick={() => handleDelete(_id)}
+                      />
+                      <span>{moment(createdAt).format("DD/MM/YYYY hh:mm:yy")}</span>
+                    </div>
+                  </>
+                )}
+
                 <div className={styles.avisosItemFooter}>
                   <button
+                  style={{
+                    bottom: createdBy ? "45px !important" : "0",
+                  }}
                     onClick={() => handleDelete(_id)}
                     className={`${styles.btn} exclude`}
                     title="Excluir"
