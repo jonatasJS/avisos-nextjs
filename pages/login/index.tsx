@@ -55,6 +55,7 @@ export default function Home() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            marginTop: "-100px",
           }}
         >
           <Logo />
