@@ -24,7 +24,7 @@ interface Todos {
   _id: string;
 }
 
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/", {
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
   transports: ["websocket"],
 });
 
@@ -51,6 +51,8 @@ socket.on("login", (data: Todos) => {
 
 socket.on("connect", () => {
   console.log("Connected to socket.io");
+  console.log(socket.id);
+  console.log(process.env.NEXT_PUBLIC_API_URL);
 });
 
 async function getTodos(setTodos: any) {
