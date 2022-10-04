@@ -1,16 +1,21 @@
-import Head from "next/head";
+import Router from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import * as Yup from "yup"; 
+import { FiLogOut } from "react-icons/fi";
+import * as Yup from "yup";
+
+import users from "../../data/database.json";
+
 import api from "../../services/api";
 
 import styles from "../../styles/Dashboard.module.scss";
 import Input from "../../components/FormComponents/Input";
 import TextArea from "../../components/FormComponents/TextArea";
 import toastContainer from "../../services/toastContainer";
+import Logo from "../../components/Logo";
 
 interface Todos {
   title: string;
@@ -23,6 +28,20 @@ export default function Dashboard() {
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    // percorrer o array de usuários e verificar se o usuário está cadastrado no localStorage (se o usuário está logado) e se o usuário é admin
+    const userIsAdmin = users.find(
+      (user) => user.username === user.username && user.isAdmin === true
+    );
+
+    // se o usuário não estiver logado, redirecionar para a página de login
+    if (!user) {
+      Router.push("/login");
+    }
+  }, []);
 
   useEffect(() => {
     async function getTodos() {
@@ -41,6 +60,17 @@ export default function Dashboard() {
     { reset }: { reset: () => void }
   ) {
     try {
+      // veririca se o usuario é admin, se não for ele não pode criar um novo todo
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userIsAdmin = users.find(
+        (data) => data.username === user.username && data.isAdmin === true
+      );
+
+      if (!userIsAdmin) {
+        toastContainer("Você não tem permissão para criar um novo todo", "error");
+        return;
+      }
+
       const schema = Yup.object().shape({
         title: Yup.string().required("O título é obrigatório"),
         body: Yup.string().required("A descrição é obrigatória"),
@@ -85,6 +115,17 @@ export default function Dashboard() {
 
   async function handleDelete(id: string) {
     try {
+      // veririca se o usuario é admin, se não for ele não pode deletar um todo
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userIsAdmin = users.find(
+        (data) => data.username === user.username && data.isAdmin === true
+      );
+
+      if (!userIsAdmin) {
+        toastContainer("Você não tem permissão para deletar um todo", "error");
+        return;
+      }
+
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
@@ -137,9 +178,29 @@ export default function Dashboard() {
 
   return (
     <>
-      <Head>
-        <title>Dashboard</title>
-      </Head>
+      <button
+      style={{
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        background: "transparent",
+        border: "none",
+        cursor: "pointer",
+        outline: "none",
+      }}
+      onClick={() => {
+        // remove o usuário do localStorage
+        localStorage.removeItem("user");
+        Router.push("/login");
+        return toastContainer("Logout realizado com sucesso", "success");
+      }}
+        className={styles.btn}
+      >
+        <FiLogOut size={20} color="#fff" />
+      </button>
+      <div>
+        <Logo />
+      </div>
       <header className={styles.header}>
         <h1>Cadastrar novo aviso</h1>
       </header>

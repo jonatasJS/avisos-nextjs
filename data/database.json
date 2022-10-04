@@ -1,0 +1,25 @@
+[
+  {
+    "name": "JOSEANE RIBEIRO CASTRO",
+    "username": "joseane",
+    "pass": "1234",
+    "isAdmin": true
+  },
+  {
+    "name": "JEANE CRISTINY CASTRO CARVALHO",
+    "username": "jeane",
+    "pass": "1234",
+    "isAdmin": true
+  },
+  {
+    "name": "JONATAS SOUZA SOARES",
+    "username": "admin",
+    "pass": "admin",
+    "isAdmin": true
+  },
+  {
+    "name": "JOHN DOE",
+    "username": "john",
+    "pass": "1234"
+  }
+]
