@@ -12,10 +12,7 @@ export default function Home() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit(data: {
-    username: string;
-    pass: string
-  }) {
+  async function handleSubmit(data: { username: string; pass: string }) {
     const { username, pass } = data;
 
     const user = users.find(
@@ -33,7 +30,6 @@ export default function Home() {
     }
   }
 
-  
   return (
     <div className="min-h-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Head>
@@ -41,7 +37,14 @@ export default function Home() {
       </Head>
 
       <div className="max-w-sm w-full space-y-8">
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
           <Logo />
           <h2 className="mt-0px text-center text-2xl font-extrabold text-gray-300">
             Faça login em sua conta

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { motion } from "framer-motion";
+import { io } from "socket.io-client";
 
 import api from "../services/api";
 
@@ -11,20 +12,40 @@ import styles from "../styles/Home.module.scss";
 
 interface Todos {
   title: string;
-  body: string; 
+  body: string;
+}
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/", {
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("Connected to socket.io");
+});
+
+async function getTodos(setTodos: any) {
+  const { data } = await api.get("/messanges");
+  setTodos(data);
 }
 
 const Home: NextPage = () => {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [todo, setTodo] = useState(0);
 
-  useEffect(() => {
-    async function getTodos() {
-      const { data } = await api.get("/messanges");
-      setTodos(data);
-    }
+  socket.on("addNewTodo", (data: Todos) => {
+    console.log(data);
 
-    getTodos();
+    getTodos(setTodos);
+  });
+
+  socket.on("deleteTodo", (data: Todos) => {
+    console.log(data);
+
+    getTodos(setTodos);
+  });
+
+  useEffect(() => {
+    getTodos(setTodos);
   }, []);
 
   useEffect(() => {

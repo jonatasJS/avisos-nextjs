@@ -6,6 +6,7 @@ import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import { FiLogOut } from "react-icons/fi";
 import * as Yup from "yup";
+import { io } from "socket.io-client";
 
 import users from "../../data/database.json";
 
@@ -23,33 +24,72 @@ interface Todos {
   _id: string;
 }
 
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/", {
+  transports: ["websocket"],
+});
+
+socket.on("addNewTodo", (data: Todos) => {
+  toastContainer(
+    `Aviso criado com sucesso!`,
+    "success"
+  );
+});
+
+socket.on("deleteTodo", (data: Todos) => {
+  toastContainer(
+    `Aviso deletado com sucesso!`,
+    "warning"
+  );
+});
+
+socket.on("connect", () => {
+  console.log("Connected to socket.io");
+});
+
+async function getTodos(setTodos: any) {
+  const { data } = await api.get("/messanges");
+  setTodos(data);
+}
+
 export default function Dashboard() {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  
+  // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
+  socket.on("addNewTodo", (data: Todos) => {
+    console.log(data);
+    getTodos(setTodos);
+  });
+
+  // qual o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
+  socket.on("deleteTodo", (data: Todos) => {
+    console.log(data);
+    getTodos(setTodos);
+  });
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     // percorrer o array de usuários e verificar se o usuário está cadastrado no localStorage (se o usuário está logado) e se o usuário é admin
-    const userIsAdmin = users.find(
-      (user) => user.username === user.username && user.isAdmin === true
+    const userIsExist = users.find(
+      (data) => data.username === user.username && data.isAdmin === true
     );
 
     // se o usuário não estiver logado, redirecionar para a página de login
-    if (!user) {
+    if (!user || !userIsExist) {
       Router.push("/login");
     }
   }, []);
 
-  useEffect(() => {
-    async function getTodos() {
-      const { data } = await api.get("/messanges");
-      setTodos(data);
-    }
+  socket.on("newTodo", (todo: Todos) => {
+    setTodos((oldTodos) => [...oldTodos, todo]);
+    console.log(todo);
+  });
 
-    getTodos();
+  useEffect(() => {
+    getTodos(setTodos);
   }, []);
 
   async function handleSubmit(
@@ -67,7 +107,10 @@ export default function Dashboard() {
       );
 
       if (!userIsAdmin) {
-        toastContainer("Você não tem permissão para criar um novo todo", "error");
+        toastContainer(
+          "Você não tem permissão para criar um novo todo",
+          "error"
+        );
         return;
       }
 
@@ -91,6 +134,7 @@ export default function Dashboard() {
             `Aviso \"${dataApi.title}\" criada com sucesso!`,
             "success"
           );
+          socket.emit("addNewTodo", "addNewTodo");
           reset();
 
           formRef.current?.setErrors({});
@@ -129,6 +173,7 @@ export default function Dashboard() {
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
+      socket.emit("deleteTodo", "deleteTodo");
       toast.warn(data.message, {
         theme: "dark",
       });
@@ -179,26 +224,35 @@ export default function Dashboard() {
   return (
     <>
       <button
-      style={{
-        position: "absolute",
-        top: "10px",
-        right: "10px",
-        background: "transparent",
-        border: "none",
-        cursor: "pointer",
-        outline: "none",
-      }}
-      onClick={() => {
-        // remove o usuário do localStorage
-        localStorage.removeItem("user");
-        Router.push("/login");
-        return toastContainer("Logout realizado com sucesso", "success");
-      }}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          outline: "none",
+        }}
+        onClick={() => {
+          // remove o usuário do localStorage
+          localStorage.removeItem("user");
+          Router.push("/login");
+          return toastContainer("Logout realizado com sucesso", "success");
+        }}
         className={styles.btn}
       >
         <FiLogOut size={20} color="#fff" />
       </button>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          marginBottom: "-50px",
+          marginTop: "20px",
+        }}
+      >
         <Logo />
       </div>
       <header className={styles.header}>

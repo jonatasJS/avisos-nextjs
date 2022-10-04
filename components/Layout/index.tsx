@@ -9,7 +9,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {route.pathname === "/" && (
-        <div className="mt-20">
+        <div
+          className="mt-20"
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: "30px",
+            marginBottom: "-20px",
+          }}
+        >
           <Logo />
         </div>
       )}
