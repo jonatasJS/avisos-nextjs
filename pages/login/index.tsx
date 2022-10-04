@@ -1,12 +1,17 @@
 import { useState } from "react";
 import Head from "next/head";
 import Router from "next/router";
+import { io } from "socket.io-client";
 
 import users from "../../data/database.json";
 
 import toastContainer from "../../services/toastContainer";
 
 import Logo from "../../components/Logo";
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/", {
+  transports: ["websocket"],
+});
 
 export default function Home() {
   const [user, setUser] = useState("");
@@ -24,6 +29,7 @@ export default function Home() {
       localStorage.setItem("user", JSON.stringify(user));
       // redirecionar para a página de dashboard
       Router.push("/dashboard");
+      socket.emit("login", username);
       toastContainer("Login realizado com sucesso", "success");
     } else {
       toastContainer("Email ou senha incorretos", "error");

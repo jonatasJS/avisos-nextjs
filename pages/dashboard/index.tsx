@@ -42,6 +42,13 @@ socket.on("deleteTodo", (data: Todos) => {
   );
 });
 
+socket.on("login", (data: Todos) => {
+  toastContainer(
+    `${data} logado!`,
+    "success"
+  );
+});
+
 socket.on("connect", () => {
   console.log("Connected to socket.io");
 });
