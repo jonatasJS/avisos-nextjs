@@ -11,11 +11,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const [isVisibled, setIsVisibled] = useState(false);
 
+  const lay = document.getElementById("layout");
+
   const scrollToTop = () => {
-    document.getElementById("layout").scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    if (lay !== null) {
+      lay.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
 
     setIsVisibled(false);
   };
@@ -23,10 +27,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const toggleVisibility = () => {
       const scroll = document.getElementById("layout");
-      if (scroll.scrollTop >= 300) {
-        setIsVisibled(true);
-      } else if (scroll.scrollTop <= 300) {
-        setIsVisibled(false);
+      if (scroll !== null) {
+        if (scroll.scrollTop > 300) {
+          setIsVisibled(true);
+        } else {
+          setIsVisibled(false);
+        }
       }
     };
 
@@ -70,7 +76,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div
         className={styles.button}
         style={{
-          display: (isVisibled && route.pathname !== "/") ? "inline" : "none",
+          display: isVisibled && route.pathname !== "/" ? "inline" : "none",
         }}
       >
         <FaArrowCircleUp onClick={scrollToTop} />
