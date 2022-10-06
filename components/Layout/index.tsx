@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const [isVisibled, setIsVisibled] = useState(false);
 
-  const scrollToTop = (e) => {
+  const scrollToTop = () => {
     document.getElementById("layout").scrollTo({
       top: 0,
       behavior: "smooth",
