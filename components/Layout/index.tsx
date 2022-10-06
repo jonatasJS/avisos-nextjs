@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const [isVisibled, setIsVisibled] = useState(false);
 
-  const lay = window.document.getElementById("layout");
+  let lay: HTMLElement | null = null;
 
   const scrollToTop = () => {
     if (lay !== null) {
@@ -25,6 +25,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (lay !== null) lay = window.document.getElementById("layout");
+    
     const toggleVisibility = () => {
       const scroll = window.document.getElementById("layout");
       if (scroll !== null) {
