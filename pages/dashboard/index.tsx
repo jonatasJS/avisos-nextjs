@@ -1,13 +1,15 @@
 import Router from "next/router";
 import { useEffect, useRef, useState } from "react";
+import Head from "next/head";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import { FiClock, FiLogOut, FiUser } from "react-icons/fi";
 import * as Yup from "yup";
 import { socket } from "../_app";
+
+import { FiClock, FiLogOut, FiUser } from "react-icons/fi";
 
 import users from "../../data/database.json";
 
@@ -53,6 +55,8 @@ export default function Dashboard() {
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const avisosRef = useRef<HTMLDivElement>(null);
 
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
@@ -134,6 +138,14 @@ export default function Dashboard() {
           );
           socket.emit("addNewTodo", "addNewTodo");
           reset();
+
+          // mover o scroll para o final da página
+          setTimeout(() => {
+            const layoutRef = document.getElementById("layout");
+            // console.log(layoutRef);
+            layoutRef?.scrollTo(0, layoutRef?.scrollHeight);
+            avisosRef.current?.scrollTo(0, avisosRef.current?.scrollHeight);
+          }, 500);
 
           formRef.current?.setErrors({});
         });
@@ -221,6 +233,21 @@ export default function Dashboard() {
 
   return (
     <>
+    <Head>
+      <style>
+        {`
+          html,
+          body,
+          #__next {
+            justify-content: center !important;
+          }
+          
+          #layout {
+            height: 90vh !important;
+          }
+          `}
+      </style>
+    </Head>
       <button
         style={{
           position: "absolute",
@@ -256,7 +283,7 @@ export default function Dashboard() {
       <header className={styles.header}>
         <h1>Cadastrar novo aviso</h1>
       </header>
-      <main className={styles.main}>
+      <main className={styles.main} ref={mainRef}>
         <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
           <Input
             styles={styles}
@@ -285,7 +312,7 @@ export default function Dashboard() {
         </Form>
       </main>
       {!!todos.length && (
-        <div className={styles.avisos}>
+        <div className={styles.avisos} ref={avisosRef}>
           <h1>Avisos</h1>
           <div className={styles.searchTitle}>
             <input
@@ -327,7 +354,7 @@ export default function Dashboard() {
                         `
                     
                   `,
-                        "<br />"
+                        "<br /><br />"
                       ),
                   }}
                 ></p>
@@ -344,16 +371,18 @@ export default function Dashboard() {
                         color="#fff"
                         onClick={() => handleDelete(_id)}
                       />
-                      <span>{moment(createdAt).format("DD/MM/YYYY hh:mm:yy")}</span>
+                      <span>
+                        {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                      </span>
                     </div>
                   </>
                 )}
 
                 <div className={styles.avisosItemFooter}>
                   <button
-                  style={{
-                    bottom: createdBy ? "45px !important" : "0",
-                  }}
+                    style={{
+                      bottom: createdBy ? "45px !important" : "0",
+                    }}
                     onClick={() => handleDelete(_id)}
                     className={`${styles.btn} exclude`}
                     title="Excluir"

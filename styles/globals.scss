@@ -15,11 +15,12 @@ svg {
 
 html, 
 body,
-.__next {
+#__next {
   background-color: #282a36;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
   overflow: hidden;

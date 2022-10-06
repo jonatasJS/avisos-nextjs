@@ -20,6 +20,7 @@
   {
     "name": "JOHN DOE",
     "username": "john",
-    "pass": "1234"
+    "pass": "1234",
+    "isAdmin": false
   }
 ]
