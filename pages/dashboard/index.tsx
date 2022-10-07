@@ -290,8 +290,8 @@ export default function Dashboard() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            marginBottom: "-50px",
-            marginTop: "20px",
+            marginBottom: "-60px",
+            marginTop: "100px",
           }}
         >
           <Logo />
