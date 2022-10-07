@@ -65,7 +65,7 @@ const Home: NextPage = () => {
           author="Jõnatas"
           countryName="Brasil"
           email="soaresjonatas398@gmail.com"
-          image="/preview.png"
+          image="/preview_dashboard.png"
           language="pt-BR"
           phoneNumber="+55 63 9 84707053"
           themeColor="#FF6F21"
