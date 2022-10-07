@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
@@ -59,6 +60,9 @@ export default function Dashboard() {
   const searchRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const avisosRef = useRef<HTMLDivElement>(null);
+  const [messageIdEdit, setMessageIdEdit] = useState("");
+  const [editingTitle, setEditingTitle] = useState("");
+  const [editingBody, setEditingBody] = useState("");
 
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
@@ -232,6 +236,26 @@ export default function Dashboard() {
       toastContainer("Internal Server Error", "error");
     }
   }
+
+  async function handleEditMessage(id: string) {
+    try {
+      await api.put(`/messange/${id}`, {
+        title: editingTitle,
+        body: editingBody,
+      });
+
+      toastContainer("Aviso atualizados com sucesso", "success");
+    } catch (err) {
+      toastContainer("Internal Server Error", "error");
+    }
+  }
+
+  // ativar o modo de edição
+  // function handleEdit(id: string) {
+  //   const todo = todos.find((todo) => todo._id === id);
+  //   if (todo) {
+  //     setEditingId(todo._id);
+  //   }
 
   return (
     <>
@@ -414,4 +438,12 @@ export default function Dashboard() {
       )}
     </>
   );
+}
+
+
+
+export async function getStaticProps(context: GetStaticProps) {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
 }
