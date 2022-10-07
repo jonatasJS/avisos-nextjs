@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 
+import Clock from "../Clock";
+import Logo from "../Logo";
+
 import { FaArrowCircleUp } from "react-icons/fa";
 
-import Logo from "../Logo";
 import styles from "./styles.module.scss";
-import Link from "next/link";
-import Clock from "../Clock";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
