@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Router from "next/router";
 import { socket } from "../_app";
@@ -131,4 +132,10 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getStaticProps(context: GetStaticProps) {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
 }

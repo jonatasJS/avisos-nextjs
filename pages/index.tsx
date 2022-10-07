@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import type { NextPage } from "next";
+import type { NextPage, GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import { socket } from "./_app";
 
@@ -149,3 +149,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getStaticProps(context: GetStaticProps) {
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
