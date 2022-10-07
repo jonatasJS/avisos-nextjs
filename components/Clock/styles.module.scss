@@ -1,0 +1,32 @@
+.num {
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  font-size: 3rem;
+  letter-spacing: 0px;
+  font-family: 'Russo One', sans-serif;
+}
+
+.ponts {
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  font-size: 3rem;
+  margin-left: 5px;
+  font-family: 'Russo One', sans-serif;
+  transition: all 0.5s ease;
+  animation: blink 3s ease-in-out infinite;
+}
+
+// Animação de piscacar lentamente
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

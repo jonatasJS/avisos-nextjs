@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 
 import { FaArrowCircleUp } from "react-icons/fa";
 
 import Logo from "../Logo";
 import styles from "./styles.module.scss";
+import Link from "next/link";
+import Clock from "../Clock";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const [isVisibled, setIsVisibled] = useState(false);
+  const [isLogo, setIsLogo] = useState<"logo" | "clock">("logo");
 
   let lay: HTMLElement | null = null;
 
@@ -26,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (lay !== null) lay = window.document.getElementById("layout");
-    
+
     const toggleVisibility = () => {
       const scroll = window.document.getElementById("layout");
       if (scroll !== null) {
@@ -42,24 +46,47 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       .getElementById("layout")
       ?.addEventListener("scroll", toggleVisibility);
   }, []);
+  
+  // alterar o logo acada 10 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsLogo((isLogo) => (isLogo === "logo" ? "clock" : "logo"));
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [isLogo]);
 
   return (
     <>
       {route.pathname === "/" && (
-        <div
-          className="mt-20"
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            marginTop: "30px",
-            marginBottom: "-20px",
-          }}
-        >
-          <Logo />
-        </div>
+        <Link href="/dashboard">
+          <motion.a
+            // flicker animation
+            animate={{
+              opacity: [1, 1.1, 1.1, 1, 1],
+            }}
+            transition={{
+              duration: 2,
+              ease: "easeInOut",
+              times: [0, 0.2, 0.5, 0.8, 1]
+            }}
+            key={isLogo}
+            className="mt-20"
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              marginTop: "60px",
+              marginBottom: "60px",
+              letterSpacing: "5px",
+              cursor: "pointer",
+            }}
+          >
+            {isLogo === "logo" ? <Logo /> : <Clock />}
+          </motion.a>
+        </Link>
       )}
       <div
         id="layout"

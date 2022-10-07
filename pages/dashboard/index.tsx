@@ -1,6 +1,7 @@
-import Router from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import Router from "next/router";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
@@ -233,9 +234,9 @@ export default function Dashboard() {
 
   return (
     <>
-    <Head>
-      <style>
-        {`
+      <Head>
+        <style>
+          {`
           html,
           body,
           #__next {
@@ -246,8 +247,8 @@ export default function Dashboard() {
             height: 90vh !important;
           }
           `}
-      </style>
-    </Head>
+        </style>
+      </Head>
       <button
         style={{
           position: "absolute",
@@ -268,18 +269,20 @@ export default function Dashboard() {
       >
         <FiLogOut size={20} color="#fff" />
       </button>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          marginBottom: "-50px",
-          marginTop: "20px",
-        }}
-      >
-        <Logo />
-      </div>
+      <Link href="/">
+        <a
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            marginBottom: "-50px",
+            marginTop: "20px",
+          }}
+        >
+          <Logo />
+        </a>
+      </Link>
       <header className={styles.header}>
         <h1>Cadastrar novo aviso</h1>
       </header>
