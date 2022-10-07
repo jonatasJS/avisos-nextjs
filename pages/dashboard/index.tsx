@@ -21,6 +21,7 @@ import Input from "../../components/FormComponents/Input";
 import TextArea from "../../components/FormComponents/TextArea";
 import toastContainer from "../../services/toastContainer";
 import Logo from "../../components/Logo";
+import SEO from "../../components/SEO";
 
 interface Todos {
   title: string;
@@ -248,6 +249,19 @@ export default function Dashboard() {
           }
           `}
         </style>
+        <SEO
+          title="Avisos"
+          description="Avisos da para os colaboradores da empresa"
+          author="Jõnatas"
+          countryName="Brasil"
+          email="soaresjonatas398@gmail.com"
+          image="/preview.png"
+          language="pt-BR"
+          phoneNumber="+55 63 9 84707053"
+          themeColor="#FF6F21"
+          url="https://avisos.jonatas.app/"
+          website="https://avisos.jonatas.app/"
+        />
       </Head>
       <button
         style={{
