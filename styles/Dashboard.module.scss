@@ -25,11 +25,18 @@
 
 .main {
   display: flex;
-  margin-top: 5%;
+  margin-top: 10%;
   justify-content: center;
   align-items: center;
   height: 50%;
   border-radius: 0 0 20px 20px;
+  width: 100%;
+  scale: 1.2;
+  
+  @media (max-width: 962px) {
+    margin-top: 5%;
+    scale: .8;
+  }
 }
 
 .form {

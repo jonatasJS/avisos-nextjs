@@ -18,7 +18,7 @@ export default function TextArea({
   ...rest
 }: Inputrops) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const { fieldName, defaultValue, error, registerField } = useField(name);
+  const { fieldName, error, registerField } = useField(name);
 
   useEffect(() => {
     registerField({

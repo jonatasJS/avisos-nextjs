@@ -11,14 +11,16 @@ import { FaArrowCircleUp } from "react-icons/fa";
 
 import styles from "./styles.module.scss";
 
+let lay: HTMLElement | null = null;
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const route = useRouter();
   const [isVisibled, setIsVisibled] = useState(false);
   const [isLogo, setIsLogo] = useState<"logo" | "clock">("logo");
 
-  let lay: HTMLElement | null = null;
 
   const scrollToTop = () => {
+    lay = document.getElementById("layout");
     if (lay !== null) {
       lay.scrollTo({
         top: 0,
@@ -26,11 +28,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       });
     }
 
+    console.log(lay);
+
     setIsVisibled(false);
   };
 
   useEffect(() => {
-    if (lay !== null) lay = window.document.getElementById("layout");
+    lay = window.document.getElementById("layout");
 
     const toggleVisibility = () => {
       const scroll = window.document.getElementById("layout");
