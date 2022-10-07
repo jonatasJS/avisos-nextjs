@@ -62,10 +62,10 @@ const Home: NextPage = () => {
         <SEO
           title="Avisos"
           description="Avisos da para os colaboradores da empresa"
-          author="Jõnatas"
+          author="Jônatas"
           countryName="Brasil"
           email="soaresjonatas398@gmail.com"
-          image="/preview_dashboard.png"
+          image="/preview.png"
           language="pt-BR"
           phoneNumber="+55 63 9 84707053"
           themeColor="#FF6F21"

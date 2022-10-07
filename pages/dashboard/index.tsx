@@ -250,12 +250,12 @@ export default function Dashboard() {
           `}
         </style>
         <SEO
-          title="Avisos"
-          description="Avisos da para os colaboradores da empresa"
-          author="Jõnatas"
+          title="Dashboard"
+          description="Dashboard da aplicação"
+          author="Jônatas"
           countryName="Brasil"
           email="soaresjonatas398@gmail.com"
-          image="/preview.png"
+          image="/preview_dashboard.png"
           language="pt-BR"
           phoneNumber="+55 63 9 84707053"
           themeColor="#FF6F21"
