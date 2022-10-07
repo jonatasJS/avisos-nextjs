@@ -9,6 +9,7 @@ import api from "../services/api";
 import Header from "../components/Header";
 
 import styles from "../styles/Home.module.scss";
+import SEO from "../components/SEO";
 
 interface Todos {
   title: string;
@@ -58,6 +59,19 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Home</title>
+        <SEO
+          title="Avisos"
+          description="Avisos da para os colaboradores da empresa"
+          author="Jõnatas"
+          countryName="Brasil"
+          email="soaresjonatas398@gmail.com"
+          image="/preview.png"
+          language="pt-BR"
+          phoneNumber="+55 63 9 84707053"
+          themeColor="#FF6F21"
+          url="https://avisos.jonatas.app/"
+          website="https://avisos.jonatas.app/"
+        />
       </Head>
       <Header />
       <motion.main
