@@ -2,7 +2,7 @@
   font-weight: 700;
   color: #fff;
   position: relative;
-  font-size: 5rem;
+  font-size: 4rem;
   margin-top: -10px;
   margin-bottom: -10px;
   letter-spacing: 0px;
@@ -13,13 +13,33 @@
   font-weight: 700;
   color: #fff;
   position: relative;
-  font-size: 5rem;
+  font-size: 4rem;
   margin-top: -10px;
   margin-bottom: -10px;
   margin-left: 5px;
   font-family: 'Russo One', sans-serif;
   transition: all 0.5s ease;
   animation: blink 3s ease-in-out infinite;
+}
+
+.date {
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  font-size: 4rem;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  margin-left: 20px;
+  letter-spacing: 0px;
+  font-family: 'Russo One', sans-serif;
+
+  h1 {
+    font-size: 4rem;
+    margin-top: -10px;
+    margin-bottom: -10px;
+    letter-spacing: 0px;
+    font-family: 'Russo One', sans-serif;
+  }
 }
 
 // Animação de piscacar lentamente

@@ -80,7 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             style={{
               display: "flex",
               width: "100%",
-              justifyContent: "center",
+              justifyContent: "space-around",
               alignItems: "center",
               flexDirection: "row",
               marginTop: "60px",
