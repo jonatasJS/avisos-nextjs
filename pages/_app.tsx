@@ -19,6 +19,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Layout>
+      <style>
+        {`
+          #__next {
+            justify-content: ${router.pathname.includes("/login") ? "center" : "start"};
+            align-items: center;
+          }
+        `}
+      </style>
       <link
         href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
         rel="stylesheet"
