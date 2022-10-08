@@ -6,6 +6,8 @@ import { socket } from "../_app";
 
 import users from "../../data/database.json";
 
+import styles from "../../styles/Login.module.scss";
+
 import toastContainer from "../../services/toastContainer";
 
 import Logo from "../../components/Logo";
@@ -94,8 +96,8 @@ export default function Home() {
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 autoComplete="username"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                className={`${styles.input} appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
+                placeholder="Username"
               />
             </div>
             <div>
@@ -118,7 +120,7 @@ export default function Home() {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 autoComplete="current-pass"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`${styles.input} appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Password"
               />
             </div>
