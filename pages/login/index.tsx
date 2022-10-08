@@ -21,6 +21,12 @@ export default function Home() {
   async function handleSubmit(data: { username: string; pass: string }) {
     const { username, pass } = data;
 
+    // verificar se o username e a senha são valores válidos
+    if (username === "" || pass === "") {
+      toastContainer("Preencha todos os campos", "error");
+      return;
+    }
+
     const user = users.find(
       (user) => user.username === username && user.pass === pass
     );
@@ -51,6 +57,7 @@ export default function Home() {
             alignItems: "center",
             flexDirection: "column",
             marginTop: "-100px",
+            gap: "50px",
           }}
         >
           <Logo />
@@ -65,7 +72,7 @@ export default function Home() {
             handleSubmit({ username: user, pass: password });
           }}
         >
-          <input type="hidden" name="remember" defaultValue="true" />
+          {/* <input type="hidden" name="remember" defaultValue="true" /> */}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="username-address" className="sr-only">
@@ -73,13 +80,20 @@ export default function Home() {
               </label>
               <input
                 // {...register("username")}
+                style={{
+                  backgroundColor: "#44475a",
+                  color: "#f8f8f2",
+                  borderBottom: ".5px solid #667eea",
+                  borderTop: "1px solid #667eea",
+                  borderLeft: "1px solid #667eea",
+                  borderRight: "1px solid #667eea",
+                }}
                 id="username-address"
                 name="username"
                 type="username"
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 autoComplete="username"
-                required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
               />
@@ -90,13 +104,20 @@ export default function Home() {
               </label>
               <input
                 // {...register("pass")}
+                style={{
+                  backgroundColor: "#44475a",
+                  color: "#f8f8f2",
+                  borderBottom: "1px solid #667eea",
+                  borderTop: "1px solid #667eea",
+                  borderLeft: "1px solid #667eea",
+                  borderRight: ".5px solid #667eea",
+                }}
                 id="pass"
                 name="pass"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 autoComplete="current-pass"
-                required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
               />

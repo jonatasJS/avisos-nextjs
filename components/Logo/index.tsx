@@ -6,13 +6,13 @@ export default function Logo() {
       style={{
         marginTop: "-70px",
         marginBottom: "-70px",
-        height: "215px",
+        height: "107.5px",
         width: "auto",
       }}
-      width={500}
-      height={215}
+      width={250}
+      height={107.5}
       className="mx-auto h-48 w-auto"
-      src="http://avisos.jonatas.app/logo-sim-500-215.png"
+      src="/logo-sim-500-215.png"
       alt="Workflow"
     />
   );
