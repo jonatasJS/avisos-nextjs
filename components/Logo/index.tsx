@@ -6,11 +6,11 @@ export default function Logo() {
       style={{
         marginTop: "-70px",
         marginBottom: "-70px",
-        height: "107.5px",
+        height: "76px",
         width: "auto",
       }}
-      width={250}
-      height={107.5}
+      width={176.725}
+      height={76}
       className="mx-auto h-48 w-auto"
       src="/logo-sim-500-215.png"
       alt="Workflow"
