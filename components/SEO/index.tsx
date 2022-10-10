@@ -29,6 +29,26 @@ export default function SEO({
 }: CEOProps) {
   return (
     <>
+      <meta
+        name="image"
+        content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
+      />
+
+      <meta
+        itemProp="image"
+        content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
+      />
+
+      <meta
+        property="og:image"
+        content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
+      />
+      
+      <meta
+        name="twitter:image"
+        content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
+      />
+
       <meta name="description" content={description} />
 
       <meta name="author" content={author} />
