@@ -73,7 +73,10 @@ const Home: NextPage = () => {
           website="https://avisos.jonatas.app/"
         />
       </Head>
-      <Header />
+      <Header
+        title={todos[todo]?.title}
+        showTitle={false}  
+      />
       <motion.main
         className={styles.main}
         initial={{ opacity: 0 }}
