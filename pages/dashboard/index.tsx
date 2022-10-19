@@ -353,16 +353,16 @@ export default function Dashboard() {
             (data) =>
               data.username === userDataServer.username && data.isAdmin === true
           )
-            ? "rgba(255, 111, 33, 0.2)"
-            : "rgba(255, 255, 255, 0.1)",
+            ? "rgba(0, 255, 0, 0.2)"
+            : "rgba(255, 111, 33, 0.2)",
           boxShadow: `0 0 20px 1px ${
             users.find(
               (data) =>
                 data.username === userDataServer.username &&
                 data.isAdmin === true
             )
-              ? "rgba(255, 111, 33, 0.2)"
-              : "rgba(255, 255, 255, 0.1)"
+              ? "rgba(0, 255, 0, 0.2)"
+              : "rgba(255, 111, 33, 0.2)"
           }`,
           maxWidth: "70px",
           height: "auto",
