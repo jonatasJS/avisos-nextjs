@@ -346,7 +346,7 @@ export default function Dashboard() {
             marginTop: "10px",
             // transform: "translate(-50%, -50%)",
             color: "#fff",
-            fontSize: ".5em",
+            fontSize: "1em",
             fontWeight: "bold",
             textAlign: "center",
 
