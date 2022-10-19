@@ -149,7 +149,7 @@ export default function Dashboard() {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
-            createdBy: userDataLocal.name || userDataServer.name,
+            createdBy: await userDataLocal.name || await userDataServer.name,
           });
 
           setTodos([...todos, dataApi]);
