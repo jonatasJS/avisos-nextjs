@@ -40,8 +40,11 @@ socket.on("addNewTodo", (data: string) => {
 
 socket.on("deleteTodo", (data: string) => {
   console.log("Dashboard out:",data);
-  const { deletedBy, title } = JSON.parse(data);
-  toastContainer(`Aviso "${title}" deletado por ${deletedBy} com sucesso!`, "warning");
+  const { deletedBy, title }: {
+    deletedBy: string;
+    title: string;
+  } = JSON.parse(data);
+  toastContainer(`Aviso "${title}" deletado por ${deletedBy[0].toUpperCase()} com sucesso!`, "warning");
 });
 
 socket.on("login", (data: Todos) => {
