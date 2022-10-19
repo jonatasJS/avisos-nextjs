@@ -44,7 +44,7 @@ export default function Home() {
       socket.emit("login", username);
       toastContainer("Login realizado com sucesso", "success");
     } else {
-      toastContainer("Email ou senha incorretos", "error");
+      toastContainer("Usuario ou senha incorretos", "error");
     }
   }
 
