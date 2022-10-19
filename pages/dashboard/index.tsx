@@ -70,7 +70,8 @@ export default function Dashboard() {
   const [messageIdEdit, setMessageIdEdit] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
   const [editingBody, setEditingBody] = useState("");
-  const [userData, setUserData] = useState({} as UserDataProps);
+  const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
+  const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
@@ -107,7 +108,8 @@ export default function Dashboard() {
     getTodos(setTodos);
     async function getUserDatasFromLocalStorage() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      setUserData(user);
+      setUserDataServer(user);
+      setUserDataLocal(user);
     }
 
     getUserDatasFromLocalStorage();
@@ -323,16 +325,29 @@ export default function Dashboard() {
           outline: "none",
           backdropFilter: "blur(10px)",
           padding: "10px",
-          backgroundColor: userData?.isAdmin ? "rgba(255, 111, 33, 0.2)" : "rgba(255, 255, 255, 0.1)",
-          boxShadow: `0 0 20px 1px ${userData?.isAdmin ? "rgba(255, 111, 33, 0.2)" : "rgba(255, 255, 255, 0.1)"}`,
+          backgroundColor: users.find(
+            (data) =>
+              data.username === userDataServer.username && data.isAdmin === true
+          )
+            ? "rgba(255, 111, 33, 0.2)"
+            : "rgba(255, 255, 255, 0.1)",
+          boxShadow: `0 0 20px 1px ${
+            users.find(
+              (data) =>
+                data.username === userDataServer.username &&
+                data.isAdmin === true
+            )
+              ? "rgba(255, 111, 33, 0.2)"
+              : "rgba(255, 255, 255, 0.1)"
+          }`,
           width: "4rem",
           height: "4rem",
           borderRadius: "10px",
         }}
-        >
+      >
         <Image
-          src={`https://avatars.dicebear.com/api/identicon/${userData.username}.svg`}
-          alt={userData?.name}
+          src={`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
+          alt={userDataLocal.name}
           width={50}
           height={50}
           objectFit="cover"
@@ -349,10 +364,9 @@ export default function Dashboard() {
             fontSize: "1em",
             fontWeight: "bold",
             textAlign: "center",
-
           }}
         >
-          {userData?.name}
+          {userDataLocal?.name}
         </span>
       </motion.span>
       <motion.button
