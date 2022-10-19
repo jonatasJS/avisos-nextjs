@@ -35,12 +35,13 @@ interface Todos {
 
 socket.on("addNewTodo", (data: string) => {
   console.log("Dashboard out:",data);
-  toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
+  toastContainer(`Um novo aviso criado por "${data}" com sucesso!`, "success");
 });
 
 socket.on("deleteTodo", (data: string) => {
+  console.log("Dashboard out:",data);
   const { deletedBy, title } = JSON.parse(data);
-  toastContainer(`Aviso "${JSON.parse(title)}" deletado por ${deletedBy} com sucesso!`, "warning");
+  toastContainer(`Aviso "${title}" deletado por ${deletedBy} com sucesso!`, "warning");
 });
 
 socket.on("login", (data: Todos) => {
@@ -204,11 +205,12 @@ export default function Dashboard() {
         return;
       }
 
+      const title = await todos.find((data) => data._id === id);
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
       socket.emit("deleteTodo", JSON.stringify({
-        title: data.title,
+        title,
         deletedBy: userDataLocal.username,
       }));
       toast.warn(data.message, {
