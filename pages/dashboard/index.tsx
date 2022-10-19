@@ -35,7 +35,7 @@ interface Todos {
 
 socket.on("addNewTodo", (data: string) => {
   console.log("Dashboard out:",data);
-  toastContainer(`Um novo aviso criado por "${data}" com sucesso!`, "success");
+  toastContainer(`Um novo aviso criado por "${data[0].toUpperCase()+data.substring(1)}" com sucesso!`, "success");
 });
 
 socket.on("deleteTodo", (data: string) => {
@@ -44,7 +44,7 @@ socket.on("deleteTodo", (data: string) => {
     deletedBy: string;
     title: string;
   } = JSON.parse(data);
-  toastContainer(`Aviso "${title}" deletado por ${deletedBy[0].toUpperCase()} com sucesso!`, "warning");
+  toastContainer(`Aviso "${title}" deletado por ${deletedBy[0].toUpperCase()+deletedBy.substring(1)} com sucesso!`, "warning");
 });
 
 socket.on("login", (data: Todos) => {
