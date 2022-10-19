@@ -123,10 +123,8 @@ export default function Dashboard() {
     { reset }: { reset: () => void }
   ) {
     try {
-      // veririca se o usuario é admin, se não for ele não pode criar um novo todo
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
       const userIsAdmin = users.find(
-        (data) => data.username === user.username && data.isAdmin === true
+        (data) => data.username === userDataLocal.username && data.isAdmin === true
       );
 
       if (!userIsAdmin) {
@@ -150,7 +148,7 @@ export default function Dashboard() {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
-            createdBy: user.name,
+            createdBy: userDataLocal.name,
           });
 
           setTodos([...todos, dataApi]);
@@ -191,10 +189,8 @@ export default function Dashboard() {
 
   async function handleDelete(id: string) {
     try {
-      // veririca se o usuario é admin, se não for ele não pode deletar um todo
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
       const userIsAdmin = users.find(
-        (data) => data.username === user.username && data.isAdmin === true
+        (data) => data.username === userDataLocal.username && data.isAdmin === true
       );
 
       if (!userIsAdmin) {
