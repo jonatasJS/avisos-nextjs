@@ -33,8 +33,8 @@ interface Todos {
   _id: string;
 }
 
-socket.on("addNewTodo", (data: Todos) => {
-  toastContainer(`Aviso criado com sucesso!`, "success");
+socket.on("addNewTodo", (data: string) => {
+  toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
 });
 
 socket.on("deleteTodo", (data: Todos) => {
@@ -74,8 +74,9 @@ export default function Dashboard() {
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("addNewTodo", (data: Todos) => {
+  socket.on("addNewTodo", (data: string) => {
     console.clear();
+    toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
 
@@ -157,7 +158,7 @@ export default function Dashboard() {
             `Aviso \"${dataApi.title}\" criada com sucesso!`,
             "success"
           );
-          socket.emit("addNewTodo", "addNewTodo");
+          socket.emit("addNewTodo", userDataLocal.username);
           reset();
 
           // mover o scroll para o final da página
