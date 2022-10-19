@@ -448,8 +448,11 @@ export default function Dashboard() {
             flexDirection: "column",
             marginBottom: users.find(
               (data) =>
-                data.username === userDataServer.username && data.isAdmin === true
-            ) ? "-60px" : "60px",
+                data.username === userDataServer.username &&
+                data.isAdmin === true
+            )
+              ? "-60px"
+              : "60px",
             marginTop: "100px",
           }}
         >
@@ -565,18 +568,24 @@ export default function Dashboard() {
                     </>
                   )}
 
-                  <div className={styles.avisosItemFooter}>
-                    <button
-                      style={{
-                        bottom: createdBy ? "45px !important" : "0",
-                      }}
-                      onClick={() => handleDelete(_id)}
-                      className={`${styles.btn} exclude`}
-                      title="Excluir"
-                    >
-                      Excluir
-                    </button>
-                  </div>
+                  {users.find(
+                    (data) =>
+                      data.username === userDataServer.username &&
+                      data.isAdmin === true
+                  ) && (
+                    <div className={styles.avisosItemFooter}>
+                      <button
+                        style={{
+                          bottom: createdBy ? "45px !important" : "0",
+                        }}
+                        onClick={() => handleDelete(_id)}
+                        className={`${styles.btn} exclude`}
+                        title="Excluir"
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
