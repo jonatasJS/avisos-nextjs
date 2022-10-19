@@ -310,6 +310,7 @@ export default function Dashboard() {
         whileFocus={{ scale: 1.1 }}
         whileDrag={{ scale: 0.9 }}
         style={{
+          zIndex: 999,
           position: "absolute",
           display: "flex",
           justifyContent: "center",
