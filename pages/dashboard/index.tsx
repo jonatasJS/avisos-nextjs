@@ -110,9 +110,7 @@ export default function Dashboard() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     // percorrer o array de usuários e verificar se o usuário está cadastrado no localStorage (se o usuário está logado) e se o usuário é admin
-    const userIsExist = users.find(
-      (data) => data.username === user.username
-    );
+    const userIsExist = users.find((data) => data.username === user.username);
 
     // se o usuário não estiver logado, redirecionar para a página de login
     if (!user || !userIsExist) {
@@ -448,44 +446,55 @@ export default function Dashboard() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            marginBottom: "-60px",
+            marginBottom: users.find(
+              (data) =>
+                data.username === userDataServer.username && data.isAdmin === true
+            ) ? "-60px" : "60px",
             marginTop: "100px",
           }}
         >
           <Logo />
         </a>
       </Link>
-      <header className={styles.header}>
-        <h1>Cadastrar novo aviso</h1>
-      </header>
-      <main className={styles.main} ref={mainRef}>
-        <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
-          <Input
-            styles={styles}
-            name="title"
-            label="Título"
-            placeholder="Título do aviso"
-            type="text"
-          />
+      {/* verifica se é admin */}
+      {users.find(
+        (data) =>
+          data.username === userDataServer.username && data.isAdmin === true
+      ) && (
+        <>
+          <header className={styles.header}>
+            <h1>Cadastrar novo aviso</h1>
+          </header>
+          <main className={styles.main} ref={mainRef}>
+            <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
+              <Input
+                styles={styles}
+                name="title"
+                label="Título"
+                placeholder="Título do aviso"
+                type="text"
+              />
 
-          <TextArea
-            styles={styles}
-            name="body"
-            label="Descrição"
-            placeholder="Descrição do aviso"
-          />
+              <TextArea
+                styles={styles}
+                name="body"
+                label="Descrição"
+                placeholder="Descrição do aviso"
+              />
 
-          <motion.div
-            className={styles.formFooter}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            exit={{ opacity: 0 }}
-          >
-            <button className={styles.btn}>Cadastrar</button>
-          </motion.div>
-        </Form>
-      </main>
+              <motion.div
+                className={styles.formFooter}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                exit={{ opacity: 0 }}
+              >
+                <button className={styles.btn}>Cadastrar</button>
+              </motion.div>
+            </Form>
+          </main>
+        </>
+      )}
       {!!todos.length && (
         <div className={styles.avisos} ref={avisosRef}>
           <h1>Avisos</h1>
