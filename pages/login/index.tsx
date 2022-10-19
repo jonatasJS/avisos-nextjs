@@ -37,8 +37,7 @@ export default function Home() {
       // salvar o usuário no localStorage
       localStorage.setItem("user", JSON.stringify({
         username: user.username,
-        name: user.name,
-        isAdmin: user.isAdmin,
+        name: user.name
       }));
       // redirecionar para a página de dashboard
       Router.push("/dashboard");
