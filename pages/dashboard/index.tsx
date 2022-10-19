@@ -151,8 +151,8 @@ export default function Dashboard() {
 
       if (!userIsAdmin) {
         toastContainer(
-          "Você não tem permissão para criar um novo todo",
-          "error"
+          "Você não tem permissão para criar um novo aviso!",
+          "info"
         );
         return;
       }
@@ -218,7 +218,7 @@ export default function Dashboard() {
       );
 
       if (!userIsAdmin) {
-        toastContainer("Você não tem permissão para deletar um todo", "error");
+        toastContainer("Você não tem permissão para deletar um aviso!", "info");
         return;
       }
 
