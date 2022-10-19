@@ -356,6 +356,9 @@ export default function Dashboard() {
           style={{
             // name do usuario
             position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             top: "100%",
             left: "0%",
             marginTop: "10px",
