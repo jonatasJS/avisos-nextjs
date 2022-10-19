@@ -23,6 +23,7 @@ import TextArea from "../../components/FormComponents/TextArea";
 import toastContainer from "../../services/toastContainer";
 import Logo from "../../components/Logo";
 import SEO from "../../components/SEO";
+import Image from "next/image";
 
 interface Todos {
   title: string;
@@ -53,6 +54,12 @@ async function getTodos(setTodos: any) {
   setTodos(data);
 }
 
+interface UserDataProps {
+  username: string;
+  name: string;
+  isAdmin: boolean;
+}
+
 export default function Dashboard() {
   const [todos, setTodos] = useState<Todos[]>([]);
   const [isShowError, setIsShowError] = useState(false);
@@ -63,6 +70,7 @@ export default function Dashboard() {
   const [messageIdEdit, setMessageIdEdit] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
   const [editingBody, setEditingBody] = useState("");
+  const [userData, setUserData] = useState({} as UserDataProps);
 
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: Todos) => {
@@ -97,6 +105,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     getTodos(setTodos);
+    async function getUserDatasFromLocalStorage() {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      setUserData(user);
+    }
+
+    getUserDatasFromLocalStorage();
   }, []);
 
   async function handleSubmit(
@@ -287,7 +301,67 @@ export default function Dashboard() {
           website="https://avisos.jonatas.app/"
         />
       </Head>
-      <button
+      <motion.span
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        whileFocus={{ scale: 1.1 }}
+        whileDrag={{ scale: 0.9 }}
+        style={{
+          position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          top: "20px",
+          left: "20px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          outline: "none",
+          backdropFilter: "blur(10px)",
+          padding: "10px",
+          backgroundColor: userData?.isAdmin ? "rgba(255, 111, 33, 0.2)" : "rgba(255, 255, 255, 0.1)",
+          boxShadow: `0 0 20px 1px ${userData?.isAdmin ? "rgba(255, 111, 33, 0.2)" : "rgba(255, 255, 255, 0.1)"}`,
+          width: "4rem",
+          height: "4rem",
+          borderRadius: "10px",
+        }}
+        >
+        <Image
+          src={`https://avatars.dicebear.com/api/identicon/${userData.username}.svg`}
+          alt={userData?.name}
+          width={50}
+          height={50}
+          objectFit="cover"
+        />
+        <span
+          style={{
+            // name do usuario
+            position: "absolute",
+            top: "100%",
+            left: "0%",
+            marginTop: "10px",
+            // transform: "translate(-50%, -50%)",
+            color: "#fff",
+            fontSize: ".5em",
+            fontWeight: "bold",
+            textAlign: "center",
+
+          }}
+        >
+          {userData?.name}
+        </span>
+      </motion.span>
+      <motion.button
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        whileHover={{ scale: 1.2 }}
+        whileTap={{ scale: 0.9 }}
+        whileFocus={{ scale: 1.2 }}
+        whileDrag={{ scale: 0.9 }}
         style={{
           position: "absolute",
           top: "10px",
@@ -306,7 +380,7 @@ export default function Dashboard() {
         className={styles.btn}
       >
         <FiLogOut size={20} color="#fff" />
-      </button>
+      </motion.button>
       <Link href="/">
         <a
           style={{
@@ -440,10 +514,8 @@ export default function Dashboard() {
   );
 }
 
-
-
 export async function getStaticProps(context: GetStaticProps) {
   return {
     props: {}, // will be passed to the page component as props
-  }
+  };
 }
