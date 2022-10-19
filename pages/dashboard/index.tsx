@@ -34,17 +34,30 @@ interface Todos {
 }
 
 socket.on("addNewTodo", (data: string) => {
-  console.log("Dashboard out:",data);
-  toastContainer(`Um novo aviso criado por "${data[0].toUpperCase()+data.substring(1)}" com sucesso!`, "success");
+  console.log("Dashboard out:", data);
+  toastContainer(
+    `Um novo aviso criado por "${
+      data[0].toUpperCase() + data.substring(1)
+    }" com sucesso!`,
+    "success"
+  );
 });
 
 socket.on("deleteTodo", (data: string) => {
-  console.log("Dashboard out:",data);
-  const { deletedBy, title }: {
+  console.log("Dashboard out:", data);
+  const {
+    deletedBy,
+    title,
+  }: {
     deletedBy: string;
     title: string;
   } = JSON.parse(data);
-  toastContainer(`Aviso "${title}" deletado por ${deletedBy[0].toUpperCase()+deletedBy.substring(1)} com sucesso!`, "warning");
+  toastContainer(
+    `Aviso "${title}" deletado por ${
+      deletedBy[0].toUpperCase() + deletedBy.substring(1)
+    } com sucesso!`,
+    "warning"
+  );
 });
 
 socket.on("login", (data: Todos) => {
@@ -82,7 +95,7 @@ export default function Dashboard() {
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
     console.clear();
-    console.log("Dashboard in:",data);
+    console.log("Dashboard in:", data);
     // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
@@ -157,7 +170,8 @@ export default function Dashboard() {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
-            createdBy: await userDataLocal.name || await userDataServer.name,
+            createdBy:
+              (await userDataLocal.name) || (await userDataServer.name),
           });
 
           setTodos([...todos, dataApi]);
@@ -212,10 +226,13 @@ export default function Dashboard() {
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
-      socket.emit("deleteTodo", JSON.stringify({
-        title,
-        deletedBy: userDataLocal.username,
-      }));
+      socket.emit(
+        "deleteTodo",
+        JSON.stringify({
+          title,
+          deletedBy: userDataLocal.username,
+        })
+      );
       toast.warn(data.message, {
         theme: "dark",
       });
@@ -314,9 +331,6 @@ export default function Dashboard() {
         />
       </Head>
       <motion.span
-        initial={{ opacity: 0, y: -100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         whileFocus={{ scale: 1.1 }}
@@ -325,11 +339,11 @@ export default function Dashboard() {
           zIndex: 999,
           position: "absolute",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           top: "20px",
           left: "20px",
-          background: "transparent",
           border: "none",
           cursor: "pointer",
           outline: "none",
@@ -350,37 +364,55 @@ export default function Dashboard() {
               ? "rgba(255, 111, 33, 0.2)"
               : "rgba(255, 255, 255, 0.1)"
           }`,
-          width: "4rem",
-          height: "4rem",
+          maxWidth: "70px",
+          height: "auto",
           borderRadius: "10px",
         }}
       >
-        <Image
-          src={`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
-          alt={userDataLocal.name}
-          width={50}
-          height={50}
-          objectFit="cover"
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2, delay: 0 }}
+        >
+          <Image
+            src={`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
+            alt={userDataLocal.name}
+            width={50}
+            height={50}
+            objectFit="cover"
+          />
+        </motion.span>
+        <motion.tr
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.2 }}
+          style={{
+            width: "100%",
+            height: "2px",
+            margin: "10px 0",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+          }}
         />
-        <span
+        <motion.span
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.4 }}
           style={{
             // name do usuario
-            position: "absolute",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             top: "100%",
             left: "0%",
-            marginTop: "10px",
-            // transform: "translate(-50%, -50%)",
             color: "#fff",
-            fontSize: "1em",
+            fontSize: ".7rem",
             fontWeight: "bold",
             textAlign: "center",
+            whiteSpace: "pre-wrap",
           }}
         >
           {userDataLocal?.name}
-        </span>
+        </motion.span>
       </motion.span>
       <motion.button
         initial={{ opacity: 0, y: -100 }}
@@ -470,7 +502,7 @@ export default function Dashboard() {
           </div>
           <div className={styles.avisosContainer}>
             {todos.map(({ title, body, createdBy, createdAt, _id }, i) => {
-              console.log(_id,createdBy);
+              console.log(_id, createdBy);
 
               return (
                 <motion.div
