@@ -205,7 +205,7 @@ export default function Dashboard() {
         return;
       }
 
-      const title = await todos.find((data) => data._id === id);
+      const title = await todos.find((data) => data._id === id)?.title;
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
