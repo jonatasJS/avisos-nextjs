@@ -111,7 +111,7 @@ export default function Dashboard() {
 
     // percorrer o array de usuários e verificar se o usuário está cadastrado no localStorage (se o usuário está logado) e se o usuário é admin
     const userIsExist = users.find(
-      (data) => data.username === user.username && data.isAdmin === true
+      (data) => data.username === user.username
     );
 
     // se o usuário não estiver logado, redirecionar para a página de login
@@ -354,7 +354,7 @@ export default function Dashboard() {
               data.username === userDataServer.username && data.isAdmin === true
           )
             ? "rgba(0, 255, 0, 0.2)"
-            : "rgba(255, 111, 33, 0.2)",
+            : "rgba(255, 255, 255, 0.1)",
           boxShadow: `0 0 20px 1px ${
             users.find(
               (data) =>
@@ -362,7 +362,7 @@ export default function Dashboard() {
                 data.isAdmin === true
             )
               ? "rgba(0, 255, 0, 0.2)"
-              : "rgba(255, 111, 33, 0.2)"
+              : "rgba(255, 255, 255, 0.1)"
           }`,
           maxWidth: "70px",
           height: "auto",
