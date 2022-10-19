@@ -18,6 +18,12 @@
     "isAdmin": true
   },
   {
+    "name": "LEANDRO BARBOSA DE SALES",
+    "username": "leandro",
+    "pass": "1234",
+    "isAdmin": true
+  },
+  {
     "name": "JOHN DOE",
     "username": "john",
     "pass": "1234",
