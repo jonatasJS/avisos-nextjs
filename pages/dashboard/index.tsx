@@ -124,7 +124,8 @@ export default function Dashboard() {
   ) {
     try {
       const userIsAdmin = users.find(
-        (data) => data.username === userDataLocal.username && data.isAdmin === true
+        (data) =>
+          data.username === userDataLocal.username && data.isAdmin === true
       );
 
       if (!userIsAdmin) {
@@ -148,7 +149,7 @@ export default function Dashboard() {
           const { data: dataApi } = await api.post("/messanges", {
             title,
             body,
-            createdBy: userDataLocal.name,
+            createdBy: userDataLocal.name || userDataServer.name,
           });
 
           setTodos([...todos, dataApi]);
@@ -190,7 +191,8 @@ export default function Dashboard() {
   async function handleDelete(id: string) {
     try {
       const userIsAdmin = users.find(
-        (data) => data.username === userDataLocal.username && data.isAdmin === true
+        (data) =>
+          data.username === userDataLocal.username && data.isAdmin === true
       );
 
       if (!userIsAdmin) {
@@ -455,72 +457,76 @@ export default function Dashboard() {
             </button>
           </div>
           <div className={styles.avisosContainer}>
-            {todos.map(({ title, body, createdBy, createdAt, _id }, i) => (
-              <motion.div
-                key={_id}
-                className={styles.avisosItem}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                exit={{ opacity: 0, y: 50 }}
-                title={!!createdBy ? `Criado por: ${createdBy}` : ""}
-              >
-                <h2
-                  dangerouslySetInnerHTML={{
-                    __html: title,
-                  }}
-                ></h2>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: body
-                      .replaceAll("\n", "<br />")
-                      .replaceAll(
-                        `
+            {todos.map(({ title, body, createdBy, createdAt, _id }, i) => {
+              console.log(_id,createdBy);
+
+              return (
+                <motion.div
+                  key={_id}
+                  className={styles.avisosItem}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  title={!!createdBy ? `Criado por: ${createdBy}` : ""}
+                >
+                  <h2
+                    dangerouslySetInnerHTML={{
+                      __html: title,
+                    }}
+                  ></h2>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: body
+                        .replaceAll("\n", "<br />")
+                        .replaceAll(
+                          `
                   `,
-                        "<br />"
-                      )
-                      .replaceAll(
-                        `
+                          "<br />"
+                        )
+                        .replaceAll(
+                          `
                     
                   `,
-                        "<br /><br />"
-                      ),
-                  }}
-                ></p>
-
-                {createdBy && (
-                  <>
-                    <div className={styles.createdBy}>
-                      <FiUser size={20} color="#fff" />
-                      <span>{createdBy}</span>
-                    </div>
-                    <div className={styles.createdAt}>
-                      <FiClock
-                        size={20}
-                        color="#fff"
-                        onClick={() => handleDelete(_id)}
-                      />
-                      <span>
-                        {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
-                      </span>
-                    </div>
-                  </>
-                )}
-
-                <div className={styles.avisosItemFooter}>
-                  <button
-                    style={{
-                      bottom: createdBy ? "45px !important" : "0",
+                          "<br /><br />"
+                        ),
                     }}
-                    onClick={() => handleDelete(_id)}
-                    className={`${styles.btn} exclude`}
-                    title="Excluir"
-                  >
-                    Excluir
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                  ></p>
+
+                  {createdBy && (
+                    <>
+                      <div className={styles.createdBy}>
+                        <FiUser size={20} color="#fff" />
+                        <span>{createdBy}</span>
+                      </div>
+                      <div className={styles.createdAt}>
+                        <FiClock
+                          size={20}
+                          color="#fff"
+                          onClick={() => handleDelete(_id)}
+                        />
+                        <span>
+                          {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className={styles.avisosItemFooter}>
+                    <button
+                      style={{
+                        bottom: createdBy ? "45px !important" : "0",
+                      }}
+                      onClick={() => handleDelete(_id)}
+                      className={`${styles.btn} exclude`}
+                      title="Excluir"
+                    >
+                      Excluir
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       )}
