@@ -34,11 +34,13 @@ interface Todos {
 }
 
 socket.on("addNewTodo", (data: string) => {
+  console.log("Dashboard out:",data);
   toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
 });
 
-socket.on("deleteTodo", (data: Todos) => {
-  toastContainer(`Aviso deletado com sucesso!`, "warning");
+socket.on("deleteTodo", (data: string) => {
+  const { deletedBy, title } = JSON.parse(data);
+  toastContainer(`Aviso "${JSON.parse(title)}" deletado por ${deletedBy} com sucesso!`, "warning");
 });
 
 socket.on("login", (data: Todos) => {
@@ -76,7 +78,8 @@ export default function Dashboard() {
   // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
     console.clear();
-    toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
+    console.log("Dashboard in:",data);
+    // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
 
@@ -204,7 +207,10 @@ export default function Dashboard() {
       const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
-      socket.emit("deleteTodo", "deleteTodo");
+      socket.emit("deleteTodo", JSON.stringify({
+        title: data.title,
+        deletedBy: userDataLocal.username,
+      }));
       toast.warn(data.message, {
         theme: "dark",
       });

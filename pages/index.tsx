@@ -31,9 +31,6 @@ const Home: NextPage = () => {
 
   socket.on("addNewTodo", (data: Todos) => {
     console.clear();
-
-    
-
     getTodos(setTodos);
   });
 
