@@ -589,7 +589,10 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         padding: messageIdEdit === _id ? "10px" : "0",
                         borderRadius: messageIdEdit === _id ? "5px" : "0",
                         transition: "all 0.2s",
-                        boxShadow: messageIdEdit === _id ? "0 0 20px 1px #0000007f" : "none",
+                        boxShadow:
+                          messageIdEdit === _id
+                            ? "0 0 20px 1px #0000007f"
+                            : "none",
                       }}
                     ></h2>
                     <p
@@ -599,7 +602,10 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         padding: messageIdEdit === _id ? "10px" : "0",
                         borderRadius: messageIdEdit === _id ? "5px" : "0",
                         transition: "all 0.2s",
-                        boxShadow: messageIdEdit === _id ? "0 0 20px 1px #0000007f" : "none",
+                        boxShadow:
+                          messageIdEdit === _id
+                            ? "0 0 20px 1px #0000007f"
+                            : "none",
                       }}
                       contentEditable={messageIdEdit === _id}
                       onKeyUp={async (e) => {
@@ -628,23 +634,21 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     ></p>
 
                     {createdBy && (
-                      <>
-                        <div className={styles.createdBy}>
-                          <FiUser size={20} color="#fff" />
-                          <span>{createdBy}</span>
-                        </div>
-                        <div className={styles.createdAt}>
-                          <FiClock
-                            size={20}
-                            color="#fff"
-                            onClick={() => handleDelete(_id)}
-                          />
-                          <span>
-                            {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
-                          </span>
-                        </div>
-                      </>
+                      <div className={styles.createdBy}>
+                        <FiUser size={20} color="#fff" />
+                        <span>{createdBy}</span>
+                      </div>
                     )}
+                    <div className={styles.createdAt}>
+                      <FiClock
+                        size={20}
+                        color="#fff"
+                        onClick={() => handleDelete(_id)}
+                      />
+                      <span>
+                        {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                      </span>
+                    </div>
                     {editedBy && (
                       <>
                         <div className={styles.editedBy}>
