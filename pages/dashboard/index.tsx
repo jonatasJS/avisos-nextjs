@@ -302,7 +302,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       await api.put(`/messange/${id}`, {
         title: titleEdit,
         body: bodyEdit,
-        editedBy: userDataLocal.username,
+        editedBy: userDataLocal.name,
       });
 
       toastContainer("Aviso atualizados com sucesso", "success");
@@ -577,8 +577,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         __html: title,
                       }}
                       onKeyUp={async (e) => {
-                        if (e.target.textContent || messageIdEdit === _id) {
-                          setTitleEdit(e.target.textContent);
+                        if (e.target.innerHTML || messageIdEdit === _id) {
+                          setTitleEdit(e.target.innerHTML);
                         } else {
                           setTitleEdit("");
                         }
@@ -610,8 +610,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       contentEditable={messageIdEdit === _id}
                       onKeyUp={async (e) => {
                         console.log(e);
-                        if (e.target.textContent || messageIdEdit === _id) {
-                          setBodyEdit(e.target.textContent);
+                        if (e.target.innerHTML || messageIdEdit === _id) {
+                          setBodyEdit(e.target.innerHTML);
                         } else {
                           setBodyEdit("");
                         }
@@ -635,13 +635,17 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
                     {createdBy && (
                       <div className={styles.createdBy}>
-                        <FiUser size={20} color="#fff" />
+                        <FiUser size={10} color="#fff" />
                         <span>{createdBy}</span>
                       </div>
                     )}
-                    <div className={styles.createdAt}>
+                    <div className={styles.createdAt}
+                      style={{
+                        bottom: !!editedBy ? "55px" : "10px",
+                      }}
+                    >
                       <FiClock
-                        size={20}
+                        size={10}
                         color="#fff"
                         onClick={() => handleDelete(_id)}
                       />
@@ -652,11 +656,11 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     {editedBy && (
                       <>
                         <div className={styles.editedBy}>
-                          <FiEdit2 size={20} color="#fff" />
+                          <FiEdit2 size={10} color="#fff" />
                           <span>{editedBy}</span>
                         </div>
                         <div className={styles.editedAt}>
-                          <FiClock size={20} color="#fff" />
+                          <FiClock size={10} color="#fff" />
                           <span>
                             {moment(editedAt).format("DD/MM/YYYY hh:mm:ss")}
                           </span>
@@ -672,7 +676,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       <div className={styles.avisosItemFooter}>
                         <button
                           style={{
-                            bottom: createdBy ? "45px !important" : "15px",
+                            bottom: "0px",
+                            right: "25px",
                             backgroundColor:
                               messageIdEdit === _id ? "#32333a" : "#282a36",
                           }}

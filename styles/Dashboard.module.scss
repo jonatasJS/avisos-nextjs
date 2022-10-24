@@ -503,13 +503,13 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   width: 100%;
   background-color: transparent;
   position: absolute;
-  bottom: 30px;
+  bottom: 80px;
   left: 5px;
   gap: 10px;
 
   span {
     margin-left: 5px;
-    font-size: 1rem;
+    font-size: .5rem;
     color: #fff;
     background-color: transparent;
     text-align: center;
@@ -526,13 +526,59 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   width: 100%;
   background-color: transparent;
   position: absolute;
-  bottom: 5px;
+  bottom: 55px;
   left: 5px;
   gap: 10px;
 
   span {
     margin-left: 5px;
-    font-size: 1rem;
+    font-size: .5rem;
+    color: #fff;
+    background-color: transparent;
+    text-align: center;
+    margin-top: 5%;
+    font-weight: bold;
+  }
+}
+
+.editedBy {
+  // display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  bottom: 30px;
+  right: -5px;
+  gap: 10px;
+
+  span {
+    margin-left: 5px;
+    font-size: .5rem;
+    color: #fff;
+    background-color: transparent;
+    text-align: center;
+    margin-top: 5%;
+    font-weight: bold;
+  }
+}
+
+.editedAt {
+  // display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+  bottom: 5px;
+  right: -5px;
+  gap: 10px;
+
+  span {
+    margin-left: 5px;
+    font-size: .5rem;
     color: #fff;
     background-color: transparent;
     text-align: center;
