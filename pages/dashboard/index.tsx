@@ -672,7 +672,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       <div className={styles.avisosItemFooter}>
                         <button
                           style={{
-                            bottom: createdBy ? "45px !important" : "0",
+                            bottom: createdBy ? "45px !important" : "15px",
                             backgroundColor:
                               messageIdEdit === _id ? "#32333a" : "#282a36",
                           }}
