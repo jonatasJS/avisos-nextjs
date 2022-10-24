@@ -25,8 +25,12 @@ async function getTodos(setTodos: any) {
   setTodos(data);
 }
 
-const Home: NextPage = () => {
-  const [todos, setTodos] = useState<Todos[]>([]);
+const Home = ({
+  todosBack,
+}: {
+  todosBack: Todos[];
+}) => {
+  const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [todo, setTodo] = useState(0);
 
   socket.on("addNewTodo", (data: Todos) => {
@@ -47,12 +51,12 @@ const Home: NextPage = () => {
   useEffect(() => {
     const interval = setInterval(
       () => {
-        setTodo((todo) => (todo + 1) % todos.length);
+        setTodo((todo) => (todo + 1) % todos?.length);
       },
       process.env.NODE_ENV === "development" ? 15000 : 15000
     );
     return () => clearInterval(interval);
-  }, [todo, todos.length]);
+  }, [todo, todos?.length]);
 
   return (
     <>
@@ -152,8 +156,18 @@ const Home: NextPage = () => {
 
 export default Home;
 
+// export async function getServersideProps() {
+  
+// }
+
 export async function getStaticProps(context: GetStaticProps) {
+  const { data: todosBack } = await api.get("/messanges");
+
+  console.log(todosBack);
+
   return {
-    props: {}, // will be passed to the page component as props
-  }
+    props: {
+      todosBack,
+    },
+  };
 }

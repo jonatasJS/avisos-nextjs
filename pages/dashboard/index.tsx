@@ -1,3 +1,7 @@
+// desativer o tipescript e o eslint nesta linha
+// @ts-nocheck
+// @ts-ignore
+
 import { useEffect, useRef, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
@@ -11,7 +15,14 @@ import moment from "moment";
 import * as Yup from "yup";
 import { socket } from "../_app";
 
-import { FiClock, FiLogOut, FiUser } from "react-icons/fi";
+import {
+  FiClock,
+  FiEdit,
+  FiEdit2,
+  FiLogOut,
+  FiTrash2,
+  FiUser,
+} from "react-icons/fi";
 
 import users from "../../data/database.json";
 
@@ -28,9 +39,11 @@ import Image from "next/image";
 interface Todos {
   title: string;
   body: string;
-  createdBy: string;
-  createdAt: string;
+  createdBy?: string;
+  createdAt?: string;
   _id: string;
+  editedBy?: string;
+  editedAt?: string;
 }
 
 socket.on("addNewTodo", (data: string) => {
@@ -79,16 +92,16 @@ interface UserDataProps {
   isAdmin: boolean;
 }
 
-export default function Dashboard() {
-  const [todos, setTodos] = useState<Todos[]>([]);
+export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
+  const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [isShowError, setIsShowError] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const avisosRef = useRef<HTMLDivElement>(null);
   const [messageIdEdit, setMessageIdEdit] = useState("");
-  const [editingTitle, setEditingTitle] = useState("");
-  const [editingBody, setEditingBody] = useState("");
+  const [titleEdit, setTitleEdit] = useState("");
+  const [bodyEdit, setBodyEdit] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
@@ -280,12 +293,20 @@ export default function Dashboard() {
 
   async function handleEditMessage(id: string) {
     try {
+      console.log({
+        id,
+        title: titleEdit,
+        body: bodyEdit,
+        editedBy: userDataLocal.username,
+      });
       await api.put(`/messange/${id}`, {
-        title: editingTitle,
-        body: editingBody,
+        title: titleEdit,
+        body: bodyEdit,
+        editedBy: userDataLocal.username,
       });
 
       toastContainer("Aviso atualizados com sucesso", "success");
+      setMessageIdEdit("");
     } catch (err) {
       toastContainer("Internal Server Error", "error");
     }
@@ -513,82 +534,165 @@ export default function Dashboard() {
             </button>
           </div>
           <div className={styles.avisosContainer}>
-            {todos.map(({ title, body, createdBy, createdAt, _id }, i) => {
-              console.log(_id, createdBy);
+            {todos.map(
+              (
+                { title, body, createdBy, createdAt, _id, editedBy, editedAt },
+                i
+              ) => {
+                console.log(_id, createdBy);
 
-              return (
-                <motion.div
-                  key={_id}
-                  className={styles.avisosItem}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  exit={{ opacity: 0, y: 50 }}
-                  title={!!createdBy ? `Criado por: ${createdBy}` : ""}
-                >
-                  <h2
-                    dangerouslySetInnerHTML={{
-                      __html: title,
+                return (
+                  <motion.div
+                    key={_id}
+                    className={styles.avisosItem}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    exit={{ opacity: 0, y: 50 }}
+                    title={!!createdBy ? `Criado por: ${createdBy}` : ""}
+                    style={{
+                      outline:
+                        messageIdEdit === _id ? "2px solid #00f" : "none",
                     }}
-                  ></h2>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: body
-                        .replaceAll("\n", "<br />")
-                        .replaceAll(
-                          `
+                  >
+                    <span className={styles.penToEditTodo}>
+                      <FiEdit
+                        size={20}
+                        color="#fff"
+                        onClick={() => {
+                          if (messageIdEdit === _id) {
+                            // alert("Você já está editando este aviso");
+                            setMessageIdEdit("");
+                          } else {
+                            setTitleEdit("");
+                            setBodyEdit("");
+                            setMessageIdEdit(_id);
+                          }
+                        }}
+                      />
+                    </span>
+                    <h2
+                      contentEditable={messageIdEdit === _id}
+                      dangerouslySetInnerHTML={{
+                        __html: title,
+                      }}
+                      onKeyUp={async (e) => {
+                        if (e.target.textContent || messageIdEdit === _id) {
+                          setTitleEdit(e.target.textContent);
+                        } else {
+                          setTitleEdit("");
+                        }
+                      }}
+                      style={{
+                        outline:
+                          messageIdEdit === _id ? "2px solid #00f" : "none",
+                        padding: messageIdEdit === _id ? "10px" : "0",
+                        borderRadius: messageIdEdit === _id ? "5px" : "0",
+                        transition: "all 0.2s",
+                        boxShadow: messageIdEdit === _id ? "0 0 20px 1px #0000007f" : "none",
+                      }}
+                    ></h2>
+                    <p
+                      style={{
+                        outline:
+                          messageIdEdit === _id ? "2px solid #00f" : "none",
+                        padding: messageIdEdit === _id ? "10px" : "0",
+                        borderRadius: messageIdEdit === _id ? "5px" : "0",
+                        transition: "all 0.2s",
+                        boxShadow: messageIdEdit === _id ? "0 0 20px 1px #0000007f" : "none",
+                      }}
+                      contentEditable={messageIdEdit === _id}
+                      onKeyUp={async (e) => {
+                        console.log(e);
+                        if (e.target.textContent || messageIdEdit === _id) {
+                          setBodyEdit(e.target.textContent);
+                        } else {
+                          setBodyEdit("");
+                        }
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: body
+                          .replaceAll("\n", "<br />")
+                          .replaceAll(
+                            `
                   `,
-                          "<br />"
-                        )
-                        .replaceAll(
-                          `
+                            "<br />"
+                          )
+                          .replaceAll(
+                            `
                     
                   `,
-                          "<br /><br />"
-                        ),
-                    }}
-                  ></p>
+                            "<br /><br />"
+                          ),
+                      }}
+                    ></p>
 
-                  {createdBy && (
-                    <>
-                      <div className={styles.createdBy}>
-                        <FiUser size={20} color="#fff" />
-                        <span>{createdBy}</span>
-                      </div>
-                      <div className={styles.createdAt}>
-                        <FiClock
-                          size={20}
-                          color="#fff"
-                          onClick={() => handleDelete(_id)}
-                        />
-                        <span>
-                          {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
-                        </span>
-                      </div>
-                    </>
-                  )}
+                    {createdBy && (
+                      <>
+                        <div className={styles.createdBy}>
+                          <FiUser size={20} color="#fff" />
+                          <span>{createdBy}</span>
+                        </div>
+                        <div className={styles.createdAt}>
+                          <FiClock
+                            size={20}
+                            color="#fff"
+                            onClick={() => handleDelete(_id)}
+                          />
+                          <span>
+                            {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {editedBy && (
+                      <>
+                        <div className={styles.editedBy}>
+                          <FiEdit2 size={20} color="#fff" />
+                          <span>{editedBy}</span>
+                        </div>
+                        <div className={styles.editedAt}>
+                          <FiClock size={20} color="#fff" />
+                          <span>
+                            {moment(editedAt).format("DD/MM/YYYY hh:mm:ss")}
+                          </span>
+                        </div>
+                      </>
+                    )}
 
-                  {users.find(
-                    (data) =>
-                      data.username === userDataServer.username &&
-                      data.isAdmin === true
-                  ) && (
-                    <div className={styles.avisosItemFooter}>
-                      <button
-                        style={{
-                          bottom: createdBy ? "45px !important" : "0",
-                        }}
-                        onClick={() => handleDelete(_id)}
-                        className={`${styles.btn} exclude`}
-                        title="Excluir"
-                      >
-                        Excluir
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
+                    {users.find(
+                      (data) =>
+                        data.username === userDataServer.username &&
+                        data.isAdmin === true
+                    ) && (
+                      <div className={styles.avisosItemFooter}>
+                        <button
+                          style={{
+                            bottom: createdBy ? "45px !important" : "0",
+                            backgroundColor:
+                              messageIdEdit === _id ? "#32333a" : "#282a36",
+                          }}
+                          onClick={() => {
+                            if (messageIdEdit === _id) {
+                              handleEditMessage(_id);
+                            } else {
+                              handleDelete(_id);
+                            }
+                          }}
+                          className={`${styles.btn} exclude`}
+                        >
+                          {messageIdEdit === _id ? (
+                            "Salvar"
+                          ) : (
+                            <FiTrash2 size={20} color="#fff" />
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              }
+            )}
           </div>
         </div>
       )}
@@ -597,7 +701,13 @@ export default function Dashboard() {
 }
 
 export async function getStaticProps(context: GetStaticProps) {
+  const { data: todosBack } = await api.get("/messanges");
+
+  console.log(todosBack);
+
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      todosBack,
+    },
   };
 }
