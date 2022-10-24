@@ -20,9 +20,12 @@ import {
   FiEdit,
   FiEdit2,
   FiLogOut,
+  FiSave,
   FiTrash2,
   FiUser,
 } from "react-icons/fi";
+
+import { AiOutlineClose } from "react-icons/ai";
 
 import users from "../../data/database.json";
 
@@ -555,21 +558,24 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         messageIdEdit === _id ? "2px solid #00f" : "none",
                     }}
                   >
-                    <span className={styles.penToEditTodo}>
-                      <FiEdit
-                        size={20}
-                        color="#fff"
-                        onClick={() => {
-                          if (messageIdEdit === _id) {
-                            // alert("Você já está editando este aviso");
-                            setMessageIdEdit("");
-                          } else {
-                            setTitleEdit("");
-                            setBodyEdit("");
-                            setMessageIdEdit(_id);
-                          }
-                        }}
-                      />
+                    <span
+                      className={styles.penToEditTodo}
+                      onClick={() => {
+                        if (messageIdEdit === _id) {
+                          // alert("Você já está editando este aviso");
+                          setMessageIdEdit("");
+                        } else {
+                          setTitleEdit("");
+                          setBodyEdit("");
+                          setMessageIdEdit(_id);
+                        }
+                      }}
+                    >
+                      {messageIdEdit !== _id ? (
+                        <FiEdit size={20} color="#fff" />
+                      ) : (
+                        <AiOutlineClose size={20} color="#fff" fill="#fff" />
+                      )}
                     </span>
                     <h2
                       contentEditable={messageIdEdit === _id}
@@ -639,7 +645,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         <span>{createdBy}</span>
                       </div>
                     )}
-                    <div className={styles.createdAt}
+                    <div
+                      className={styles.createdAt}
                       style={{
                         bottom: !!editedBy ? "55px" : "10px",
                       }}
@@ -679,7 +686,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                             bottom: "0px",
                             right: "25px",
                             backgroundColor:
-                              messageIdEdit === _id ? "#32333a" : "#282a36",
+                              messageIdEdit === _id ? "#282a36" : "#282a36",
                           }}
                           onClick={() => {
                             if (messageIdEdit === _id) {
@@ -691,7 +698,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                           className={`${styles.btn} exclude`}
                         >
                           {messageIdEdit === _id ? (
-                            "Salvar"
+                            <FiSave size={20} color="#fff" />
                           ) : (
                             <FiTrash2 size={20} color="#fff" />
                           )}
