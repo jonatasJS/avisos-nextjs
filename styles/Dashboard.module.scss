@@ -491,7 +491,6 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   width: 100%;
   height: 100%;
   margin-bottom: 10%;
-  background-color: transparent;
   // position: /;
 
   button {
@@ -502,11 +501,12 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .createdBy {
   // display: flex;
+  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, .1);
   position: absolute;
   bottom: 80px;
   left: 5px;
@@ -525,11 +525,12 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .createdAt {
   // display: flex;
+  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, .1);
   position: absolute;
   bottom: 55px;
   left: 5px;
@@ -548,11 +549,12 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .editedBy {
   // display: flex;
+  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, .1);
   position: absolute;
   bottom: 30px;
   right: -5px;
@@ -571,11 +573,12 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .editedAt {
   // display: flex;
+  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, .1);
   position: absolute;
   bottom: 5px;
   right: -5px;

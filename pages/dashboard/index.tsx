@@ -12,9 +12,10 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import * as Yup from "yup";
-import { socket } from "../_app";
 import nmd from 'nano-markdown';
+import * as Yup from "yup";
+
+import { socket } from "../_app";
 
 import {
   FiClock,

@@ -1,7 +1,9 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import type { NextPage, GetStaticProps } from "next";
+import type { GetStaticProps } from "next";
 import { motion } from "framer-motion";
+import nmd from 'nano-markdown';
+
 import { socket } from "./_app";
 
 import api from "../services/api";
@@ -96,7 +98,7 @@ const Home = ({
         >
           <h1
             dangerouslySetInnerHTML={{
-              __html: todos[todo]?.title,
+              __html: nmd(todos[todo]?.title),
             }}
           ></h1>
         </motion.div>
@@ -128,19 +130,19 @@ const Home = ({
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: todos[todo]?.body
-              .replaceAll("\n", "<br />")
-              .replaceAll(
-                `
-            `,
-                "<br />"
-              )
-              .replaceAll(
-                `
+            __html: nmd(todos[todo]?.body)
+            //   .replaceAll("\n", "<br />")
+            //   .replaceAll(
+            //     `
+            // `,
+            //     "<br />"
+            //   )
+            //   .replaceAll(
+            //     `
               
-            `,
-                "<br />"
-              ),
+            // `,
+            //     "<br />"
+            //   ),
           }}
           initial={{ opacity: 0, y: 500 }}
           animate={{ opacity: 1, y: 0 }}
