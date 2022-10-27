@@ -483,6 +483,23 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 }
 
+.logs {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 5%;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  height: auto;
+}
+
 .avisosItemFooter {
   display: flex;
   position: relative;
@@ -500,17 +517,19 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 }
 
+/*
+  padding: 10px;
+  background-color: rgba(0, 0, 0, .1);
+*/
 .createdBy {
   // display: flex;
-  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 0, 0, .1);
-  position: absolute;
-  bottom: 80px;
-  left: 5px;
+  // position: absolute;
+  // bottom: 80px;
+  // left: 5px;
   gap: 10px;
 
   span {
@@ -526,15 +545,13 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .createdAt {
   // display: flex;
-  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 0, 0, .1);
-  position: absolute;
-  bottom: 55px;
-  left: 5px;
+  // position: absolute;
+  // bottom: 55px;
+  // left: 5px;
   gap: 10px;
 
   span {
@@ -550,15 +567,13 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .editedBy {
   // display: flex;
-  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 0, 0, .1);
-  position: absolute;
-  bottom: 30px;
-  right: -5px;
+  // position: absolute;
+  // bottom: 30px;
+  // right: -5px;
   gap: 10px;
 
   span {
@@ -574,15 +589,13 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 
 .editedAt {
   // display: flex;
-  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 0, 0, .1);
-  position: absolute;
-  bottom: 5px;
-  right: -5px;
+  // position: absolute;
+  // bottom: 5px;
+  // right: -5px;
   gap: 10px;
 
   span {

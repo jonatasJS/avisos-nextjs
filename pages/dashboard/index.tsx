@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import nmd from 'nano-markdown';
+import nmd from "nano-markdown";
 import * as Yup from "yup";
 
 import { socket } from "../_app";
@@ -334,7 +334,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             body: bodyEdit,
           };
         }
-      
+
         return todo;
       });
 
@@ -499,7 +499,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             fontWeight: "bold",
             textAlign: "center",
             whiteSpace: "pre-wrap",
-            userSelect: "none"
+            userSelect: "none",
           }}
         >
           {userDataLocal?.name}
@@ -689,57 +689,59 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         }
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: nmd(body)
-                  //         .replaceAll("\n", "<br />")
-                  //         .replaceAll(
-                  //           `
-                  // `,
-                  //           "<br />"
-                  //         )
-                  //         .replaceAll(
-                  //           `
-                    
-                  // `,
-                  //           "<br /><br />"
-                  //         ),
+                        __html: nmd(body),
+                        //         .replaceAll("\n", "<br />")
+                        //         .replaceAll(
+                        //           `
+                        // `,
+                        //           "<br />"
+                        //         )
+                        //         .replaceAll(
+                        //           `
+
+                        // `,
+                        //           "<br /><br />"
+                        //         ),
                       }}
                     ></p>
 
-                    {createdBy && (
-                      <div className={styles.createdBy}>
-                        <FiUser size={10} color="#fff" />
-                        <span>{createdBy}</span>
+                    <div className={styles.logs}>
+                      {createdBy && (
+                        <div className={styles.createdBy}>
+                          <FiUser size={10} color="#fff" />
+                          <span>{createdBy}</span>
+                        </div>
+                      )}
+                      <div
+                        className={styles.createdAt}
+                        style={{
+                          bottom: !!editedBy ? "55px" : "10px",
+                        }}
+                      >
+                        <FiClock
+                          size={10}
+                          color="#fff"
+                          onClick={() => handleDelete(_id)}
+                        />
+                        <span>
+                          {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                        </span>
                       </div>
-                    )}
-                    <div
-                      className={styles.createdAt}
-                      style={{
-                        bottom: !!editedBy ? "55px" : "10px",
-                      }}
-                    >
-                      <FiClock
-                        size={10}
-                        color="#fff"
-                        onClick={() => handleDelete(_id)}
-                      />
-                      <span>
-                        {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
-                      </span>
+                      {editedBy && (
+                        <>
+                          <div className={styles.editedBy}>
+                            <FiEdit2 size={10} color="#fff" />
+                            <span>{editedBy}</span>
+                          </div>
+                          <div className={styles.editedAt}>
+                            <FiClock size={10} color="#fff" />
+                            <span>
+                              {moment(editedAt).format("DD/MM/YYYY hh:mm:ss")}
+                            </span>
+                          </div>
+                        </>
+                      )}
                     </div>
-                    {editedBy && (
-                      <>
-                        <div className={styles.editedBy}>
-                          <FiEdit2 size={10} color="#fff" />
-                          <span>{editedBy}</span>
-                        </div>
-                        <div className={styles.editedAt}>
-                          <FiClock size={10} color="#fff" />
-                          <span>
-                            {moment(editedAt).format("DD/MM/YYYY hh:mm:ss")}
-                          </span>
-                        </div>
-                      </>
-                    )}
 
                     {users.find(
                       (data) =>
