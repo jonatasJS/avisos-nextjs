@@ -476,6 +476,11 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     color: #fff;
     background-color: transparent;
     text-align: center;
+
+    b {
+      margin-top: 5%;
+      font-size: 1.5em;
+    }
   }
 
   div svg {
