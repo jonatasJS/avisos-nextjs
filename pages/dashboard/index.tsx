@@ -126,7 +126,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
-  // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
     console.clear();
     console.log("Dashboard in:", data);
@@ -134,13 +134,13 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     getTodos(setTodos);
   });
 
-  // qual o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
   });
 
-  // qual o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("editTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
