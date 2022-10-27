@@ -471,6 +471,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             fontWeight: "bold",
             textAlign: "center",
             whiteSpace: "pre-wrap",
+            userSelect: "none"
           }}
         >
           {userDataLocal?.name}
