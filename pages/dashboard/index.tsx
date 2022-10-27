@@ -343,8 +343,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       socket.emit(
         "editTodo",
         JSON.stringify({
-          title: titleEdit,
-          body: bodyEdit,
+          title: todos.find((todo) => todo._id === id)?.title,
           editedBy: userDataLocal.username,
         })
       );
