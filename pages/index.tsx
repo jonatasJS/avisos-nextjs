@@ -43,10 +43,6 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   });
 
   useEffect(() => {
-    getTodos(setTodos);
-  }, []);
-
-  useEffect(() => {
     const interval = setInterval(
       () => {
         setTodo((todo) => (todo + 1) % todos?.length);

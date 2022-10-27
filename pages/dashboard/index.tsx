@@ -164,7 +164,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   });
 
   useEffect(() => {
-    getTodos(setTodos);
     async function getUserDatasFromLocalStorage() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setUserDataServer(user);
