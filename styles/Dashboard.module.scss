@@ -454,10 +454,20 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   h2 {
     font-size: 1.5em;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: transparent;
     text-align: center;
     margin-top: 5%;
     font-weight: bold;
+
+    p {
+      gap: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   p {
