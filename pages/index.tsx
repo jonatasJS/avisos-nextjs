@@ -164,5 +164,6 @@ export async function getStaticProps(context: GetStaticProps) {
     props: {
       todosBack,
     },
+    revalidate: 60,
   };
 }
