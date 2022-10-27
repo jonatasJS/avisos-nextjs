@@ -368,15 +368,42 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       <Head>
         <style>
           {`
-          html,
-          body,
-          #__next {
-            justify-content: center !important;
-          }
+            html,
+            body,
+            #__next {
+              justify-content: center !important;
+              height: auto !important;
+              width: 100vw !important;
+              overflow-x: hidden !important;
+              overflow-y: auto !important;
+            }
+
+            html:-webkit-scrollbar-track,
+            body:-webkit-scrollbar-track,
+            #__next:-webkit-scrollbar-track {
+              -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+              border-radius: 10px;
+              background-color: transparent;
+            }
           
-          #layout {
-            height: 90vh !important;
-          }
+            html::-webkit-scrollbar,
+            body::-webkit-scrollbar,
+            #__next::-webkit-scrollbar {
+              width: 12px;
+              background-color: transparent;
+            }
+          
+            html::-webkit-scrollbar-thumb,
+            body::-webkit-scrollbar-thumb,
+            #__next::-webkit-scrollbar-thumb {
+              border-radius: 10px;
+              -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+              background-color: #44475a;
+            }
+            
+            #layout {
+              height: 90vh !important;
+            }
           `}
         </style>
         <SEO
@@ -519,7 +546,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             )
               ? "-60px"
               : "60px",
-            marginTop: "100px",
+            marginTop: "50px",
           }}
         >
           <Logo />
@@ -531,9 +558,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           data.username === userDataServer.username && data.isAdmin === true
       ) && (
         <>
-          <header className={styles.header}>
-            <h1>Cadastrar novo aviso</h1>
-          </header>
           <main className={styles.main} ref={mainRef}>
             <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
               <Input

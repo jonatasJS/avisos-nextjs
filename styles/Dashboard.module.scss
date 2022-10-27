@@ -66,7 +66,8 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 }
 
 .formFooter {
-  margin-top: 2em;
+  margin-top: 1em;
+  margin-bottom: 2em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -385,10 +386,10 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 .avisos {
   height: auto;
   max-height: 100%;
-  width: 97%;
+  width: 92%;
   margin-left: 20px;
   margin-right: 30px;
-  margin-top: 2%;
+  margin-top: 5%;
   margin-bottom: 5%;
   border-radius: 20px;
   border-top: 1px solid #44475a;

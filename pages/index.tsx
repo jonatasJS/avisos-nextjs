@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion } from "framer-motion";
-import nmd from 'nano-markdown';
+import nmd from "nano-markdown";
 
 import { socket } from "./_app";
 
@@ -27,11 +27,7 @@ async function getTodos(setTodos: any) {
   setTodos(data);
 }
 
-const Home = ({
-  todosBack,
-}: {
-  todosBack: Todos[];
-}) => {
+const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [todo, setTodo] = useState(0);
 
@@ -78,10 +74,7 @@ const Home = ({
           website="https://avisos.jonatas.app/"
         />
       </Head>
-      <Header
-        title={todos[todo]?.title}
-        showTitle={false}  
-      />
+      <Header title={todos[todo]?.title} showTitle={false} />
       <motion.main
         className={styles.main}
         initial={{ opacity: 0 }}
@@ -130,7 +123,7 @@ const Home = ({
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: nmd(todos[todo]?.body)
+            __html: nmd(todos[todo]?.body),
             //   .replaceAll("\n", "<br />")
             //   .replaceAll(
             //     `
@@ -139,7 +132,7 @@ const Home = ({
             //   )
             //   .replaceAll(
             //     `
-              
+
             // `,
             //     "<br />"
             //   ),
@@ -159,7 +152,7 @@ const Home = ({
 export default Home;
 
 // export async function getServersideProps() {
-  
+
 // }
 
 export async function getStaticProps(context: GetStaticProps) {

@@ -18,7 +18,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [isVisibled, setIsVisibled] = useState(false);
   const [isLogo, setIsLogo] = useState<"logo" | "clock">("logo");
 
-
   const scrollToTop = () => {
     lay = document.getElementById("layout");
     if (lay !== null) {
@@ -51,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       .getElementById("layout")
       ?.addEventListener("scroll", toggleVisibility);
   }, []);
-  
+
   // alterar o logo acada 10 segundos
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,7 +72,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             transition={{
               duration: 2,
               ease: "easeInOut",
-              times: [0, 0.2, 0.5, 0.8, 1]
+              times: [0, 0.2, 0.5, 0.8, 1],
             }}
             key={isLogo}
             className="mt-20"
@@ -93,7 +92,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </motion.a>
         </Link>
       )}
-      <div
+      {route.pathname !== "/dashboard" ? <div
         id="layout"
         style={{
           position: "relative",
@@ -105,8 +104,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         className={styles.container}
       >
         {children}
-        <ToastContainer />
-      </div>
+      </div> : children}
+      <ToastContainer />
       <div
         className={styles.button}
         style={{
