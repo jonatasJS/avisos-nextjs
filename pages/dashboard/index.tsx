@@ -14,6 +14,7 @@ import { FormHandles } from "@unform/core";
 import moment from "moment";
 import * as Yup from "yup";
 import { socket } from "../_app";
+import nmd from 'nano-markdown';
 
 import {
   FiClock,
@@ -24,7 +25,6 @@ import {
   FiTrash2,
   FiUser,
 } from "react-icons/fi";
-
 import { AiOutlineClose } from "react-icons/ai";
 
 import users from "../../data/database.json";
@@ -76,6 +76,23 @@ socket.on("deleteTodo", (data: string) => {
   );
 });
 
+socket.on("editTodo", (data: string) => {
+  console.log("Dashboard out:", data);
+  const {
+    editedBy,
+    title,
+  }: {
+    editedBy: string;
+    title: string;
+  } = JSON.parse(data);
+  toastContainer(
+    `Aviso "${title}" editado por ${
+      editedBy[0].toUpperCase() + editedBy.substring(1)
+    } com sucesso!`,
+    "info"
+  );
+});
+
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 });
@@ -118,6 +135,12 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // qual o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
+    console.clear();
+    getTodos(setTodos);
+  });
+
+  // qual o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
+  socket.on("editTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
   });
@@ -296,17 +319,34 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   async function handleEditMessage(id: string) {
     try {
-      console.log({
-        id,
-        title: titleEdit,
-        body: bodyEdit,
-        editedBy: userDataLocal.username,
-      });
       await api.put(`/messange/${id}`, {
         title: titleEdit,
         body: bodyEdit,
         editedBy: userDataLocal.name,
       });
+
+      const newTodos = todos.map((todo) => {
+        if (todo._id === id) {
+          return {
+            ...todo,
+            title: titleEdit,
+            body: bodyEdit,
+          };
+        }
+      
+        return todo;
+      });
+
+      setTodos(newTodos);
+
+      socket.emit(
+        "editTodo",
+        JSON.stringify({
+          title: titleEdit,
+          body: bodyEdit,
+          editedBy: userDataLocal.username,
+        })
+      );
 
       toastContainer("Aviso atualizados com sucesso", "success");
       setMessageIdEdit("");
@@ -580,7 +620,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     <h2
                       contentEditable={messageIdEdit === _id}
                       dangerouslySetInnerHTML={{
-                        __html: title,
+                        __html: nmd(title),
                       }}
                       onKeyUp={async (e) => {
                         if (e.target.innerHTML || messageIdEdit === _id) {
@@ -623,19 +663,19 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         }
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: body
-                          .replaceAll("\n", "<br />")
-                          .replaceAll(
-                            `
-                  `,
-                            "<br />"
-                          )
-                          .replaceAll(
-                            `
+                        __html: nmd(body)
+                  //         .replaceAll("\n", "<br />")
+                  //         .replaceAll(
+                  //           `
+                  // `,
+                  //           "<br />"
+                  //         )
+                  //         .replaceAll(
+                  //           `
                     
-                  `,
-                            "<br /><br />"
-                          ),
+                  // `,
+                  //           "<br /><br />"
+                  //         ),
                       }}
                     ></p>
 

@@ -9,7 +9,6 @@ import Layout from "../components/Layout";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.scss";
 
-
 export const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
   transports: ["websocket"],
 });
