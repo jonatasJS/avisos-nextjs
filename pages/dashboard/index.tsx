@@ -14,6 +14,7 @@ import { FormHandles } from "@unform/core";
 import moment from "moment";
 import nmd from "nano-markdown";
 import * as Yup from "yup";
+import Modal from "react-bootstrap/Modal";
 
 import { socket } from "../_app";
 
@@ -39,6 +40,7 @@ import toastContainer from "../../services/toastContainer";
 import Logo from "../../components/Logo";
 import SEO from "../../components/SEO";
 import Image from "next/image";
+import { Button } from "react-bootstrap";
 
 interface Todos {
   title: string;
@@ -116,6 +118,7 @@ interface UserDataProps {
 export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [isShowError, setIsShowError] = useState(false);
+  const [deleteMessageVisible, setDeleteMessageVisible] = useState(true);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -123,6 +126,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdEdit, setMessageIdEdit] = useState("");
   const [titleEdit, setTitleEdit] = useState("");
   const [bodyEdit, setBodyEdit] = useState("");
+  const [titleDelete, setTitleDelete] = useState("");
+  const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
@@ -355,15 +360,80 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     }
   }
 
-  // ativar o modo de edição
-  // function handleEdit(id: string) {
-  //   const todo = todos.find((todo) => todo._id === id);
-  //   if (todo) {
-  //     setEditingId(todo._id);
-  //   }
-
   return (
     <>
+      {/* modal to confirm delete todo */}
+      <Modal
+        show={deleteMessageVisible}
+        size="lm"
+        centered
+        onHide={() => {
+          setDeleteMessageVisible(false);
+        }}
+        themeColor={"dark"}
+      >
+        <Modal.Dialog
+          style={{
+            margin: "0",
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              dangerouslySetInnerHTML={{
+                __html: `${nmd(titleDelete)}`,
+              }}
+            ></Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: `Você está prestes a deletar ${
+                  /*nmd(*/ titleDelete /*)*/
+                }!`,
+              }}
+            />
+            <p>Caso delete não tera como recuperá-lo!</p>
+          </Modal.Body>
+
+          <Modal.Footer
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <p>{messageIdDelete}</p>
+            <div style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "10px",
+            }}>
+              <Button
+                onClick={() => {
+                  setDeleteMessageVisible(false);
+                  setTitleDelete("");
+                  setmMessageIdDelete("");
+                }}
+                variant="secondary"
+              >
+                Fechar
+              </Button>
+              <Button
+                onClick={async () => {
+                  await handleDelete(messageIdDelete);
+                  setDeleteMessageVisible(false);
+                  setTitleDelete("");
+                  setmMessageIdDelete("");
+                }}
+                variant="danger"
+              >
+                Sim, apagar
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </Modal>
+
       <Head>
         <style>
           {`
@@ -760,7 +830,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                             if (messageIdEdit === _id) {
                               handleEditMessage(_id);
                             } else {
-                              handleDelete(_id);
+                              setTitleDelete(title);
+                              setmMessageIdDelete(_id);
+                              setDeleteMessageVisible(true);
                             }
                           }}
                           className={`${styles.btn} exclude`}
