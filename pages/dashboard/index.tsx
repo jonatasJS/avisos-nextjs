@@ -349,6 +349,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
       toastContainer("Aviso atualizados com sucesso", "success");
       setMessageIdEdit("");
+      handleRefresh();
     } catch (err) {
       toastContainer("Internal Server Error", "error");
     }
@@ -628,6 +629,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         if (messageIdEdit === _id) {
                           // alert("Você já está editando este aviso");
                           setMessageIdEdit("");
+                          handleRefresh();
                         } else {
                           setTitleEdit("");
                           setBodyEdit("");
