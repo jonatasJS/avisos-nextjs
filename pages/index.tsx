@@ -87,7 +87,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         >
           <h1
             dangerouslySetInnerHTML={{
-              __html: !!todos[todo] && nmd(todos[todo]?.title),
+              __html: nmd(todos[todo]?.title),
             }}
           ></h1>
         </motion.div>
@@ -119,7 +119,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: !!todos[todo] && nmd(todos[todo]?.body),
+            __html: nmd(todos[todo]?.body),
             //   .replaceAll("\n", "<br />")
             //   .replaceAll(
             //     `
