@@ -118,7 +118,7 @@ interface UserDataProps {
 export default function Dashboard() {
   const [todos, setTodos] = useState<Todos[]>([] as Todos[]);
   const [isShowError, setIsShowError] = useState(false);
-  const [deleteMessageVisible, setDeleteMessageVisible] = useState(true);
+  const [deleteMessageVisible, setDeleteMessageVisible] = useState(false);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
