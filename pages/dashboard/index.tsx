@@ -115,8 +115,8 @@ interface UserDataProps {
   isAdmin: boolean;
 }
 
-export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
-  const [todos, setTodos] = useState<Todos[]>(todosBack);
+export default function Dashboard() {
+  const [todos, setTodos] = useState<Todos[]>([] as Todos[]);
   const [isShowError, setIsShowError] = useState(false);
   const [deleteMessageVisible, setDeleteMessageVisible] = useState(true);
   const formRef = useRef<FormHandles>(null);
@@ -856,15 +856,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   );
 }
 
-export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messages");
+// export async function getStaticProps(context: GetStaticProps) {
+//   const { data: todosBack } = await api.get("/messages");
 
-  console.log(todosBack);
+//   console.log(todosBack);
 
-  return {
-    props: {
-      todosBack,
-    },
-    revalidate: 60,
-  };
-}
+//   return {
+//     props: {
+//       todosBack,
+//     },
+//     revalidate: 60,
+//   };
+// }
