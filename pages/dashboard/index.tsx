@@ -105,7 +105,7 @@ socket.on("connect", () => {
 });
 
 async function getTodos(setTodos: any) {
-  const { data } = await api.get("/messanges");
+  const { data } = await api.get("/messages");
   setTodos(data);
 }
 
@@ -209,7 +209,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           abortEarly: false,
         })
         .then(async ({ title, body }) => {
-          const { data: dataApi } = await api.post("/messanges", {
+          const { data: dataApi } = await api.post("/messages", {
             title,
             body,
             createdBy:
@@ -286,7 +286,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   async function handleSearch(e: any) {
     const { value } = e.target;
     if (!value || value === "") {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       return setTodos(data);
     }
 
@@ -295,7 +295,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     });
 
     if (!filtered.length) {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       setTodos(data);
       setIsShowError(true);
 
@@ -313,7 +313,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   async function handleRefresh() {
     try {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       setTodos(data);
       searchRef.current && (searchRef.current.value = "");
       toastContainer("Avisos atualizados com sucesso", "success");
@@ -857,7 +857,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 }
 
 export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messanges");
+  const { data: todosBack } = await api.get("/messages");
 
   console.log(todosBack);
 

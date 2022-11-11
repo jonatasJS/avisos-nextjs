@@ -23,7 +23,7 @@ socket.on("connect", () => {
 });
 
 async function getTodos(setTodos: any) {
-  const { data } = await api.get("/messanges");
+  const { data } = await api.get("/messages");
   setTodos(data);
 }
 
@@ -152,7 +152,7 @@ export default Home;
 // }
 
 export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messanges");
+  const { data: todosBack } = await api.get("/messages");
 
   console.log(todosBack);
 
