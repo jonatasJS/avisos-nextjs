@@ -23,7 +23,7 @@ socket.on("connect", () => {
 });
 
 async function getTodos(setTodos: any) {
-  const { data } = await api.get("/messanges");
+  const { data } = await api.get("/messages");
   setTodos(data);
 }
 
@@ -87,7 +87,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         >
           <h1
             dangerouslySetInnerHTML={{
-              __html: nmd(todos[todo]?.title),
+              __html: !!todos[todo] && nmd(todos[todo]?.title),
             }}
           ></h1>
         </motion.div>
@@ -119,7 +119,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: nmd(todos[todo]?.body),
+            __html: !!todos[todo] && nmd(todos[todo]?.body),
             //   .replaceAll("\n", "<br />")
             //   .replaceAll(
             //     `
@@ -152,7 +152,7 @@ export default Home;
 // }
 
 export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messanges");
+  const { data: todosBack } = await api.get("/messages");
 
   console.log(todosBack);
 
