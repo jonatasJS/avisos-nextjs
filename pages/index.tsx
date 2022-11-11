@@ -27,8 +27,8 @@ async function getTodos(setTodos: any) {
   setTodos(data);
 }
 
-const Home = () => {
-  const [todos, setTodos] = useState<Todos[]>([] as Todos[]);
+const Home = ({ todosBack }: { todosBack: Todos[] }) => {
+  const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [todo, setTodo] = useState(0);
 
   socket.on("addNewTodo", (data: Todos) => {
@@ -151,15 +151,15 @@ export default Home;
 
 // }
 
-// export async function getStaticProps(context: GetStaticProps) {
-//   const { data: todosBack } = await api.get("/messages");
+export async function getStaticProps(context: GetStaticProps) {
+  const { data: todosBack } = await api.get("/messages");
 
-//   console.log(todosBack);
+  console.log(todosBack);
 
-//   return {
-//     props: {
-//       todosBack,
-//     },
-//     revalidate: 60,
-//   };
-// }
+  return {
+    props: {
+      todosBack,
+    },
+    revalidate: 60,
+  };
+}
