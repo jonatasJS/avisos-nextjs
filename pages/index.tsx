@@ -47,7 +47,7 @@ const Home = () => {
       () => {
         setTodo((todo) => (todo + 1) % todos?.length);
       },
-      process.env.NODE_ENV === "development" ? 15000 : 15000
+      process.env.NODE_ENV === "development" ? 3000 : 15000
     );
     return () => clearInterval(interval);
   }, [todo, todos?.length]);
@@ -87,7 +87,7 @@ const Home = () => {
         >
           <h1
             dangerouslySetInnerHTML={{
-              __html: nmd(todos[todo]?.title),
+              __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
           ></h1>
         </motion.div>
@@ -119,7 +119,7 @@ const Home = () => {
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: nmd(todos[todo]?.body),
+            __html: nmd(todos[todo]?.body ? todos[todo].body : ''),
             //   .replaceAll("\n", "<br />")
             //   .replaceAll(
             //     `
