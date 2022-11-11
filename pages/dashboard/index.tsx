@@ -265,7 +265,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
 
       const title = await todos.find((data) => data._id === id)?.title;
-      const { data } = await api.delete(`/message/${id}`);
+      const { data } = await api.delete(`/messange/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
       socket.emit(
@@ -324,7 +324,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   async function handleEditMessage(id: string) {
     try {
-      await api.put(`/message/${id}`, {
+      await api.put(`/messange/${id}`, {
         title: titleEdit,
         body: bodyEdit,
         editedBy: userDataLocal.name,
