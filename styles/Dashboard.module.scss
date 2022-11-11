@@ -467,7 +467,6 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
       display: flex;
       justify-content: center;
       align-items: center;
-
     }
   }
 
@@ -495,7 +494,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   flex-direction: column;
   gap: 5px;
   background-color: rgba(0, 0, 0, 0.2);
-  // backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   border-radius: 10px;
   padding: 10px;
   margin-top: 5%;
@@ -505,6 +504,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   left: 0;
   width: 55%;
   height: auto;
+  box-shadow: 0 0 20px 1px rgba(0,0,0,.2);
 }
 
 .avisosItemFooter {

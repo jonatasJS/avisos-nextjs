@@ -403,11 +403,13 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             }}
           >
             <p>{messageIdDelete}</p>
-            <div style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "10px",
-            }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+              }}
+            >
               <Button
                 onClick={() => {
                   setDeleteMessageVisible(false);
@@ -777,16 +779,32 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
                     <div className={styles.logs}>
                       {createdBy && (
-                        <div className={styles.createdBy}>
+                        <motion.div
+                          className={styles.createdBy}
+                          initial={{ opacity: 0, y: 100 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.1 }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          whileFocus={{ scale: 1.1 }}
+                          whileDrag={{ scale: 0.9 }}
+                        >
                           <FiUser size={10} color="#fff" />
                           <span>{createdBy}</span>
-                        </div>
+                        </motion.div>
                       )}
-                      <div
+                      <motion.div
                         className={styles.createdAt}
                         style={{
                           bottom: !!editedBy ? "55px" : "10px",
                         }}
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.1 }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        whileFocus={{ scale: 1.1 }}
+                        whileDrag={{ scale: 0.9 }}
                       >
                         <FiClock
                           size={10}
@@ -796,19 +814,37 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         <span>
                           {moment(createdAt).format("DD/MM/YYYY hh:mm:ss")}
                         </span>
-                      </div>
+                      </motion.div>
                       {editedBy && (
                         <>
-                          <div className={styles.editedBy}>
+                          <motion.div
+                            className={styles.editedBy}
+                            initial={{ opacity: 0, y: 100 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.1 }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            whileFocus={{ scale: 1.1 }}
+                            whileDrag={{ scale: 0.9 }}
+                          >
                             <FiEdit2 size={10} color="#fff" />
                             <span>{editedBy}</span>
-                          </div>
-                          <div className={styles.editedAt}>
+                          </motion.div>
+                          <motion.div
+                            className={styles.editedAt}
+                            initial={{ opacity: 0, y: 100 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.1 }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            whileFocus={{ scale: 1.1 }}
+                            whileDrag={{ scale: 0.9 }}
+                          >
                             <FiClock size={10} color="#fff" />
                             <span>
                               {moment(editedAt).format("DD/MM/YYYY hh:mm:ss")}
                             </span>
-                          </div>
+                          </motion.div>
                         </>
                       )}
                     </div>
