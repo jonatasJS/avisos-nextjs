@@ -23,7 +23,7 @@ socket.on("connect", () => {
 });
 
 async function getTodos(setTodos: any) {
-  const { data } = await api.get("/messanges");
+  const { data } = await api.get("/messages");
   setTodos(data);
 }
 
@@ -41,10 +41,6 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
 
     getTodos(setTodos);
   });
-
-  useEffect(() => {
-    getTodos(setTodos);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(
@@ -156,7 +152,7 @@ export default Home;
 // }
 
 export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messanges");
+  const { data: todosBack } = await api.get("/messages");
 
   console.log(todosBack);
 
@@ -164,5 +160,6 @@ export async function getStaticProps(context: GetStaticProps) {
     props: {
       todosBack,
     },
+    revalidate: 60,
   };
 }

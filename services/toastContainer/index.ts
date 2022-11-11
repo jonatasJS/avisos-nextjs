@@ -9,6 +9,7 @@ export default function toastContainer(message: string, type: 'info' | 'success'
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true
+    draggable: true,
+    pauseOnFocusLoss: false,
   });
 }

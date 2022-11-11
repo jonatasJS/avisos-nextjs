@@ -14,6 +14,7 @@ import { FormHandles } from "@unform/core";
 import moment from "moment";
 import nmd from "nano-markdown";
 import * as Yup from "yup";
+import Modal from "react-bootstrap/Modal";
 
 import { socket } from "../_app";
 
@@ -39,6 +40,7 @@ import toastContainer from "../../services/toastContainer";
 import Logo from "../../components/Logo";
 import SEO from "../../components/SEO";
 import Image from "next/image";
+import { Button } from "react-bootstrap";
 
 interface Todos {
   title: string;
@@ -103,7 +105,7 @@ socket.on("connect", () => {
 });
 
 async function getTodos(setTodos: any) {
-  const { data } = await api.get("/messanges");
+  const { data } = await api.get("/messages");
   setTodos(data);
 }
 
@@ -116,6 +118,7 @@ interface UserDataProps {
 export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [isShowError, setIsShowError] = useState(false);
+  const [deleteMessageVisible, setDeleteMessageVisible] = useState(true);
   const formRef = useRef<FormHandles>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -123,10 +126,12 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdEdit, setMessageIdEdit] = useState("");
   const [titleEdit, setTitleEdit] = useState("");
   const [bodyEdit, setBodyEdit] = useState("");
+  const [titleDelete, setTitleDelete] = useState("");
+  const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
-  // qual o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
     console.clear();
     console.log("Dashboard in:", data);
@@ -134,13 +139,13 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     getTodos(setTodos);
   });
 
-  // qual o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
   });
 
-  // qual o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
+  // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("editTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
@@ -164,7 +169,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   });
 
   useEffect(() => {
-    getTodos(setTodos);
     async function getUserDatasFromLocalStorage() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setUserDataServer(user);
@@ -205,7 +209,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           abortEarly: false,
         })
         .then(async ({ title, body }) => {
-          const { data: dataApi } = await api.post("/messanges", {
+          const { data: dataApi } = await api.post("/messages", {
             title,
             body,
             createdBy:
@@ -261,7 +265,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
 
       const title = await todos.find((data) => data._id === id)?.title;
-      const { data } = await api.delete(`/messange/${id}`);
+      const { data } = await api.delete(`/message/${id}`);
 
       setTodos(todos.filter((todo) => todo._id !== id));
       socket.emit(
@@ -282,7 +286,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   async function handleSearch(e: any) {
     const { value } = e.target;
     if (!value || value === "") {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       return setTodos(data);
     }
 
@@ -291,7 +295,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     });
 
     if (!filtered.length) {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       setTodos(data);
       setIsShowError(true);
 
@@ -309,7 +313,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   async function handleRefresh() {
     try {
-      const { data } = await api.get("/messanges");
+      const { data } = await api.get("/messages");
       setTodos(data);
       searchRef.current && (searchRef.current.value = "");
       toastContainer("Avisos atualizados com sucesso", "success");
@@ -320,7 +324,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   async function handleEditMessage(id: string) {
     try {
-      await api.put(`/messange/${id}`, {
+      await api.put(`/message/${id}`, {
         title: titleEdit,
         body: bodyEdit,
         editedBy: userDataLocal.name,
@@ -350,20 +354,86 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
       toastContainer("Aviso atualizados com sucesso", "success");
       setMessageIdEdit("");
+      handleRefresh();
     } catch (err) {
       toastContainer("Internal Server Error", "error");
     }
   }
 
-  // ativar o modo de edição
-  // function handleEdit(id: string) {
-  //   const todo = todos.find((todo) => todo._id === id);
-  //   if (todo) {
-  //     setEditingId(todo._id);
-  //   }
-
   return (
     <>
+      {/* modal to confirm delete todo */}
+      <Modal
+        show={deleteMessageVisible}
+        size="lm"
+        centered
+        onHide={() => {
+          setDeleteMessageVisible(false);
+        }}
+        themeColor={"dark"}
+      >
+        <Modal.Dialog
+          style={{
+            margin: "0",
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              dangerouslySetInnerHTML={{
+                __html: `${nmd(titleDelete)}`,
+              }}
+            ></Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: `Você está prestes a deletar ${
+                  /*nmd(*/ titleDelete /*)*/
+                }!`,
+              }}
+            />
+            <p>Caso delete não tera como recuperá-lo!</p>
+          </Modal.Body>
+
+          <Modal.Footer
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <p>{messageIdDelete}</p>
+            <div style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "10px",
+            }}>
+              <Button
+                onClick={() => {
+                  setDeleteMessageVisible(false);
+                  setTitleDelete("");
+                  setmMessageIdDelete("");
+                }}
+                variant="secondary"
+              >
+                Fechar
+              </Button>
+              <Button
+                onClick={async () => {
+                  await handleDelete(messageIdDelete);
+                  setDeleteMessageVisible(false);
+                  setTitleDelete("");
+                  setmMessageIdDelete("");
+                }}
+                variant="danger"
+              >
+                Sim, apagar
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </Modal>
+
       <Head>
         <style>
           {`
@@ -629,6 +699,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         if (messageIdEdit === _id) {
                           // alert("Você já está editando este aviso");
                           setMessageIdEdit("");
+                          handleRefresh();
                         } else {
                           setTitleEdit("");
                           setBodyEdit("");
@@ -759,7 +830,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                             if (messageIdEdit === _id) {
                               handleEditMessage(_id);
                             } else {
-                              handleDelete(_id);
+                              setTitleDelete(title);
+                              setmMessageIdDelete(_id);
+                              setDeleteMessageVisible(true);
                             }
                           }}
                           className={`${styles.btn} exclude`}
@@ -784,7 +857,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 }
 
 export async function getStaticProps(context: GetStaticProps) {
-  const { data: todosBack } = await api.get("/messanges");
+  const { data: todosBack } = await api.get("/messages");
 
   console.log(todosBack);
 
@@ -792,5 +865,6 @@ export async function getStaticProps(context: GetStaticProps) {
     props: {
       todosBack,
     },
+    revalidate: 60,
   };
 }
