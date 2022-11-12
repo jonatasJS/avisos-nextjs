@@ -41,7 +41,6 @@ import Logo from "../../components/Logo";
 import SEO from "../../components/SEO";
 import Image from "next/image";
 import { Button } from "react-bootstrap";
-import { emit } from "process";
 
 interface Todos {
   title: string;
@@ -99,6 +98,11 @@ socket.on("editTodo", (data: string) => {
 
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
+
+  if (users.find((userOnly) => userOnly.username === data)) {
+    // modificar o isOnline;
+    users.find((user) => user.username === data).isOnline = true;
+  }
 });
 
 async function getTodos(setTodos: any) {
@@ -174,28 +178,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataLocal(user);
 
       socket.emit("login", user.username);
-      socket.on("login", (data) => {
-        if (Users.find((userOnly) => userOnly.username === data)) {
-          setUsers(
-            users.forEach((e) => {
-              if (e.username === data) {
-                e.isOnline = true;
-              } else {
-                e.isOnline = false;
-              }
-            })
-          );
-          console.log(
-            users.forEach((e) => {
-              if (e.username === data) {
-                e.isOnline = true;
-              } else {
-                e.isOnline = false;
-              }
-            })
-          );
-        }
-      });
 
       setUsers(users);
     }
