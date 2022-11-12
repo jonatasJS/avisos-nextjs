@@ -174,23 +174,30 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataLocal(user);
 
       socket.emit("login", user.username);
-      socket.on('login', (data) => {
-        if (Users.find(userOnly => userOnly.username === data)) {
+      socket.on("login", (data) => {
+        if (Users.find((userOnly) => userOnly.username === data)) {
           setUsers(
-            users.forEach(e => {
+            users.forEach((e) => {
               if (e.username === data) {
                 e.isOnline = true;
               } else {
                 e.isOnline = false;
               }
             })
-          )
+          );
+          users.forEach((e) => {
+            if (e.username === data) {
+              e.isOnline = true;
+            } else {
+              e.isOnline = false;
+            }
+          });
         }
       });
 
       setUsers(users);
     }
-    
+
     getUserDatasFromLocalStorage();
   }, []);
 
@@ -519,6 +526,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           alignItems: "flex-start",
           top: "20px",
           left: "20px",
+          userSelect: "none",
         }}
       >
         <motion.span
@@ -603,55 +611,56 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {!!Users && Users.map(
-          (e, i) =>
-            e.username !== userDataLocal.username && (
-              <motion.span
-                key={i}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                whileFocus={{ scale: 1.1 }}
-                whileDrag={{ scale: 0.9 }}
-                style={{
-                  zIndex: 999,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  border: "none",
-                  cursor: "pointer",
-                  outline: "none",
-                  backdropFilter: "blur(10px)",
-                  padding: "10px",
-                  backgroundColor: e.isOnline
-                    ? "rgba(0, 255, 0, 0.2)"
-                    : "rgba(255, 255, 255, 0.1)",
-                  boxShadow: `0 0 20px 1px ${
-                    e.isOnline
-                      ? "rgba(0, 255, 0, 0.2)"
-                      : "rgba(255, 255, 255, 0.1)"
-                  }`,
-                  maxWidth: "40px",
-                  height: "auto",
-                  borderRadius: "10px",
-                }}
-              >
+        {!!Users &&
+          Users.map(
+            (e, i) =>
+              e.username !== userDataLocal.username && (
                 <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0 }}
+                  key={i}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  whileFocus={{ scale: 1.1 }}
+                  whileDrag={{ scale: 0.9 }}
+                  style={{
+                    zIndex: 999,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "none",
+                    cursor: "pointer",
+                    outline: "none",
+                    backdropFilter: "blur(10px)",
+                    padding: "10px",
+                    backgroundColor: e.isOnline
+                      ? "rgba(0, 255, 0, 0.2)"
+                      : "rgba(255, 255, 255, 0.1)",
+                    boxShadow: `0 0 20px 1px ${
+                      e.isOnline
+                        ? "rgba(0, 255, 0, 0.2)"
+                        : "rgba(255, 255, 255, 0.1)"
+                    }`,
+                    maxWidth: "40px",
+                    height: "auto",
+                    borderRadius: "10px",
+                  }}
                 >
-                  <Image
-                    src={`https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
-                    alt={e.name}
-                    width={40}
-                    height={40}
-                    objectFit="cover"
-                  />
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 0 }}
+                  >
+                    <Image
+                      src={`https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
+                      alt={e.name}
+                      width={40}
+                      height={40}
+                      objectFit="cover"
+                    />
+                  </motion.span>
                 </motion.span>
-              </motion.span>
-            )
-        )}
+              )
+          )}
       </div>
 
       <motion.button
@@ -840,7 +849,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         }
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: nmd(body)
+                        __html: nmd(body),
                       }}
                     ></p>
 
