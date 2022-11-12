@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import moment from "moment";
+import moment, { relativeTimeRounding } from "moment";
 import nmd from "nano-markdown";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
@@ -98,10 +98,12 @@ socket.on("editTodo", (data: string) => {
 
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
-});
 
-socket.on("connect", () => {
-  console.clear();
+  users.map((user: UserDataProps) => {
+    if (user.username === data) {
+      user.isOnline = true;
+    }
+  });
 });
 
 async function getTodos(setTodos: any) {
@@ -113,6 +115,7 @@ interface UserDataProps {
   username: string;
   name: string;
   isAdmin: boolean;
+  isOnline: boolean;
 }
 
 export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
@@ -174,7 +177,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataServer(user);
       setUserDataLocal(user);
     }
-
+    
     getUserDatasFromLocalStorage();
   }, []);
 
@@ -491,91 +494,155 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           website="https://avisos.jonatas.app/"
         />
       </Head>
-      <motion.span
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        whileFocus={{ scale: 1.1 }}
-        whileDrag={{ scale: 0.9 }}
+
+      <div
         style={{
           zIndex: 999,
           position: "absolute",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
+          gap: 5,
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-start",
           top: "20px",
           left: "20px",
-          border: "none",
-          cursor: "pointer",
-          outline: "none",
-          backdropFilter: "blur(10px)",
-          padding: "10px",
-          backgroundColor: users.find(
-            (data) =>
-              data.username === userDataServer.username && data.isAdmin === true
-          )
-            ? "rgba(0, 255, 0, 0.2)"
-            : "rgba(255, 255, 255, 0.1)",
-          boxShadow: `0 0 20px 1px ${
-            users.find(
+        }}
+
+        onLoad={() => socket.emit("login", userDataLocal.username)}
+      >
+        <motion.span
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          whileFocus={{ scale: 1.1 }}
+          whileDrag={{ scale: 0.9 }}
+          style={{
+            zIndex: 999,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "none",
+            cursor: "pointer",
+            outline: "none",
+            backdropFilter: "blur(10px)",
+            padding: "10px",
+            backgroundColor: users.find(
               (data) =>
                 data.username === userDataServer.username &&
                 data.isAdmin === true
             )
               ? "rgba(0, 255, 0, 0.2)"
-              : "rgba(255, 255, 255, 0.1)"
-          }`,
-          maxWidth: "70px",
-          height: "auto",
-          borderRadius: "10px",
-        }}
-      >
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2, delay: 0 }}
+              : "rgba(255, 255, 255, 0.1)",
+            boxShadow: `0 0 20px 1px ${
+              users.find(
+                (data) =>
+                  data.username === userDataServer.username &&
+                  data.isAdmin === true
+              )
+                ? "rgba(0, 255, 0, 0.2)"
+                : "rgba(255, 255, 255, 0.1)"
+            }`,
+            maxWidth: "70px",
+            height: "auto",
+            borderRadius: "10px",
+          }}
         >
-          <Image
-            src={`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
-            alt={userDataLocal.name}
-            width={50}
-            height={50}
-            objectFit="cover"
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, delay: 0 }}
+          >
+            <Image
+              src={`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
+              alt={userDataLocal.name}
+              width={50}
+              height={50}
+              objectFit="cover"
+            />
+          </motion.span>
+          <tr
+            style={{
+              width: "100%",
+              height: "2px",
+              margin: "10px 0",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+            }}
           />
+          <motion.span
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, delay: 0.4 }}
+            style={{
+              // name do usuario
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              top: "100%",
+              left: "0%",
+              color: "#fff",
+              fontSize: ".7rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              whiteSpace: "pre-wrap",
+              userSelect: "none",
+            }}
+          >
+            {userDataLocal?.name}
+          </motion.span>
         </motion.span>
-        <motion.tr
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, delay: 0.2 }}
-          style={{
-            width: "100%",
-            height: "2px",
-            margin: "10px 0",
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-          }}
-        />
-        <motion.span
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, delay: 0.4 }}
-          style={{
-            // name do usuario
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            top: "100%",
-            left: "0%",
-            color: "#fff",
-            fontSize: ".7rem",
-            fontWeight: "bold",
-            textAlign: "center",
-            whiteSpace: "pre-wrap",
-            userSelect: "none",
-          }}
-        >
-          {userDataLocal?.name}
-        </motion.span>
-      </motion.span>
+
+        {/* listra usuarios que estão online  */}
+        {users.map(
+          (e, i) =>
+            e.username !== userDataLocal.username && (
+              <motion.span
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                whileFocus={{ scale: 1.1 }}
+                whileDrag={{ scale: 0.9 }}
+                style={{
+                  zIndex: 999,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  border: "none",
+                  cursor: "pointer",
+                  outline: "none",
+                  backdropFilter: "blur(10px)",
+                  padding: "10px",
+                  backgroundColor: e.isOnline
+                    ? "rgba(0, 255, 0, 0.2)"
+                    : "rgba(255, 255, 255, 0.1)",
+                  boxShadow: `0 0 20px 1px ${
+                    e.isOnline
+                      ? "rgba(0, 255, 0, 0.2)"
+                      : "rgba(255, 255, 255, 0.1)"
+                  }`,
+                  maxWidth: "40px",
+                  height: "auto",
+                  borderRadius: "10px",
+                }}
+              >
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0 }}
+                >
+                  <Image
+                    src={`https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
+                    alt={e.name}
+                    width={40}
+                    height={40}
+                    objectFit="cover"
+                  />
+                </motion.span>
+              </motion.span>
+            )
+        )}
+      </div>
+
       <motion.button
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -603,6 +670,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       >
         <FiLogOut size={20} color="#fff" />
       </motion.button>
+
       <Link href="/">
         <a
           style={{
@@ -761,19 +829,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         }
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: nmd(body),
-                        //         .replaceAll("\n", "<br />")
-                        //         .replaceAll(
-                        //           `
-                        // `,
-                        //           "<br />"
-                        //         )
-                        //         .replaceAll(
-                        //           `
-
-                        // `,
-                        //           "<br /><br />"
-                        //         ),
+                        __html: nmd(body)
                       }}
                     ></p>
 
@@ -894,8 +950,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
 export async function getStaticProps(context: GetStaticProps) {
   const { data: todosBack } = await api.get("/messages");
-
-  console.log(todosBack);
 
   return {
     props: {

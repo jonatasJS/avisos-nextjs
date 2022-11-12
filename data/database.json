@@ -3,30 +3,35 @@
     "name": "JOSEANE RIBEIRO CASTRO",
     "username": "joseane",
     "pass": "1234",
-    "isAdmin": true
+    "isAdmin": true,
+    "isOnline": false
   },
   {
     "name": "JEANE CRISTINY CASTRO CARVALHO",
     "username": "jeane",
     "pass": "1234",
-    "isAdmin": true
+    "isAdmin": true,
+    "isOnline": false
   },
   {
     "name": "JONATAS SOUZA SOARES",
     "username": "admin",
     "pass": "admin",
-    "isAdmin": true
+    "isAdmin": true,
+    "isOnline": false
   },
   {
     "name": "LEANDRO BARBOSA DE SALES",
     "username": "leandro",
     "pass": "1234",
-    "isAdmin": true
+    "isAdmin": true,
+    "isOnline": false
   },
   {
     "name": "JOHN DOE",
     "username": "john",
     "pass": "1234",
-    "isAdmin": false
+    "isAdmin": false,
+    "isOnline": false
   }
 ]
