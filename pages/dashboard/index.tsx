@@ -600,8 +600,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {!!Users &&
-          Users.map(
+        {!!users &&
+          users.map(
             (e, i) =>
               e.username !== userDataLocal.username && (
                 <motion.span
@@ -645,6 +645,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       width={40}
                       height={40}
                       objectFit="cover"
+                      title={e.name}
                     />
                   </motion.span>
                 </motion.span>
