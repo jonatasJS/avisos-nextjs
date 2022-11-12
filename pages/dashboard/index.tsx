@@ -99,10 +99,10 @@ socket.on("editTodo", (data: string) => {
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 
-  if (users.find((userOnly) => userOnly.username === data)) {
-    // modificar o isOnline;
-    users.find((userOnly) => userOnly.username === data).isOnline = true;
-  }
+  users.filter(userOnly => userOnly.username === data).forEach(user => {
+    console.log(user);
+    user.isOnline = true;
+  });
 
   console.log({
     data,
