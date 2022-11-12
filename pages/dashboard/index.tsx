@@ -176,6 +176,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setUserDataServer(user);
       setUserDataLocal(user);
+
+      socket.emit("login", user.username);
     }
     
     getUserDatasFromLocalStorage();
@@ -507,8 +509,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           top: "20px",
           left: "20px",
         }}
-
-        onLoad={() => socket.emit("login", userDataLocal.username)}
       >
         <motion.span
           whileHover={{ scale: 1.1 }}
