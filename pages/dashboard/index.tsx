@@ -101,8 +101,13 @@ socket.on("login", (data: Todos) => {
 
   if (users.find((userOnly) => userOnly.username === data)) {
     // modificar o isOnline;
-    users.find((user) => user.username === data).isOnline = true;
+    users.find((userOnly) => userOnly.username === data).isOnline = true;
   }
+
+  console.log({
+    data,
+    users
+  })
 });
 
 async function getTodos(setTodos: any) {
