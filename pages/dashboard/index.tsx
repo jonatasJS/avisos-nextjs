@@ -42,6 +42,8 @@ import SEO from "../../components/SEO";
 import Image from "next/image";
 import { Button } from "react-bootstrap";
 
+let Users: UserDataProps[] = [];
+
 interface Todos {
   title: string;
   body: string;
@@ -99,7 +101,7 @@ socket.on("editTodo", (data: string) => {
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 
-  users.filter(userOnly => userOnly.username === data).forEach(user => {
+  Users = users.filter(userOnly => userOnly.username === data).forEach(user => {
     console.log(user);
     user.isOnline = true;
   });
@@ -137,7 +139,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
-  const [Users, setUsers] = useState([] as UserDataProps[]);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -183,8 +184,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataLocal(user);
 
       socket.emit("login", user.username);
-
-      setUsers(users);
     }
 
     getUserDatasFromLocalStorage();
@@ -600,8 +599,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {!!users &&
-          users.map(
+        {!!Users &&
+          Users.map(
             (e, i) =>
               e.username !== userDataLocal.username && (
                 <motion.span
