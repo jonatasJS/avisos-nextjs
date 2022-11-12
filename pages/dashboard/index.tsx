@@ -42,7 +42,7 @@ import SEO from "../../components/SEO";
 import Image from "next/image";
 import { Button } from "react-bootstrap";
 
-let Users: UserDataProps[] = [];
+let Users: UserDataProps[] = users;
 
 interface Todos {
   title: string;
