@@ -128,7 +128,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
-  const [Users, setUsers] = useState({} as UserDataProps[]);
+  const [Users, setUsers] = useState([] as UserDataProps[]);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -603,7 +603,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {Users.map(
+        {!!Users && Users.map(
           (e, i) =>
             e.username !== userDataLocal.username && (
               <motion.span
