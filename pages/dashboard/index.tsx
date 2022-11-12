@@ -185,13 +185,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               }
             })
           );
-          users.forEach((e) => {
-            if (e.username === data) {
-              e.isOnline = true;
-            } else {
-              e.isOnline = false;
-            }
-          });
+          console.log(
+            users.forEach((e) => {
+              if (e.username === data) {
+                e.isOnline = true;
+              } else {
+                e.isOnline = false;
+              }
+            })
+          );
         }
       });
 
