@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import moment, { relativeTimeRounding } from "moment";
+import moment from "moment";
 import nmd from "nano-markdown";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
@@ -41,6 +41,7 @@ import Logo from "../../components/Logo";
 import SEO from "../../components/SEO";
 import Image from "next/image";
 import { Button } from "react-bootstrap";
+import { emit } from "process";
 
 interface Todos {
   title: string;
@@ -98,16 +99,6 @@ socket.on("editTodo", (data: string) => {
 
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
-
-  users.map((user: UserDataProps) => {
-    if (user.username === data) {
-      user.isOnline = true;
-    } else {
-      user.isOnline = false;
-    }
-
-    console.log(user.username);
-  });
 });
 
 async function getTodos(setTodos: any) {
@@ -137,6 +128,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
+  const [Users, setUsers] = useState({} as UserDataProps[]);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -182,6 +174,21 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataLocal(user);
 
       socket.emit("login", user.username);
+      socket.on('login', (data) => {
+        if (Users.find(userOnly => userOnly.username === data)) {
+          setUsers(
+            users.forEach(e => {
+              if (e.username === data) {
+                e.isOnline = true;
+              } else {
+                e.isOnline = false;
+              }
+            })
+          )
+        }
+      });
+
+      setUsers(users);
     }
     
     getUserDatasFromLocalStorage();
@@ -596,7 +603,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {userDataServer.map(
+        {Users.map(
           (e, i) =>
             e.username !== userDataLocal.username && (
               <motion.span
