@@ -102,7 +102,11 @@ socket.on("login", (data: Todos) => {
   users.map((user: UserDataProps) => {
     if (user.username === data) {
       user.isOnline = true;
+    } else {
+      user.isOnline = false;
     }
+
+    console.log(user.username);
   });
 });
 
@@ -592,7 +596,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         </motion.span>
 
         {/* listra usuarios que estão online  */}
-        {users.map(
+        {userDataServer.map(
           (e, i) =>
             e.username !== userDataLocal.username && (
               <motion.span
