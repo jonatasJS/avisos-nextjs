@@ -483,9 +483,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               background-color: #44475a;
             }
             
-            #layout {
+            */ #layout {
               height: 90vh !important;
-            }
+            } */
           `}
         </style>
         <SEO

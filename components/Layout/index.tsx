@@ -47,26 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     };
 
     window.document
-      .getElementById(styles.container)
-      ?.addEventListener("scroll", toggleVisibility);
-  }, []);
-
-  useEffect(() => {
-    lay = window.document.getElementById(styles.container);
-
-    const toggleVisibility = () => {
-      const scroll = window.document.getElementById(styles.container);
-      if (scroll !== null) {
-        if (scroll.scrollTop > 300) {
-          setIsVisibled(true);
-        } else {
-          setIsVisibled(false);
-        }
-      }
-    };
-
-    window.document
-      .getElementById(styles.container)
+      .getElementById(styles.dashboard)
       ?.addEventListener("scroll", toggleVisibility);
   }, []);
 
@@ -111,19 +92,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </motion.a>
         </Link>
       )}
-      {route.pathname !== "/dashboard" ? <div
-        id="layout"
-        style={{
-          position: "relative",
-          overflowY:
-            route.pathname === "/" || route.pathname.includes("/login")
-              ? "hidden"
-              : "auto",
-        }}
-        className={styles.container}
-      >
-        {children}
-      </div> : children}
+      {route.pathname !== "/dashboard" ? (
+        <div
+          id="layout"
+          style={{
+            position: "relative",
+            overflowY:
+              route.pathname === "/" || route.pathname.includes("/login")
+                ? "hidden"
+                : "auto",
+          }}
+          className={styles.container}
+        >
+          {children}
+        </div>
+      ) : (
+        <div
+          style={{
+            height: "100% !important",
+          }}
+          id="layout"
+        >
+          {children}
+        </div>
+      )}
       <ToastContainer />
       <div
         className={styles.button}
