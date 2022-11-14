@@ -47,7 +47,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     };
 
     window.document
-      .getElementById("layout")
+      .getElementById(styles.container)
+      ?.addEventListener("scroll", toggleVisibility);
+  }, []);
+
+  useEffect(() => {
+    lay = window.document.getElementById(styles.container);
+
+    const toggleVisibility = () => {
+      const scroll = window.document.getElementById(styles.container);
+      if (scroll !== null) {
+        if (scroll.scrollTop > 300) {
+          setIsVisibled(true);
+        } else {
+          setIsVisibled(false);
+        }
+      }
+    };
+
+    window.document
+      .getElementById(styles.container)
       ?.addEventListener("scroll", toggleVisibility);
   }, []);
 
