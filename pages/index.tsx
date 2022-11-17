@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import nmd from "nano-markdown";
+import convertToHTML from 'markdown-to-html-converter';
 
 import { socket } from "./_app";
 
@@ -87,7 +88,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         >
           <h1
             dangerouslySetInnerHTML={{
-              __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
+              __html: convertToHTML(todos[todo]?.title ? todos[todo].title : '') // nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
           ></h1>
         </motion.div>
@@ -119,26 +120,13 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               : "1.9rem",
           }}
           dangerouslySetInnerHTML={{
-            __html: nmd(todos[todo]?.body ? todos[todo].body : ''),
-            //   .replaceAll("\n", "<br />")
-            //   .replaceAll(
-            //     `
-            // `,
-            //     "<br />"
-            //   )
-            //   .replaceAll(
-            //     `
-
-            // `,
-            //     "<br />"
-            //   ),
+            __html: convertToHTML(todos[todo]?.body ? todos[todo].body : '') // nmd(todos[todo]?.body ? todos[todo].body : '')
           }}
           initial={{ opacity: 0, y: 500 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.6, bounce: 1 }}
           exit={{ opacity: 0, y: 500 }}
         >
-          {/* <p>{todos[0].body}</p> */}
         </motion.div>
       </motion.main>
     </>

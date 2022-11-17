@@ -15,6 +15,7 @@ import moment from "moment";
 import nmd from "nano-markdown";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
+import convertToHTML from 'markdown-to-html-converter';
 
 import { socket } from "../_app";
 
@@ -391,7 +392,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           <Modal.Header closeButton>
             <Modal.Title
               dangerouslySetInnerHTML={{
-                __html: `${nmd(titleDelete)}`,
+                __html: convertToHTML(titleDelete) // `${nmd(titleDelete)}`,
               }}
             ></Modal.Title>
           </Modal.Header>
@@ -795,7 +796,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     <h2
                       contentEditable={messageIdEdit === _id}
                       dangerouslySetInnerHTML={{
-                        __html: nmd(title),
+                        __html: convertToHTML(title) // nmd(title),
                       }}
                       onKeyUp={async (e) => {
                         if (e.target.innerHTML || messageIdEdit === _id) {
@@ -838,7 +839,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         }
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: nmd(body),
+                        __html: convertToHTML(body) // nmd(body),
                       }}
                     ></p>
 

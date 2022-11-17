@@ -2543,6 +2543,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+markdown-to-html-converter@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-to-html-converter/-/markdown-to-html-converter-1.0.4.tgz#2d60406e9a18ff0cbdba9410552b68abd4e61252"
+  integrity sha512-u7xzA7HvOlo2A1bEeIDLV8aYpcFbNGwJ1tjBqYjQedBCRjxIiWADXpA/uBNXalj4xGjafhgtgb+cdX7CYwBt6g==
+
 memory-pager@^1.0.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/memory-pager/-/memory-pager-1.5.0.tgz#d8751655d22d384682741c972f2c3d6dfa3e66b5"
