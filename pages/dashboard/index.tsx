@@ -851,7 +851,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       // }}
                     >
                       <Markdown>
-                        {title}
+                        {body}
                       </Markdown>
                     </p>
 
