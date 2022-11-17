@@ -92,13 +92,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </motion.a>
         </Link>
       )}
-      {route.pathname !== "/dashboard" ? (
+      {route.pathname === "/" ? (
         <div
           id="layout"
           style={{
             position: "relative",
+            height: "100% !important",
             overflowY:
-              route.pathname === "/" || route.pathname.includes("/login")
+              route.pathname === "/"
                 ? "hidden"
                 : "auto",
           }}
@@ -110,6 +111,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div
           style={{
             height: "100% !important",
+            width: "90% !important",
           }}
           id="layout"
         >

@@ -306,7 +306,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     }
 
     const filtered = todos.filter((todo) => {
-      return todo.title.toLowerCase().includes(value.toLowerCase());
+      // ilter title or description
+      
+      return todo.title.toLowerCase().includes(value.toLowerCase()) || todo.body.toLowerCase().includes(value.toLowerCase());
     });
 
     if (!filtered.length) {
@@ -749,7 +751,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           <div className={styles.searchTitle}>
             <input
               type="text"
-              placeholder="Pesquisar por título"
+              placeholder="Pesquisar por título ou conteudo"
               onChange={handleSearch}
               ref={searchRef}
             />

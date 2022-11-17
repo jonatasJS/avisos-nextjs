@@ -58,8 +58,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
       async () => {
         const { data } = await api.get("/messages");
         setTodos(data);
+        console.log(data);
+        
       },
-      process.env.NODE_ENV === "development" ? 3000 : 30000
+      process.env.NODE_ENV === "development" ? 6000 : 30000
     );
     return () => clearInterval(interval);
   }, []);
