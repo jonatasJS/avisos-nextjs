@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import nmd from "nano-markdown";
-import convertToHTML from 'markdown-to-html-converter';
+import Markdown from 'markdown-to-jsx';
 
 import { socket } from "./_app";
 
@@ -86,11 +86,14 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
           transition={{ duration: 0.3, delay: 0.5, bounce: 1 }}
           exit={{ opacity: 0, y: -100 }}
         >
-          <h1
+          {/* <h1
             dangerouslySetInnerHTML={{
-              __html: convertToHTML(todos[todo]?.title ? todos[todo].title : '') // nmd(todos[todo]?.title ? todos[todo].title : ''),
+              __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
-          ></h1>
+          ></h1> */}
+          <Markdown >
+            {todos[todo]?.title ? todos[todo].title : ''}
+          </Markdown>
         </motion.div>
         <motion.div
           key={todos[todo]?.body}
@@ -119,14 +122,17 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               ? "1.5rem"
               : "1.9rem",
           }}
-          dangerouslySetInnerHTML={{
-            __html: convertToHTML(todos[todo]?.body ? todos[todo].body : '') // nmd(todos[todo]?.body ? todos[todo].body : '')
-          }}
+          // dangerouslySetInnerHTML={{
+          //   __html: nmd(todos[todo]?.body ? todos[todo].body : '')
+          // }}
           initial={{ opacity: 0, y: 500 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.6, bounce: 1 }}
           exit={{ opacity: 0, y: 500 }}
         >
+          <Markdown>
+            {todos[todo]?.body ? todos[todo].body : ''}
+          </Markdown>
         </motion.div>
       </motion.main>
     </>

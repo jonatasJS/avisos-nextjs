@@ -13,9 +13,9 @@ import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
 import nmd from "nano-markdown";
+import Markdown from 'markdown-to-jsx';
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
-import convertToHTML from 'markdown-to-html-converter';
 
 import { socket } from "../_app";
 
@@ -391,10 +391,14 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         >
           <Modal.Header closeButton>
             <Modal.Title
-              dangerouslySetInnerHTML={{
-                __html: convertToHTML(titleDelete) // `${nmd(titleDelete)}`,
-              }}
-            ></Modal.Title>
+              // dangerouslySetInnerHTML={{
+              //   __html: `${nmd(titleDelete)}`,
+              // }}
+            >
+              <Markdown>
+                {titleDelete}
+              </Markdown>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p
@@ -795,9 +799,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     </span>
                     <h2
                       contentEditable={messageIdEdit === _id}
-                      dangerouslySetInnerHTML={{
-                        __html: convertToHTML(title) // nmd(title),
-                      }}
+                      // dangerouslySetInnerHTML={{
+                      //   __html: nmd(title),
+                      // }}
                       onKeyUp={async (e) => {
                         if (e.target.innerHTML || messageIdEdit === _id) {
                           setTitleEdit(e.target.innerHTML);
@@ -816,7 +820,11 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                             ? "0 0 20px 1px #0000007f"
                             : "none",
                       }}
-                    ></h2>
+                    >
+                      <Markdown>
+                        {title}
+                      </Markdown>
+                    </h2>
                     <p
                       style={{
                         outline:
@@ -838,10 +846,14 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                           setBodyEdit("");
                         }
                       }}
-                      dangerouslySetInnerHTML={{
-                        __html: convertToHTML(body) // nmd(body),
-                      }}
-                    ></p>
+                      // dangerouslySetInnerHTML={{
+                      //   __html: nmd(body),
+                      // }}
+                    >
+                      <Markdown>
+                        {title}
+                      </Markdown>
+                    </p>
 
                     <div className={styles.logs}>
                       {createdBy && (
