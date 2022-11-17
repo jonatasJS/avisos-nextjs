@@ -30,7 +30,7 @@ export default function Teste() {
         teste do Markdown <p>para imagens:</p>
         <strong>![titulo opicional](url)</strong>
       </h1>
-      <input
+      <textarea
         style={{
           color: "#000",
           padding: 10,
@@ -39,7 +39,6 @@ export default function Teste() {
           width: 500,
           textAlign: "center",
         }}
-        type="text"
         name="data"
         placeholder="Digite aqui"
         onChange={(e) => {
