@@ -13,7 +13,8 @@ import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
 import nmd from "nano-markdown";
-import Markdown from 'markdown-to-jsx';
+import Markdown from "markdown-to-jsx";
+import html2md from "html2md";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
 
@@ -102,15 +103,17 @@ socket.on("editTodo", (data: string) => {
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 
-  Users = users.filter(userOnly => userOnly.username === data).forEach(user => {
-    console.log(user);
-    user.isOnline = true;
-  });
+  Users = users
+    .filter((userOnly) => userOnly.username === data)
+    .forEach((user) => {
+      console.log(user);
+      user.isOnline = true;
+    });
 
   console.log({
     data,
-    users
-  })
+    users,
+  });
 });
 
 async function getTodos(setTodos: any) {
@@ -391,13 +394,12 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         >
           <Modal.Header closeButton>
             <Modal.Title
-              // dangerouslySetInnerHTML={{
-              //   __html: `${nmd(titleDelete)}`,
-              // }}
+            // dangerouslySetInnerHTML={{
+            //   __html: `${nmd(titleDelete)}`,
+            // }}
             >
-              <Markdown>
-                {titleDelete}
-              </Markdown>
+              <Markdown>{titleDelete}</Markdown>
+              {/* {html2md(titleDelete)} */}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -821,9 +823,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                             : "none",
                       }}
                     >
-                      <Markdown>
-                        {title}
-                      </Markdown>
+                      <Markdown>{title}</Markdown>
                     </h2>
                     <p
                       style={{
@@ -850,9 +850,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       //   __html: nmd(body),
                       // }}
                     >
-                      <Markdown>
-                        {body}
-                      </Markdown>
+                      <Markdown>{body}</Markdown>
                     </p>
 
                     <div className={styles.logs}>
