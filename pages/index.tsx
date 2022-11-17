@@ -53,6 +53,17 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
     return () => clearInterval(interval);
   }, [todo, todos?.length]);
 
+  useEffect(() => {
+    const interval = setInterval(
+      async () => {
+        const { data } = await api.get("/messages");
+        setTodos(data);
+      },
+      process.env.NODE_ENV === "development" ? 3000 : 30000
+    );
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <Head>
