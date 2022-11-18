@@ -696,7 +696,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     transition={{ duration: 0.2, delay: 0 }}
                   >
                     <Image
-                      src={`https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
+                      src={e.username === "admin" ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true" : `https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
                       alt={e.name}
                       width={40}
                       height={40}
