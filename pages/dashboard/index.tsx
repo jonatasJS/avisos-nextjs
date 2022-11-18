@@ -215,18 +215,18 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   //   }
   // });
 
-  // quando o socket emitir o evento de logout, ele vai receber o username e vai modificar o state de todos
-  socket.on("logout", (data: string) => {
-    console.clear();
-    // fazer o filtro de usuários online e offline aqui
-    const user = Users.find((user) => user.username === data);
-    if (user) {
-      user.isOnline = false;
-      setUserDataServer(user);
-    } else {
-      toastContainer("Usuário não encontrado!", "error");
-    }
-  });
+  // // quando o socket emitir o evento de logout, ele vai receber o username e vai modificar o state de todos
+  // socket.on("logout", (data: string) => {
+  //   console.clear();
+  //   // fazer o filtro de usuários online e offline aqui
+  //   const user = Users.find((user) => user.username === data);
+  //   if (user) {
+  //     user.isOnline = false;
+  //     setUserDataServer(user);
+  //   } else {
+  //     toastContainer("Usuário não encontrado!", "error");
+  //   }
+  // });
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -252,6 +252,27 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataLocal(user);
 
       socket.emit("login", user.username);
+      // verificar quais usuários estão online e offline e setar no state de todos os usuários
+      const usersOnline = await api.get("/users/online");
+      const usersOffline = await api.get("/users/offline");
+      const users = [...usersOnline.data, ...usersOffline.data];
+      setUsers(users);
+
+      socket.on("usersOnline", (
+        // users é uma string que vem do servidor e é convertida para um array de strings
+        users: string[]
+        ) => {
+        console.clear();
+        console.log("Dashboard in:", users);
+        // percorrer o array de usuários e verificar se o usuário está online
+        const usersOnline = users.map((user) => {
+          const userOnline = Users.find((user) => user.username === user);
+          if (userOnline) {
+            userOnline.isOnline = true;
+          }
+          return userOnline;
+        });
+      });
     }
 
     getUserDatasFromLocalStorage();
