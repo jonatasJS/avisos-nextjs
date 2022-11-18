@@ -37,7 +37,7 @@ export default function Teste() {
           borderRadius: 10,
           height: 100,
           width: 500,
-          textAlign: "center",
+          minHeight: 50,
         }}
         name="data"
         placeholder="Digite aqui"
