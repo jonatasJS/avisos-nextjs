@@ -103,17 +103,7 @@ socket.on("editTodo", (data: string) => {
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 
-  Users = users
-    .filter((userOnly) => userOnly.username === data)
-    .forEach((user) => {
-      console.log(user);
-      user.isOnline = true;
-    });
-
-  console.log({
-    data,
-    users,
-  });
+  
 });
 
 async function getTodos(setTodos: any) {
@@ -162,6 +152,19 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   socket.on("editTodo", (data: Todos) => {
     console.clear();
     getTodos(setTodos);
+  });
+
+  // quando o socket emitir o evento de login, ele vai receber o username e vai modificar o state de todos
+  socket.on("login", (data: string) => {
+    console.clear();
+    // fazer o filtro de usuários online e offline aqui
+    const user = Users.find((user) => user.username === data);
+    if (user) {
+      user.isOnline = true;
+      setUserDataServer(user);
+    } else {
+      toastContainer("Usuário não encontrado!", "error");
+    }
   });
 
   useEffect(() => {
