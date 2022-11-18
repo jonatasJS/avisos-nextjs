@@ -12,7 +12,9 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
+import nmd from "nano-markdown";
 import Markdown from "markdown-to-jsx";
+import html2md from "html2md";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
 
@@ -102,10 +104,9 @@ socket.on("editTodo", (data: string) => {
 socket.on("logout", (data: string) => {
   console.log("Dashboard out:", data);
   toastContainer(
-    `Usuário "${data[0].toUpperCase() + data.substring(1)} saiu do sistema!`,
+    `Usuário "${data[0].toUpperCase() + data.substring(1)}" saiu do sistema!`,
     "info"
   );
-  Router.push("/login");
 });
 
 socket.on("login", (data: Todos) => {
@@ -166,6 +167,16 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
       return user;
     });
+    setUserDataServer(
+      Users.find((user) => {
+        // verificar data é o username de user e ou o username é diferente do user local
+        if (user.username === data || user.username !== userDataLocal.username) {
+          return user;
+        } else {
+          return null;
+        }
+      }) as UserDataProps
+    );
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
@@ -177,6 +188,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
       return user;
     });
+    setUserDataServer(
+      Users.find((user) => user.username === data) as UserDataProps
+    );
   });
 
   useEffect(() => {
