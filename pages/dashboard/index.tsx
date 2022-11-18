@@ -100,10 +100,20 @@ socket.on("editTodo", (data: string) => {
   );
 });
 
+// logout
+socket.on("logout", (data: string) => {
+  console.log("Dashboard out:", data);
+  toastContainer(
+    `Usuário "${
+      data[0].toUpperCase() + data.substring(1)
+    } saiu do sistema!`,
+    "info"
+  );
+  Router.push("/login");
+});
+
 socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
-
-  
 });
 
 async function getTodos(setTodos: any) {
@@ -154,13 +164,38 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     getTodos(setTodos);
   });
 
+  // quando o socket emitir o evento de userOnline, ele vai receber o data e vai modificar o state para o usuário que está online
+  socket.on("userOnline", (data: string) => {
+    console.clear();
+    console.log("Dashboard in:", data);
+    const user = Users.find((user) => user.username === data);
+    if (user) {
+      user.isOnline = true;
+      setUserDataServer(user);
+    }
+  });
+
   // quando o socket emitir o evento de login, ele vai receber o username e vai modificar o state de todos
   socket.on("login", (data: string) => {
     console.clear();
     // fazer o filtro de usuários online e offline aqui
     const user = Users.find((user) => user.username === data);
+    socket.emit("userOnline", data);
     if (user) {
       user.isOnline = true;
+      setUserDataServer(user);
+    } else {
+      toastContainer("Usuário não encontrado!", "error");
+    }
+  });
+
+  // quando o socket emitir o evento de logout, ele vai receber o username e vai modificar o state de todos
+  socket.on("logout", (data: string) => {
+    console.clear();
+    // fazer o filtro de usuários online e offline aqui
+    const user = Users.find((user) => user.username === data);
+    if (user) {
+      user.isOnline = false;
       setUserDataServer(user);
     } else {
       toastContainer("Usuário não encontrado!", "error");
@@ -310,8 +345,11 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
     const filtered = todos.filter((todo) => {
       // ilter title or description
-      
-      return todo.title.toLowerCase().includes(value.toLowerCase()) || todo.body.toLowerCase().includes(value.toLowerCase());
+
+      return (
+        todo.title.toLowerCase().includes(value.toLowerCase()) ||
+        todo.body.toLowerCase().includes(value.toLowerCase())
+      );
     });
 
     if (!filtered.length) {
