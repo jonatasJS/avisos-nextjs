@@ -86,6 +86,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               marginBottom: "60px",
               letterSpacing: "5px",
               cursor: "pointer",
+              textDecoration: "none"
             }}
           >
             {isLogo === "logo" ? <Logo /> : <Clock />}
