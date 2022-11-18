@@ -104,9 +104,7 @@ socket.on("editTodo", (data: string) => {
 socket.on("logout", (data: string) => {
   console.log("Dashboard out:", data);
   toastContainer(
-    `Usuário "${
-      data[0].toUpperCase() + data.substring(1)
-    } saiu do sistema!`,
+    `Usuário "${data[0].toUpperCase() + data.substring(1)} saiu do sistema!`,
     "info"
   );
   Router.push("/login");
@@ -168,14 +166,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   socket.on("login", (data: string) => {
     console.clear();
     console.log("Dashboard in:", data);
-    socket.emit('login', userDataLocal.username);
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
       }
       return user;
     });
-    setUserDataServer(Users.find((user) => user.username === data) as UserDataProps);
+    setUserDataServer(
+      Users.find((user) => user.username === data) as UserDataProps
+    );
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
@@ -188,7 +187,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
       return user;
     });
-    setUserDataServer(Users.find((user) => user.username === data) as UserDataProps);
+    setUserDataServer(
+      Users.find((user) => user.username === data) as UserDataProps
+    );
   });
 
   useEffect(() => {
@@ -214,28 +215,32 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataServer(user);
       setUserDataLocal(user);
 
-      socket.emit("login", user.username);
-      // verificar quais usuários estão online e offline e setar no state de todos os usuários
-      const usersOnline = await api.get("/users/online");
-      const usersOffline = await api.get("/users/offline");
-      const users = [...usersOnline.data, ...usersOffline.data];
-      setUsers(users);
-
-      socket.on("usersOnline", (
-        // users é uma string que vem do servidor e é convertida para um array de strings
-        users: string[]
+      socket.on(
+        "usersOnline",
+        (
+          // users é uma string que vem do servidor e é convertida para um array de strings
+          users: string[]
         ) => {
-        console.clear();
-        console.log("Dashboard in:", users);
-        // percorrer o array de usuários e verificar se o usuário está online
-        const usersOnline = users.map((user) => {
-          const userOnline = Users.find((user) => user.username === user);
-          if (userOnline) {
-            userOnline.isOnline = true;
-          }
-          return userOnline;
-        });
-      });
+          console.clear();
+          console.log("Dashboard in:", users);
+          // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
+          Users = Users.map((user) => {
+            if (users.find((username) => username === user.username)) {
+              user.isOnline = true;
+            } else {
+              user.isOnline = false;
+            }
+            return user;
+          });
+
+          // setar o state do usuário que está logado
+          setUserDataServer(
+            Users.find(
+              (user) => user.username === user.username
+            ) as UserDataProps
+          );
+        }
+      );
     }
 
     getUserDatasFromLocalStorage();
