@@ -13,7 +13,7 @@ import toastContainer from "../../services/toastContainer";
 import Logo from "../../components/Logo";
 
 socket.on("connect", () => {
-  console.clear();
+  ;
 });
 
 export default function Home() {

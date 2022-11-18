@@ -20,7 +20,7 @@ interface Todos {
 }
 
 socket.on("connect", () => {
-  console.clear();
+  ;
 });
 
 async function getTodos(setTodos: any) {
@@ -33,12 +33,12 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   const [todo, setTodo] = useState(0);
 
   socket.on("addNewTodo", (data: Todos) => {
-    console.clear();
+    ;
     getTodos(setTodos);
   });
 
   socket.on("deleteTodo", (data: Todos) => {
-    console.clear();
+    ;
 
     getTodos(setTodos);
   });
