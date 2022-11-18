@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
 
 * {
   margin: 0;
@@ -9,12 +9,12 @@
   box-sizing: border-box;
   font-family: "Inter", "Ubuntu", sans-serif;
 }
- 
+
 svg {
   display: initial !important;
 }
 
-html, 
+html,
 body,
 #__next {
   background-color: #282a36;
@@ -25,4 +25,13 @@ body,
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+}
+
+#ramais span {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  align-items: center;
+  justify-items: center;
 }
