@@ -2,8 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion } from "framer-motion";
-import nmd from "nano-markdown";
-import Markdown from 'markdown-to-jsx';
+import Markdown from "markdown-to-jsx";
 
 import { socket } from "./_app";
 
@@ -19,9 +18,7 @@ interface Todos {
   body: string;
 }
 
-socket.on("connect", () => {
-  ;
-});
+socket.on("connect", () => {});
 
 async function getTodos(setTodos: any) {
   const { data } = await api.get("/messages");
@@ -33,13 +30,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   const [todo, setTodo] = useState(0);
 
   socket.on("addNewTodo", (data: Todos) => {
-    ;
     getTodos(setTodos);
   });
 
   socket.on("deleteTodo", (data: Todos) => {
-    ;
-
     getTodos(setTodos);
   });
 
@@ -59,8 +53,8 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         const { data } = await api.get("/messages");
         setTodos(data);
         console.log(data);
-        
       },
+      // 30000
       process.env.NODE_ENV === "development" ? 6000 : 30000
     );
     return () => clearInterval(interval);
@@ -104,35 +98,40 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
           ></h1> */}
-          <Markdown >
-            {todos[todo]?.title ? todos[todo].title : ''}
-          </Markdown>
+          <Markdown>{todos[todo]?.title ? todos[todo].title : ""}</Markdown>
         </motion.div>
         <motion.div
           key={todos[todo]?.body}
-          className={styles.description}
+          className={`${styles.description}`}
+          id={todos[todo]?.title.toLowerCase().includes('ramais') ? 'ramais' : ''}
           style={{
-            display: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "flex"
-              : "block",
-            flexWrap: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "wrap"
-              : "nowrap",
+            // display: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
+            //   ? "grid"
+            //   : "block",
             textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
               ? "left"
               : "justify",
-            justifyContent: todos[todo]?.title
-              .toLocaleLowerCase()
-              .includes("ramais")
-              ? "center"
-              : "",
-            alignItems: todos[todo]?.title
-              .toLocaleLowerCase()
-              .includes("ramais")
-              ? "start"
+            // flexWrap: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
+            //   ? "wrap"
+            //   : "nowrap",
+            // justifyContent: todos[todo]?.title
+            //   .toLocaleLowerCase()
+            //   .includes("ramais")
+            //   ? "center"
+            //   : "",
+            // alignItems: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
+            //   ? "start"
+            //   : "",
+            // gridTemplateColumns: todos[todo]?.title
+            //   .toLocaleLowerCase()
+            //   .includes("ramais")
+            //   ? "repeat(4, 1fr)"
+            //   : "",
+            height: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
+              ? "auto"
               : "",
             fontSize: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "1.5rem"
+              ? "1.9rem"
               : "1.9rem",
           }}
           // dangerouslySetInnerHTML={{
@@ -143,9 +142,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
           transition={{ duration: 0.3, delay: 0.6, bounce: 1 }}
           exit={{ opacity: 0, y: 500 }}
         >
-          <Markdown>
-            {todos[todo]?.body ? todos[todo].body : ''}
-          </Markdown>
+          <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown>
         </motion.div>
       </motion.main>
     </>
