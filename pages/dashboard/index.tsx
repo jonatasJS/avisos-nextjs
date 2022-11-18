@@ -168,6 +168,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   socket.on("login", (data: string) => {
     console.clear();
     console.log("Dashboard in:", data);
+    socket.emit('login', userDataLocal.username);
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
@@ -189,44 +190,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     });
     setUserDataServer(Users.find((user) => user.username === data) as UserDataProps);
   });
-
-  // // quando o socket emitir o evento de userOnline, ele vai receber o data e vai modificar o state para o usuário que está online
-  // socket.on("userOnline", (data: string) => {
-  //   console.clear();
-  //   console.log("Dashboard in:", data);
-  //   const user = Users.find((user) => user.username === data);
-  //   if (user) {
-  //     user.isOnline = true;
-  //     setUserDataServer(user);
-  //   }
-  // });
-
-  // // quando o socket emitir o evento de login, ele vai receber o username e vai modificar o state de todos
-  // socket.on("login", (data: string) => {
-  //   console.clear();
-  //   // fazer o filtro de usuários online e offline aqui
-  //   const user = Users.find((user) => user.username === data);
-  //   socket.emit("userOnline", data);
-  //   if (user) {
-  //     user.isOnline = true;
-  //     setUserDataServer(user);
-  //   } else {
-  //     toastContainer("Usuário não encontrado!", "error");
-  //   }
-  // });
-
-  // // quando o socket emitir o evento de logout, ele vai receber o username e vai modificar o state de todos
-  // socket.on("logout", (data: string) => {
-  //   console.clear();
-  //   // fazer o filtro de usuários online e offline aqui
-  //   const user = Users.find((user) => user.username === data);
-  //   if (user) {
-  //     user.isOnline = false;
-  //     setUserDataServer(user);
-  //   } else {
-  //     toastContainer("Usuário não encontrado!", "error");
-  //   }
-  // });
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
