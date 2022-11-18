@@ -12,9 +12,7 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import nmd from "nano-markdown";
 import Markdown from "markdown-to-jsx";
-import html2md from "html2md";
 import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
 
@@ -168,9 +166,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
       return user;
     });
-    setUserDataServer(
-      Users.find((user) => user.username === data) as UserDataProps
-    );
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
@@ -182,9 +177,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       }
       return user;
     });
-    setUserDataServer(
-      Users.find((user) => user.username === data) as UserDataProps
-    );
   });
 
   useEffect(() => {
