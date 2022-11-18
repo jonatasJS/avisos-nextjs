@@ -144,7 +144,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
-    ;
     console.log("Dashboard in:", data);
     // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
@@ -152,20 +151,17 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
-    ;
     getTodos(setTodos);
   });
 
   // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("editTodo", (data: Todos) => {
-    ;
     getTodos(setTodos);
   });
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("login", (data: string) => {
-    ;
-    console.log("Dashboard in:", data);
+    console.log("login:", data);
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
@@ -179,8 +175,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("logout", (data: string) => {
-    ;
-    console.log("Dashboard in:", data);
+    console.log("logout", data);
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = false;
@@ -206,7 +201,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   socket.on("newTodo", (todo: Todos) => {
     setTodos((oldTodos) => [...oldTodos, todo]);
-    ;
   });
 
   useEffect(() => {
@@ -221,8 +215,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           // users é uma string que vem do servidor e é convertida para um array de strings
           users: string[]
         ) => {
-          ;
-          console.log("Dashboard in:", users);
+          console.log("usersOnline:", users);
           // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
           Users = Users.map((user) => {
             if (users.find((username) => username === user.username)) {
@@ -232,13 +225,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             }
             return user;
           });
-
-          // setar o state do usuário que está logado
-          setUserDataServer(
-            Users.find(
-              (user) => user.username === user.username
-            ) as UserDataProps
-          );
         }
       );
     }
@@ -738,6 +724,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           // remove o usuário do localStorage
           localStorage.removeItem("user");
           Router.push("/login");
+          socket.emit("logout", userDataLocal.username);
           return toastContainer("Logout realizado com sucesso", "success");
         }}
         className={styles.btn}
