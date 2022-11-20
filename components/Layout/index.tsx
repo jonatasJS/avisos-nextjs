@@ -112,7 +112,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div
           style={{
             height: "100% !important",
-            width: "90% !important",
+            width: route.pathname !== '/' ? '100%' : "90% !important",
           }}
           id="layout"
         >
