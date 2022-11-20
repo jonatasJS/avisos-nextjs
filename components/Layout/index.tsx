@@ -99,7 +99,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           style={{
             position: "relative",
             height: "100% !important",
-            width: "100%",
             overflowY:
               route.pathname === "/"
                 ? "hidden"
