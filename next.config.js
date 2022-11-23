@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['avisos.jonatas.app', 'avatars.dicebear.com'],
+    domains: ['avisos.jonatas.app', 'avatars.dicebear.com', 'sim.tins.com.br'],
   },
 }
 

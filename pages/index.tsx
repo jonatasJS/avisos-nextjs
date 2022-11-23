@@ -12,6 +12,7 @@ import Header from "../components/Header";
 
 import styles from "../styles/Home.module.scss";
 import SEO from "../components/SEO";
+import axios from "axios";
 
 interface Todos {
   title: string;
@@ -28,6 +29,7 @@ async function getTodos(setTodos: any) {
 const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [todo, setTodo] = useState(0);
+  const [version, setVersion] = useState(0);
 
   socket.on("addNewTodo", (data: Todos) => {
     getTodos(setTodos);
@@ -41,11 +43,30 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
     const interval = setInterval(
       () => {
         setTodo((todo) => (todo + 1) % todos?.length);
+        axios.get("/api/version").then(({ data }) => {
+          setVersion(data.version);
+        });
       },
       process.env.NODE_ENV === "development" ? 3000 : 15000
     );
     return () => clearInterval(interval);
   }, [todo, todos?.length]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // verificar se na rota /api/version tem uma nova versão, se tiver, recarregar a página, se não tiver, não fazer nada
+      axios.get("/api/version").then((res) => {
+        if (
+          res.data.version !== process.env.NEXT_PUBLIC_VERSION &&
+          res.data.version > version
+        ) {
+          setVersion(res.data.version);
+          window.location.reload();
+        }
+      });
+    }, 1000*60*5);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(
@@ -88,10 +109,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         <motion.div
           key={todos[todo]?.title}
           className={styles.title}
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.5, bounce: 1 }}
-          exit={{ opacity: 0, y: -100 }}
+          exit={{ opacity: 0 }}
         >
           {/* <h1
             dangerouslySetInnerHTML={{
@@ -103,30 +124,13 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         <motion.div
           key={todos[todo]?.body}
           className={`${styles.description}`}
-          id={todos[todo]?.title.toLowerCase().includes('ramais') ? 'ramais' : ''}
+          id={
+            todos[todo]?.title.toLowerCase().includes("ramais") ? "ramais" : ""
+          }
           style={{
-            // display: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-            //   ? "grid"
-            //   : "block",
             textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
               ? "left"
               : "justify",
-            // flexWrap: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-            //   ? "wrap"
-            //   : "nowrap",
-            // justifyContent: todos[todo]?.title
-            //   .toLocaleLowerCase()
-            //   .includes("ramais")
-            //   ? "center"
-            //   : "",
-            // alignItems: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-            //   ? "start"
-            //   : "",
-            // gridTemplateColumns: todos[todo]?.title
-            //   .toLocaleLowerCase()
-            //   .includes("ramais")
-            //   ? "repeat(4, 1fr)"
-            //   : "",
             height: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
               ? "auto"
               : "",
@@ -134,13 +138,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               ? "1.9rem"
               : "1.9rem",
           }}
-          // dangerouslySetInnerHTML={{
-          //   __html: nmd(todos[todo]?.body ? todos[todo].body : '')
-          // }}
-          initial={{ opacity: 0, y: 500 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.6, bounce: 1 }}
-          exit={{ opacity: 0, y: 500 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.6, bounce: 1, type: "spring" }}
+          exit={{ opacity: 0 }}
         >
           <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown>
         </motion.div>

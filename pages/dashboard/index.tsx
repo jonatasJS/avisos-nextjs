@@ -170,7 +170,10 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     setUserDataServer(
       Users.find((user) => {
         // verificar data é o username de user e ou o username é diferente do user local
-        if (user.username === data || user.username !== userDataLocal.username) {
+        if (
+          user.username === data ||
+          user.username !== userDataLocal.username
+        ) {
           return user;
         } else {
           return null;
@@ -603,7 +606,16 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                   data.username === userDataServer.username &&
                   data.isAdmin === true
               )
-                ? "rgba(0, 255, 0, 0.2)"
+                ? "rgba(255, 213, 0, 0.2)"
+                : "rgba(255, 255, 255, 0.1)"
+            }`,
+            border: `1px solid ${
+              users.find(
+                (data) =>
+                  data.username === userDataServer.username &&
+                  data.isAdmin === true
+              )
+                ? "rgba(255, 213, 0, 0.5)"
                 : "rgba(255, 255, 255, 0.1)"
             }`,
             maxWidth: "70px",
@@ -617,8 +629,16 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             transition={{ duration: 0.2, delay: 0 }}
           >
             <Image
-              src={userDataLocal.username === "admin" ? 'https://sim.tins.com.br/media/1/usuarios/06161612127.jpg' :`https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`}
+              src={
+                userDataLocal.username === "admin"
+                  ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true"
+                  : `https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`
+              }
               alt={userDataLocal.name}
+              style={{
+                borderRadius:
+                  userDataLocal.username === "admin" ? "50%" : "0px",
+              }}
               width={50}
               height={50}
               objectFit="cover"
@@ -682,7 +702,14 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                       : "rgba(255, 255, 255, 0.1)",
                     boxShadow: `0 0 20px 1px ${
                       e.isOnline
-                        ? "rgba(0, 255, 0, 0.2)"
+                        ? e.isAdmin
+                          ? "rgba(255, 213, 0, 0.2)"
+                          : "rgba(0, 255, 0, 0.2)"
+                        : "rgba(255, 255, 255, 0.1)"
+                    }`,
+                    border: `1px solid ${
+                      e.isAdmin
+                        ? "rgba(255, 213, 0, 0.5)"
                         : "rgba(255, 255, 255, 0.1)"
                     }`,
                     maxWidth: "40px",
@@ -696,8 +723,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     transition={{ duration: 0.2, delay: 0 }}
                   >
                     <Image
-                      src={e.username === "admin" ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg" : `https://avatars.dicebear.com/api/identicon/${e.username}.svg`}
+                      src={
+                        e.username === "admin"
+                          ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true"
+                          : `https://avatars.dicebear.com/api/identicon/${e.username}.svg`
+                      }
                       alt={e.name}
+                      style={{
+                        borderRadius: e.username === "admin" ? "50%" : "none",
+                      }}
                       width={40}
                       height={40}
                       objectFit="cover"
