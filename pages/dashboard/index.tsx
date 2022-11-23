@@ -123,6 +123,7 @@ interface UserDataProps {
   name: string;
   isAdmin: boolean;
   isOnline: boolean;
+  profile: string;
 }
 
 export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
@@ -630,8 +631,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           >
             <Image
               src={
-                userDataLocal.username === "admin"
-                  ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true"
+                userDataLocal.profile
+                  ? userDataLocal.profile
                   : `https://avatars.dicebear.com/api/identicon/${userDataLocal.username}.svg`
               }
               alt={userDataLocal.name}
@@ -724,8 +725,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                   >
                     <Image
                       src={
-                        e.username === "admin"
-                          ? "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true"
+                        e.profile
+                          ? e.profile
                           : `https://avatars.dicebear.com/api/identicon/${e.username}.svg`
                       }
                       alt={e.name}

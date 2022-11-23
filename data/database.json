@@ -2,6 +2,7 @@
   {
     "name": "JOSEANE RIBEIRO CASTRO",
     "username": "joseane",
+    "profile": "https://sim.tins.com.br/media/1/usuarios/03709951127.jpg?externo=true",
     "pass": "1234",
     "isAdmin": true,
     "isOnline": false
@@ -9,29 +10,25 @@
   {
     "name": "JEANE CRISTINY CASTRO CARVALHO",
     "username": "jeane",
+    "profile": "https://sim.tins.com.br/media/1/usuarios/07409647124.jpg?externo=true",
     "pass": "1234",
     "isAdmin": true,
     "isOnline": false
   },
   {
     "name": "JONATAS SOUZA SOARES",
-    "username": "admin",
-    "pass": "admin",
+    "username": "jonatas",
+    "profile": "https://sim.tins.com.br/media/1/usuarios/06161612127.jpg?externo=true",
+    "pass": "zc1123rtjk",
     "isAdmin": true,
     "isOnline": false
   },
   {
     "name": "LEANDRO BARBOSA DE SALES",
     "username": "leandro",
+    "profile": "https://sim.tins.com.br/media/1/usuarios/04665166226.jpg?externo=true",
     "pass": "1234",
     "isAdmin": true,
-    "isOnline": false
-  },
-  {
-    "name": "JOHN DOE",
-    "username": "john",
-    "pass": "1234",
-    "isAdmin": false,
     "isOnline": false
   }
 ]
