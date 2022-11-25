@@ -16,6 +16,9 @@ import nmd from "nano-markdown";
 import Markdown from "markdown-to-jsx";
 import html2md from "html2md";
 import * as Yup from "yup";
+import FPSStats from "react-fps-stats";
+import gfm from "@bytemd/plugin-gfm";
+import { Editor, Viewer } from "@bytemd/react";
 import Modal from "react-bootstrap/Modal";
 
 import { socket } from "../_app";
@@ -45,6 +48,11 @@ import Image from "next/image";
 import { Button } from "react-bootstrap";
 
 let Users: UserDataProps[] = users;
+
+const plugins = [
+  gfm(),
+  // Add more plugins here
+];
 
 interface Todos {
   title: string;
@@ -431,6 +439,11 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   return (
     <>
+      <div
+        className={styles.fps}
+      >
+      <FPSStats></FPSStats>
+      </div>
       {/* modal to confirm delete todo */}
       <Modal
         show={deleteMessageVisible}

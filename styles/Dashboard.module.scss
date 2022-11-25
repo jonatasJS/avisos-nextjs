@@ -642,3 +642,28 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     top: 0;
   }
 }
+
+.fps {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+
+  & div:last-child {
+    position: fixed;
+    margin-top: 100vw;
+    margin-left: 15px;
+
+    div {
+      position: absolute;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      height: 29px;
+      background: rgb(40, 40, 68);
+      box-sizing: border-box;
+
+      margin-top: 0;
+      margin-left: 0;
+    }
+  }
+}

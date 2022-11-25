@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "markdown-to-jsx";
+import gfm from "@bytemd/plugin-gfm";
+import { Editor, Viewer } from "@bytemd/react";
 
 import { socket } from "./_app";
 
@@ -18,6 +20,11 @@ interface Todos {
   title: string;
   body: string;
 }
+
+const plugins = [
+  gfm(),
+  // Add more plugins here
+];
 
 async function getTodos(setTodos: any) {
   const { data } = await api.get("/messages");
@@ -122,7 +129,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
               __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
           ></h1> */}
-            <Markdown>{todos[todo]?.title ? todos[todo].title : ""}</Markdown>
+            <Viewer
+              value={todos[todo]?.title ? todos[todo].title : ""}
+              plugins={plugins}
+            ></Viewer>
           </motion.div>
           <motion.div
             key={todos[todo]?.body}
@@ -159,7 +169,11 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
             }}
             exit={{ opacity: 0, y: 50 }}
           >
-            <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown>
+            <Viewer
+              value={todos[todo]?.body ? todos[todo].body : ""}
+              plugins={plugins}
+            ></Viewer>
+            {/* <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown> */}
           </motion.div>
         </motion.main>
       </AnimatePresence>

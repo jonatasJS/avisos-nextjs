@@ -5,9 +5,11 @@ import { io } from "socket.io-client";
 
 import Layout from "../components/Layout";
 
-// import "tailwindcss/tailwind.css";
+import "tailwindcss/tailwind.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import "bytemd/dist/index.css";
+
 import "../styles/globals.scss";
 
 export const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
