@@ -389,12 +389,12 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   }
 
   async function handleRefresh() {
+    socket.emit("refreshHome", userDataLocal.username);
     try {
       const { data } = await api.get("/messages");
       setTodos(data);
       searchRef.current && (searchRef.current.value = "");
       toastContainer("Avisos atualizados com sucesso", "success");
-      socket.emit("refreshHome", userDataLocal.username);
     } catch (err) {
       toastContainer("Internal Server Error", "error");
     }
