@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 
 import Clock from "../Clock";
@@ -61,18 +61,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [isLogo]);
 
   return (
-    <>
+    <AnimatePresence exitBeforeEnter>
       {route.pathname === "/" && (
         <Link href="/dashboard">
           <motion.a
             // flicker animation
             animate={{
-              opacity: [1, 1.1, 1.1, 1, 1],
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
             }}
             transition={{
-              duration: 2,
-              ease: "easeInOut",
-              times: [0, 0.2, 0.5, 0.8, 1],
+              duration: .5,
             }}
             key={isLogo}
             className="mt-20"
@@ -86,7 +87,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               marginBottom: "60px",
               letterSpacing: "5px",
               cursor: "pointer",
-              textDecoration: "none"
+              textDecoration: "none",
             }}
           >
             {isLogo === "logo" ? <Logo /> : <Clock />}
@@ -99,10 +100,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           style={{
             position: "relative",
             height: "100% !important",
-            overflowY:
-              route.pathname === "/"
-                ? "hidden"
-                : "auto",
+            overflowY: route.pathname === "/" ? "hidden" : "auto",
           }}
           className={styles.container}
         >
@@ -112,7 +110,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div
           style={{
             height: "100% !important",
-            width: route.pathname !== '/' ? '100%' : "90% !important",
+            width: route.pathname !== "/" ? "100%" : "90% !important",
           }}
           id="layout"
         >
@@ -128,6 +126,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       >
         <FaArrowCircleUp onClick={scrollToTop} />
       </div>
-    </>
+    </AnimatePresence>
   );
 }

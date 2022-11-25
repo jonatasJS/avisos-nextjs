@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "markdown-to-jsx";
 
 import { socket } from "./_app";
@@ -18,8 +18,6 @@ interface Todos {
   title: string;
   body: string;
 }
-
-socket.on("connect", () => {});
 
 async function getTodos(setTodos: any) {
   const { data } = await api.get("/messages");
@@ -64,7 +62,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
           window.location.reload();
         }
       });
-    }, 1000*60*5);
+    }, 1000 * 60 * 5);
     return () => clearInterval(interval);
   }, []);
 
@@ -100,52 +98,72 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         />
       </Head>
       <Header title={todos[todo]?.title} showTitle={false} />
-      <motion.main
-        className={styles.main}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.4 }}
-      >
-        <motion.div
-          key={todos[todo]?.title}
-          className={styles.title}
+      <AnimatePresence exitBeforeEnter>
+        <motion.main
+          className={styles.main}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.5, bounce: 1 }}
-          exit={{ opacity: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4 }}
         >
-          {/* <h1
+          <motion.div
+            key={todos[todo]?.title}
+            className={styles.title}
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.3,
+              delay: 0.5,
+              bounce: 0.5,
+              type: "spring",
+            }}
+            exit={{ opacity: 0, y: -50 }}
+          >
+            {/* <h1
             dangerouslySetInnerHTML={{
               __html: nmd(todos[todo]?.title ? todos[todo].title : ''),
             }}
           ></h1> */}
-          <Markdown>{todos[todo]?.title ? todos[todo].title : ""}</Markdown>
-        </motion.div>
-        <motion.div
-          key={todos[todo]?.body}
-          className={`${styles.description}`}
-          id={
-            todos[todo]?.title.toLowerCase().includes("ramais") ? "ramais" : ""
-          }
-          style={{
-            textAlign: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "left"
-              : "justify",
-            height: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "auto"
-              : "",
-            fontSize: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
-              ? "1.9rem"
-              : "1.9rem",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.6, bounce: 1, type: "spring" }}
-          exit={{ opacity: 0 }}
-        >
-          <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown>
-        </motion.div>
-      </motion.main>
+            <Markdown>{todos[todo]?.title ? todos[todo].title : ""}</Markdown>
+          </motion.div>
+          <motion.div
+            key={todos[todo]?.body}
+            className={`${styles.description}`}
+            id={
+              todos[todo]?.title.toLowerCase().includes("ramais")
+                ? "ramais"
+                : ""
+            }
+            style={{
+              textAlign: todos[todo]?.title
+                .toLocaleLowerCase()
+                .includes("ramais")
+                ? "left"
+                : "justify",
+              height: todos[todo]?.title.toLocaleLowerCase().includes("ramais")
+                ? "auto"
+                : "",
+              fontSize: todos[todo]?.title
+                .toLocaleLowerCase()
+                .includes("ramais")
+                ? "1.9rem"
+                : "1.9rem",
+            }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.3,
+              delay: 0.6,
+              bounce: 0.5,
+              type: "spring",
+              // bounceDamping: 10,
+              // bounceStiffness: 500,
+            }}
+            exit={{ opacity: 0, y: 50 }}
+          >
+            <Markdown>{todos[todo]?.body ? todos[todo].body : ""}</Markdown>
+          </motion.div>
+        </motion.main>
+      </AnimatePresence>
     </>
   );
 };
