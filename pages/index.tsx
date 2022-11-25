@@ -58,6 +58,11 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   }, [todo, todos?.length]);
 
   useEffect(() => {
+    socket.on("refreshHome", (nameR) => {
+      console.log("refreshHome:", nameR);
+      // reload page
+      window.location.reload();
+    });
     const interval = setInterval(() => {
       // verificar se na rota /api/version tem uma nova versão, se tiver, recarregar a página, se não tiver, não fazer nada
       axios.get("/api/version").then((res) => {

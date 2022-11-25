@@ -394,6 +394,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setTodos(data);
       searchRef.current && (searchRef.current.value = "");
       toastContainer("Avisos atualizados com sucesso", "success");
+      socket.emit("refreshHome", userDataLocal.username);
     } catch (err) {
       toastContainer("Internal Server Error", "error");
     }
@@ -852,7 +853,10 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               onChange={handleSearch}
               ref={searchRef}
             />
-            <button className={styles.btn} onClick={handleRefresh}>
+            <button
+              className={styles.btn}
+              onClick={handleRefresh}
+            >
               Atualizar
             </button>
           </div>
