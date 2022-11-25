@@ -9,6 +9,8 @@ import "tailwindcss/tailwind.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "bytemd/dist/index.css";
+import 'highlight.js/styles/github.css';
+import 'github-markdown-css/github-markdown-light.css';
 
 import "../styles/globals.scss";
 

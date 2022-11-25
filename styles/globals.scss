@@ -38,3 +38,19 @@ body,
 #ramais span div {
   height: 100%;
 }
+
+.markdown-body {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #fff;
+  padding: 0 1rem;
+  max-width: 100%;
+  overflow: auto;
+  word-wrap: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+  background-color: transparent !important;
+}

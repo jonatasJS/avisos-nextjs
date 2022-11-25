@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Markdown from "markdown-to-jsx";
-import gfm from "@bytemd/plugin-gfm";
+import plugins from "../../services/plugins";
 import { Editor, Viewer } from "@bytemd/react";
-
-const plugins = [
-  gfm(),
-  // Add more plugins here
-];
+import byteMDLocale from 'bytemd/locales/pt_BR.json';
 
 export default function Teste() {
   const [valueChanged, setValueChanged] = useState("");
@@ -67,10 +63,13 @@ export default function Teste() {
         <Editor
           value={value}
           plugins={plugins}
+          mode="tab"
           placeholder="Digite aqui"
           onChange={(v) => {
+            console.log(v);
             setValue(v);
           }}
+          locale={byteMDLocale}
         />
 
         <Viewer value={value} plugins={plugins} />

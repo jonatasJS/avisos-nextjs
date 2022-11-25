@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import { motion, AnimatePresence } from "framer-motion";
 import Markdown from "markdown-to-jsx";
-import gfm from "@bytemd/plugin-gfm";
+import plugins from "../services/plugins";
 import { Editor, Viewer } from "@bytemd/react";
 
 import { socket } from "./_app";
@@ -20,11 +20,6 @@ interface Todos {
   title: string;
   body: string;
 }
-
-const plugins = [
-  gfm(),
-  // Add more plugins here
-];
 
 async function getTodos(setTodos: any) {
   const { data } = await api.get("/messages");
