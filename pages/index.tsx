@@ -71,7 +71,6 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
       async () => {
         const { data } = await api.get("/messages");
         setTodos(data);
-        console.log(data);
       },
       // 30000
       process.env.NODE_ENV === "development" ? 6000 : 30000
@@ -176,8 +175,6 @@ export default Home;
 
 export async function getStaticProps(context: GetStaticProps) {
   const { data: todosBack } = await api.get("/messages");
-
-  console.log(todosBack);
 
   return {
     props: {

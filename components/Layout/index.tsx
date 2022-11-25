@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer } from "react-toastify";
+// import bcpt from 'bcrypt';
 
 import Clock from "../Clock";
 import Logo from "../Logo";
@@ -26,8 +27,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         behavior: "smooth",
       });
     }
-
-    console.log(lay);
 
     setIsVisibled(false);
   };
@@ -75,7 +74,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             transition={{
               duration: .5,
             }}
-            key={isLogo}
+            key={`${isLogo + Math.random()}`}
             className="mt-20"
             style={{
               display: "flex",

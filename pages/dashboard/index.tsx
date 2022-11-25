@@ -849,8 +849,6 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                 { title, body, createdBy, createdAt, _id, editedBy, editedAt },
                 i
               ) => {
-                console.log(_id, createdBy);
-
                 return (
                   <motion.div
                     key={_id}
