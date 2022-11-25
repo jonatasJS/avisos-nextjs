@@ -17,7 +17,7 @@ import Markdown from "markdown-to-jsx";
 import html2md from "html2md";
 import * as Yup from "yup";
 import FPSStats from "react-fps-stats";
-import plugins from "../services/plugins";
+import plugins from "../../services/plugins";
 import { Editor, Viewer } from "@bytemd/react";
 import Modal from "react-bootstrap/Modal";
 
