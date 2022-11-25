@@ -49,11 +49,6 @@ import { Button } from "react-bootstrap";
 
 let Users: UserDataProps[] = users;
 
-const plugins = [
-  gfm(),
-  // Add more plugins here
-];
-
 interface Todos {
   title: string;
   body: string;
