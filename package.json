@@ -38,6 +38,7 @@
     "nano-markdown": "^1.2.1",
     "next": "12.3.1",
     "next-session": "^4.0.5",
+    "nextjs-progressbar": "^0.0.16",
     "nookies": "^2.5.2",
     "prettier": "^2.7.1",
     "react": "18.2.0",

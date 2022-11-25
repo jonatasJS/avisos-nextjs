@@ -2,17 +2,17 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { io } from "socket.io-client";
+import NextNProgress, {
+  NextNProgressProps
+} from "nextjs-progressbar";
 
 import Layout from "../components/Layout";
 
 import "tailwindcss/tailwind.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import "bytemd/dist/index.css";
-import 'highlight.js/styles/github.css';
-import 'github-markdown-css/github-markdown-light.css';
-
 import "../styles/globals.scss";
+import Head from "next/head";
 
 export const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
   transports: ["websocket"],
@@ -61,6 +61,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
         crossOrigin="anonymous"
+      />
+      <NextNProgress
+        color="#29D"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+        showOnShallow={true}
+        options={{
+          showSpinner: false,
+        }}
       />
       <Component {...pageProps} />
     </Layout>
