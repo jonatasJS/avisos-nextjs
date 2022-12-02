@@ -59,9 +59,7 @@ interface Todos {
   editedAt?: string;
 }
 
-socket.on("addNewTodo", async (data: string) => {
-  console.log("Dashboard out:", data);
-  await new Audio("/public/audio/createSucess.mp3").play();
+socket.on("addNewTodo", (data: string) => {
   toastContainer(
     `Um novo aviso criado por "${
       data[0].toUpperCase() + data.substring(1)
@@ -70,9 +68,8 @@ socket.on("addNewTodo", async (data: string) => {
   );
 });
 
-socket.on("deleteTodo", async (data: string) => {
+socket.on("deleteTodo", (data: string) => {
   console.log("Dashboard out:", data);
-  await new Audio("/public/audio/createSucess.mp3").play();
   const {
     deletedBy,
     title,
@@ -88,9 +85,8 @@ socket.on("deleteTodo", async (data: string) => {
   );
 });
 
-socket.on("editTodo", async (data: string) => {
+socket.on("editTodo", (data: string) => {
   console.log("Dashboard out:", data);
-  await new Audio("/public/audio/createSucess.mp3").play();
   const {
     editedBy,
     title,
@@ -107,8 +103,7 @@ socket.on("editTodo", async (data: string) => {
 });
 
 // logout
-socket.on("logout", async (data: string) => {
-  await new Audio("/public/audio/joinUser.mp3").play();
+socket.on("logout", (data: string) => {
   console.log("Dashboard out:", data);
   toastContainer(
     `Usuário "${data[0].toUpperCase() + data.substring(1)}" saiu do sistema!`,
@@ -116,8 +111,7 @@ socket.on("logout", async (data: string) => {
   );
 });
 
-socket.on("login", async (data: Todos) => {
-  await new Audio("/public/audio/joinUser.mp3").play();
+socket.on("login", (data: Todos) => {
   toastContainer(`${data} logado!`, "success");
 });
 
@@ -149,31 +143,38 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
+  const [urlSong, setUrlSong] = useState("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("addNewTodo", async (data: string) => {
+  socket.on("addNewTodo", (data: string) => {
     console.log("Dashboard in:", data);
-    await new Audio("/public/audio/createSucess.mp3").play();
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
     // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
 
   // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("deleteTodo", async (data: Todos) => {
+  socket.on("deleteTodo", (data: Todos) => {
     getTodos(setTodos);
-    await new Audio("/public/audio/createSucess.mp3").play();
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
 
   // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("editTodo", async (data: Todos) => {
+  socket.on("editTodo", (data: Todos) => {
     getTodos(setTodos);
-    await new Audio("/public/audio/createSucess.mp3").play();
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("login", async (data: string) => {
+  socket.on("login", (data: string) => {
     console.log("login:", data);
-    await new Audio("/public/audio/joinUser.mp3").play();
+    console.log(audioRef.current)
+    setUrlSong("/audio/joinUser.mp3");
+    audioRef.current?.play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
@@ -196,9 +197,10 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("logout", async (data: string) => {
+  socket.on("logout", (data: string) => {
     console.log("logout", data);
-    await new Audio("/public/audio/joinUser.mp3").play();
+    setUrlSong("/audio/joinUser.mp3");
+    audioRef.current?.play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = false;
@@ -224,7 +226,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   socket.on("newTodo", async (todo: Todos) => {
     setTodos((oldTodos) => [...oldTodos, todo]);
-    await new Audio("/public/audio/createSucess.mp3").play();
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
 
   useEffect(() => {
@@ -270,7 +273,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       );
 
       if (!userIsAdmin) {
-        await new Audio("/public/audio/err.mp3").play();
+        setUrlSong("/audio/err.mp3");
+        audioRef.current?.play();
         toastContainer(
           "Você não tem permissão para criar um novo aviso!",
           "info"
@@ -340,6 +344,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
       if (!userIsAdmin) {
         toastContainer("Você não tem permissão para deletar um aviso!", "info");
+
+        setUrlSong("/audio/err.mp3");
+        audioRef.current?.play();
         return;
       }
 
@@ -447,10 +454,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   return (
     <>
-      <div
-        className={styles.fps}
-      >
-      <FPSStats></FPSStats>
+      <div className={styles.fps}>
+        <FPSStats></FPSStats>
       </div>
       {/* modal to confirm delete todo */}
       <Modal
@@ -860,10 +865,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               onChange={handleSearch}
               ref={searchRef}
             />
-            <button
-              className={styles.btn}
-              onClick={handleRefresh}
-            >
+            <button className={styles.btn} onClick={handleRefresh}>
               Atualizar
             </button>
           </div>
@@ -1072,6 +1074,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           </div>
         </div>
       )}
+      <audio src={urlSong} autoPlay ref={audioRef} controls={false}></audio>
+      {console.log(urlSong)}
     </>
   );
 }
