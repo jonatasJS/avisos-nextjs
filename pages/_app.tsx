@@ -20,9 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Layout>
-      <Head
-        key={router.pathname}
-      >
+      <Head key={router.pathname}>
         <style>
           {`
           #__next {
@@ -62,7 +60,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
           crossOrigin="anonymous"
         />
-        <link rel="manifest" href="/manifest.json" />
       </Head>
       <NextNProgress
         color="#FF6F21"
@@ -75,6 +72,19 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <Component {...pageProps} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+              navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then(res => console.log("service worker registered"))
+                .catch(err => console.log("service worker not registered", err));
+            });
+          }`,
+        }}
+      ></script>
+      <script src="/serviceWorker.js"></script>
     </Layout>
   );
 }

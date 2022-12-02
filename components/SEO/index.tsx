@@ -29,6 +29,7 @@ export default function SEO({
 }: CEOProps) {
   return (
     <>
+      <link rel="manifest" href="/manifest.json" />
       <meta
         name="image"
         content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
@@ -43,7 +44,7 @@ export default function SEO({
         property="og:image"
         content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
       />
-      
+
       <meta
         name="twitter:image"
         content="https://api.microlink.io?url=https://avisos.jonatas.app&screenshot=true&meta=false&embed=screenshot.url"
