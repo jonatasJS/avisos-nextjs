@@ -236,6 +236,8 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataServer(user);
       setUserDataLocal(user);
 
+      socket.emit('login', user.username);
+
       socket.on(
         "usersOnline",
         (
