@@ -62,8 +62,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
         crossOrigin="anonymous"
       />
+      <link rel="manifest" href="manifest.json" />
       <NextNProgress
-        color="#29D"
+        color="#FF6F21"
         startPosition={0.3}
         stopDelayMs={200}
         height={3}
