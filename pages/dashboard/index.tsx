@@ -145,6 +145,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
   const [urlSong, setUrlSong] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isOnline, setIsOnline] = useState(false);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -236,8 +237,11 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       setUserDataServer(user);
       setUserDataLocal(user);
 
-      socket.emit('login', user.username);
+      !isOnline && socket.emit('login', user.username);
+      !isOnline && socket.emit("usersOnline", user.username);
 
+      setIsOnline(true);
+      
       socket.on(
         "usersOnline",
         (

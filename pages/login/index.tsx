@@ -42,7 +42,7 @@ export default function Home() {
       }));
       // redirecionar para a página de dashboard
       Router.push("/dashboard");
-      socket.emit("login", username);
+      // socket.emit("login", username);
       toastContainer("Login realizado com sucesso", "success");
     } else {
       toastContainer("Usuario ou senha incorretos", "error");
