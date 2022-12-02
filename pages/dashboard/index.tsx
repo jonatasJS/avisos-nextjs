@@ -59,8 +59,9 @@ interface Todos {
   editedAt?: string;
 }
 
-socket.on("addNewTodo", (data: string) => {
+socket.on("addNewTodo", async (data: string) => {
   console.log("Dashboard out:", data);
+  await new Audio("/public/audio/createSucess.mp3").play();
   toastContainer(
     `Um novo aviso criado por "${
       data[0].toUpperCase() + data.substring(1)
@@ -69,8 +70,9 @@ socket.on("addNewTodo", (data: string) => {
   );
 });
 
-socket.on("deleteTodo", (data: string) => {
+socket.on("deleteTodo", async (data: string) => {
   console.log("Dashboard out:", data);
+  await new Audio("/public/audio/createSucess.mp3").play();
   const {
     deletedBy,
     title,
@@ -86,8 +88,9 @@ socket.on("deleteTodo", (data: string) => {
   );
 });
 
-socket.on("editTodo", (data: string) => {
+socket.on("editTodo", async (data: string) => {
   console.log("Dashboard out:", data);
+  await new Audio("/public/audio/createSucess.mp3").play();
   const {
     editedBy,
     title,
@@ -104,7 +107,8 @@ socket.on("editTodo", (data: string) => {
 });
 
 // logout
-socket.on("logout", (data: string) => {
+socket.on("logout", async (data: string) => {
+  await new Audio("/public/audio/joinUser.mp3").play();
   console.log("Dashboard out:", data);
   toastContainer(
     `Usuário "${data[0].toUpperCase() + data.substring(1)}" saiu do sistema!`,
@@ -112,7 +116,8 @@ socket.on("logout", (data: string) => {
   );
 });
 
-socket.on("login", (data: Todos) => {
+socket.on("login", async (data: Todos) => {
+  await new Audio("/public/audio/joinUser.mp3").play();
   toastContainer(`${data} logado!`, "success");
 });
 
@@ -146,25 +151,29 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("addNewTodo", (data: string) => {
+  socket.on("addNewTodo", async (data: string) => {
     console.log("Dashboard in:", data);
+    await new Audio("/public/audio/createSucess.mp3").play();
     // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
 
   // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("deleteTodo", (data: Todos) => {
+  socket.on("deleteTodo", async (data: Todos) => {
     getTodos(setTodos);
+    await new Audio("/public/audio/createSucess.mp3").play();
   });
 
   // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
-  socket.on("editTodo", (data: Todos) => {
+  socket.on("editTodo", async (data: Todos) => {
     getTodos(setTodos);
+    await new Audio("/public/audio/createSucess.mp3").play();
   });
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("login", (data: string) => {
+  socket.on("login", async (data: string) => {
     console.log("login:", data);
+    await new Audio("/public/audio/joinUser.mp3").play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
@@ -187,8 +196,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("logout", (data: string) => {
+  socket.on("logout", async (data: string) => {
     console.log("logout", data);
+    await new Audio("/public/audio/joinUser.mp3").play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = false;
@@ -212,8 +222,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     }
   }, []);
 
-  socket.on("newTodo", (todo: Todos) => {
+  socket.on("newTodo", async (todo: Todos) => {
     setTodos((oldTodos) => [...oldTodos, todo]);
+    await new Audio("/public/audio/createSucess.mp3").play();
   });
 
   useEffect(() => {
@@ -259,6 +270,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       );
 
       if (!userIsAdmin) {
+        await new Audio("/public/audio/err.mp3").play();
         toastContainer(
           "Você não tem permissão para criar um novo aviso!",
           "info"
