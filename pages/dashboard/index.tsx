@@ -12,13 +12,9 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import nmd from "nano-markdown";
 import Markdown from "markdown-to-jsx";
-import html2md from "html2md";
 import * as Yup from "yup";
 import FPSStats from "react-fps-stats";
-import plugins from "../../services/plugins";
-import { Editor, Viewer } from "@bytemd/react";
 import Modal from "react-bootstrap/Modal";
 
 import { socket } from "../_app";
@@ -111,8 +107,22 @@ socket.on("logout", (data: string) => {
   );
 });
 
-socket.on("login", (data: Todos) => {
-  toastContainer(`${data} logado!`, "success");
+socket.on("login", ({
+  data,
+  users
+}: {
+  data: Todos, users: UserDataProps[]
+}) => {
+  toastContainer(`${data.data} logado!`, "success");
+
+  Users = Users.map((user) => {
+    if (users.includes(user.username)) {
+      user.isOnline = true;
+    } else {
+      user.isOnline = false;
+    }
+    return user;
+  });
 });
 
 async function getTodos(setTodos: any) {
@@ -171,10 +181,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   });
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("login", (data: string) => {
-    if(data == userDataLocal.username) return;
+  socket.on("login", ({
+    data,
+    users
+  }: {
+    data: Todos, users: UserDataProps[]
+  }) => {
+    if (data == userDataLocal.username) return;
     console.log("login:", data);
-    console.log(audioRef.current)
+    console.log(audioRef.current);
     setUrlSong("/audio/joinUser.mp3");
     audioRef.current?.play();
     Users = Users.map((user) => {
@@ -196,6 +211,15 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         }
       }) as UserDataProps
     );
+
+    Users = Users.map((user) => {
+      if (users.includes(user.username)) {
+        user.isOnline = true;
+      } else {
+        user.isOnline = false;
+      }
+      return user;
+    });
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
@@ -232,13 +256,32 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     audioRef.current?.play();
   });
 
+  socket.on(
+    "usersOnline",
+    (
+      // users é uma string que vem do servidor e é convertida para um array de strings
+      users: string[]
+    ) => {
+      console.log("usersOnline:", users);
+      // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
+      Users = Users.map((user) => {
+        if (users.includes(user.username)) {
+          user.isOnline = true;
+        } else {
+          user.isOnline = false;
+        }
+        return user;
+      });
+    }
+  );
+
   useEffect(() => {
     async function getUserDatasFromLocalStorage() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setUserDataServer(user);
       setUserDataLocal(user);
 
-      !isOnline && socket.emit('login', user.username);
+      !isOnline && socket.emit("login", user.username);
       !isOnline && socket.emit("usersOnline", user.username);
 
       setIsOnline(true);
