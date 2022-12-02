@@ -1,7 +1,7 @@
 {
   "name": "Avisos SiM",
   "short_name": "Avisos SiM",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#0000004d",
   "theme_color": "#FF6F21",

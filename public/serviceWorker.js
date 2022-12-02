@@ -2,6 +2,7 @@ const staticDevCoffee = "avisos-sim-v1";
 const assets = [
   "/",
   "/index",
+  "/dashboard",
   "/css/style.css",
   "/js/app.js",
   "/images/icon-512-512.png",
