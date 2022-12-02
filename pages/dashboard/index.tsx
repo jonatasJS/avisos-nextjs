@@ -172,6 +172,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("login", (data: string) => {
+    if(data == userDataLocal.username) return;
     console.log("login:", data);
     console.log(audioRef.current)
     setUrlSong("/audio/joinUser.mp3");
@@ -241,7 +242,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       !isOnline && socket.emit("usersOnline", user.username);
 
       setIsOnline(true);
-      
+
       socket.on(
         "usersOnline",
         (
