@@ -113,7 +113,7 @@ socket.on("login", ({
 }: {
   data: Todos, users: UserDataProps[]
 }) => {
-  toastContainer(`${data.data} logado!`, "success");
+  toastContainer(`${data} logado!`, "success");
 
   Users = Users.map((user) => {
     if (users.includes(user.username)) {
