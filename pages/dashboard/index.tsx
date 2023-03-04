@@ -100,6 +100,7 @@ socket.on("editTodo", (data: string) => {
 
 // logout
 socket.on("logout", (data: string) => {
+  if (data == null) return;
   console.log("Dashboard out:", data);
   toastContainer(
     `Usuário "${data[0].toUpperCase() + data.substring(1)}" saiu do sistema!`,
@@ -113,6 +114,7 @@ socket.on("login", ({
 }: {
   data: Todos, users: UserDataProps[]
 }) => {
+  if (data == null) return;
   toastContainer(`${data} logado!`, "success");
 
   Users = Users.map((user) => {
@@ -187,6 +189,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   }: {
     data: Todos, users: UserDataProps[]
   }) => {
+  if (data == null) return;
     if (data == userDataLocal.username) return;
     console.log("login:", data);
     console.log(audioRef.current);
@@ -224,6 +227,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("logout", (data: string) => {
+  if (data == null) return;
     console.log("logout", data);
     setUrlSong("/audio/joinUser.mp3");
     audioRef.current?.play();
@@ -262,6 +266,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       // users é uma string que vem do servidor e é convertida para um array de strings
       users: string[]
     ) => {
+  if (users == null) return;
       console.log("usersOnline:", users);
       // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
       Users = Users.map((user) => {
