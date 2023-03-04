@@ -19,6 +19,7 @@ export default function Header({ title, showTitle }: HeaderProps) {
           style={{
             background: "#ff5f5a",
           }}
+          onClick={() => window.close()}
         >
           <i className="fa fa-times" aria-hidden="true"></i>
         </motion.span>
