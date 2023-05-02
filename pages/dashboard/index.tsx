@@ -190,7 +190,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
   }: {
     data: Todos, users: UserDataProps[]
   }) => {
-  if (data == null) return;
+    if (data == null) return;
     if (data == userDataLocal.username) return;
     console.log("login:", data);
     console.log(audioRef.current);
@@ -228,7 +228,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("logout", (data: string) => {
-  if (data == null) return;
+    if (data == null) return;
     console.log("logout", data);
     setUrlSong("/audio/joinUser.mp3");
     audioRef.current?.play();
@@ -267,7 +267,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
       // users é uma string que vem do servidor e é convertida para um array de strings
       users: string[]
     ) => {
-  if (users == null) return;
+      if (users == null) return;
       console.log("usersOnline:", users);
       // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
       Users = Users.map((user) => {
@@ -407,12 +407,15 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
       );
       return;
     }
-    
+
     await api.post("/screentime", {
       time
     });
 
     socket.emit('changeTime', time);
+    toastContainer(`Tempo do aviso mudado para ${time} segundos`, "success");
+    setUrlSong("/audio/err.mp3");
+    audioRef.current?.play();
     return setScreenTimeServer_((await api.get("/screentime")).data);
   }
 
@@ -917,7 +920,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
               }}
               onClick={() => handleChangeTime(screenTimeValue)}
             />
-          : ""
+            : ""
           }
         </span>
       </div>
