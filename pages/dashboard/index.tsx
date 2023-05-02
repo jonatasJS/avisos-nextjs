@@ -153,7 +153,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
-  const [screenTimeValue, setScreenTimeValue] = useState(0);
+  const [screenTimeValue, setScreenTimeValue] = useState(screenTimeServer);
   const [screenTimeServer_, setScreenTimeServer_] = useState(screenTimeServer || 0);
   const patternString = "\d{1,3}";
   const [urlSong, setUrlSong] = useState("");
