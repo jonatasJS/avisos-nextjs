@@ -12,14 +12,11 @@ import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import moment from "moment";
-import nmd from "nano-markdown";
 import Markdown from "markdown-to-jsx";
-import html2md from "html2md";
 import * as Yup from "yup";
 import FPSStats from "react-fps-stats";
-import plugins from "../../services/plugins";
-import { Editor, Viewer } from "@bytemd/react";
 import Modal from "react-bootstrap/Modal";
+import { TbRefresh } from "react-icons/tb";
 
 import { socket } from "../_app";
 
@@ -62,8 +59,7 @@ interface Todos {
 socket.on("addNewTodo", (data: string) => {
   console.log("Dashboard out:", data);
   toastContainer(
-    `Um novo aviso criado por "${
-      data[0].toUpperCase() + data.substring(1)
+    `Um novo aviso criado por "${data[0].toUpperCase() + data.substring(1)
     }" com sucesso!`,
     "success"
   );
@@ -79,8 +75,7 @@ socket.on("deleteTodo", (data: string) => {
     title: string;
   } = JSON.parse(data);
   toastContainer(
-    `Aviso "${title}" deletado por ${
-      deletedBy[0].toUpperCase() + deletedBy.substring(1)
+    `Aviso "${title}" deletado por ${deletedBy[0].toUpperCase() + deletedBy.substring(1)
     } com sucesso!`,
     "warning"
   );
@@ -96,8 +91,7 @@ socket.on("editTodo", (data: string) => {
     title: string;
   } = JSON.parse(data);
   toastContainer(
-    `Aviso "${title}" editado por ${
-      editedBy[0].toUpperCase() + editedBy.substring(1)
+    `Aviso "${title}" editado por ${editedBy[0].toUpperCase() + editedBy.substring(1)
     } com sucesso!`,
     "info"
   );
@@ -107,7 +101,7 @@ socket.on("editTodo", (data: string) => {
 socket.on("logout", (data: string) => {
   console.log("Dashboard out:", data);
   toastContainer(
-    `Usuário "${data[0].toUpperCase() + data.substring(1)}" saiu do sistema!`,
+    `${data ? "Usuario \"" + data[0].toUpperCase() + data.substring(1) : "Alguém"}" saiu do sistema!`,
     "info"
   );
 });
@@ -129,7 +123,7 @@ interface UserDataProps {
   profile: string;
 }
 
-export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
+export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: Todos[]; screenTimeServer: number }) {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [isShowError, setIsShowError] = useState(false);
   const [deleteMessageVisible, setDeleteMessageVisible] = useState(false);
@@ -144,6 +138,9 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
   const [messageIdDelete, setmMessageIdDelete] = useState("");
   const [userDataLocal, setUserDataLocal] = useState({} as UserDataProps);
   const [userDataServer, setUserDataServer] = useState({} as UserDataProps);
+  const [screenTimeValue, setScreenTimeValue] = useState(0);
+  const [screenTimeServer_, setScreenTimeServer_] = useState(screenTimeServer || 0);
+  const patternString = "\d{1,3}";
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -249,6 +246,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
     data: {
       title: string;
       body: string;
+      screenTime: string;
     },
     { reset }: { reset: () => void }
   ) {
@@ -275,12 +273,13 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         .validate(data, {
           abortEarly: false,
         })
-        .then(async ({ title, body }) => {
+        .then(async ({ title, body, screenTime }) => {
           const { data: dataApi } = await api.post("/messages", {
             title,
             body,
             createdBy:
               (await userDataLocal.name) || (await userDataServer.name),
+            screenTime
           });
 
           setTodos([...todos, dataApi]);
@@ -317,6 +316,29 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
         );
       }
     }
+  }
+
+
+  async function handleChangeTime(time: number) {
+    const userIsAdmin = users.find(
+      (data) =>
+        data.username === userDataLocal.username && data.isAdmin === true
+    );
+
+    if (!userIsAdmin) {
+      toastContainer(
+        "Você não tem permissão para criar um novo aviso!",
+        "info"
+      );
+      return;
+    }
+    
+    await api.post("/screentime", {
+      time
+    });
+
+    socket.emit('changeTime', time);
+    return setScreenTimeServer_((await api.get("/screentime")).data);
   }
 
   async function handleDelete(id: string) {
@@ -438,7 +460,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
       <div
         className={styles.fps}
       >
-      <FPSStats></FPSStats>
+        <FPSStats></FPSStats>
       </div>
       {/* modal to confirm delete todo */}
       <Modal
@@ -470,7 +492,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               dangerouslySetInnerHTML={{
                 __html: `Você está prestes a deletar ${
                   /*nmd(*/ titleDelete /*)*/
-                }!`,
+                  }!`,
               }}
             />
             <p>Caso delete não tera como recuperá-lo!</p>
@@ -610,24 +632,22 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
             )
               ? "rgba(0, 255, 0, 0.2)"
               : "rgba(255, 255, 255, 0.1)",
-            boxShadow: `0 0 20px 1px ${
-              users.find(
-                (data) =>
-                  data.username === userDataServer.username &&
-                  data.isAdmin === true
-              )
-                ? "rgba(255, 213, 0, 0.2)"
-                : "rgba(255, 255, 255, 0.1)"
-            }`,
-            border: `1px solid ${
-              users.find(
-                (data) =>
-                  data.username === userDataServer.username &&
-                  data.isAdmin === true
-              )
-                ? "rgba(255, 213, 0, 0.5)"
-                : "rgba(255, 255, 255, 0.1)"
-            }`,
+            boxShadow: `0 0 20px 1px ${users.find(
+              (data) =>
+                data.username === userDataServer.username &&
+                data.isAdmin === true
+            )
+              ? "rgba(255, 213, 0, 0.2)"
+              : "rgba(255, 255, 255, 0.1)"
+              }`,
+            border: `1px solid ${users.find(
+              (data) =>
+                data.username === userDataServer.username &&
+                data.isAdmin === true
+            )
+              ? "rgba(255, 213, 0, 0.5)"
+              : "rgba(255, 255, 255, 0.1)"
+              }`,
             maxWidth: "70px",
             height: "auto",
             borderRadius: "10px",
@@ -710,18 +730,16 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                     backgroundColor: e.isOnline
                       ? "rgba(0, 255, 0, 0.2)"
                       : "rgba(255, 255, 255, 0.1)",
-                    boxShadow: `0 0 20px 1px ${
-                      e.isOnline
-                        ? e.isAdmin
-                          ? "rgba(255, 213, 0, 0.2)"
-                          : "rgba(0, 255, 0, 0.2)"
-                        : "rgba(255, 255, 255, 0.1)"
-                    }`,
-                    border: `1px solid ${
-                      e.isAdmin
-                        ? "rgba(255, 213, 0, 0.5)"
-                        : "rgba(255, 255, 255, 0.1)"
-                    }`,
+                    boxShadow: `0 0 20px 1px ${e.isOnline
+                      ? e.isAdmin
+                        ? "rgba(255, 213, 0, 0.2)"
+                        : "rgba(0, 255, 0, 0.2)"
+                      : "rgba(255, 255, 255, 0.1)"
+                      }`,
+                    border: `1px solid ${e.isAdmin
+                      ? "rgba(255, 213, 0, 0.5)"
+                      : "rgba(255, 255, 255, 0.1)"
+                      }`,
                     maxWidth: "40px",
                     height: "auto",
                     borderRadius: "10px",
@@ -797,47 +815,76 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
               ? "-60px"
               : "60px",
             marginTop: "50px",
+            marginLeft: "300px",
+            marginRight: "300px"
           }}
         >
           <Logo />
         </a>
       </Link>
+
+      <div
+        className={styles.screeTimeContainer}
+      >
+        <input
+          value={screenTimeServer_ == screenTimeValue ? screenTimeServer_ : screenTimeValue}
+          onChange={e => setScreenTimeValue(e.target.value)}
+          type="number"
+          pattern={patternString}
+          max="999"
+          placeholder="0"
+        />
+        <span>
+          segundos{" "}
+          {(screenTimeServer_ != screenTimeValue) ?
+            <TbRefresh
+              size={25}
+              style={{
+                cursor: "pointer"
+              }}
+              onClick={() => handleChangeTime(screenTimeValue)}
+            />
+          : ""
+          }
+        </span>
+      </div>
+
       {/* verifica se é admin */}
       {users.find(
         (data) =>
           data.username === userDataServer.username && data.isAdmin === true
       ) && (
-        <>
-          <main className={styles.main} ref={mainRef}>
-            <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
-              <Input
-                styles={styles}
-                name="title"
-                label="Título"
-                placeholder="Título do aviso"
-                type="text"
-              />
+          <>
+            <main className={styles.main} ref={mainRef}>
+              <Form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
+                <Input
+                  styles={styles}
+                  name="title"
+                  label="Título"
+                  placeholder="Título do aviso"
+                  type="text"
+                />
 
-              <TextArea
-                styles={styles}
-                name="body"
-                label="Descrição"
-                placeholder="Descrição do aviso"
-              />
+                <TextArea
+                  styles={styles}
+                  name="body"
+                  label="Descrição"
+                  placeholder="Descrição do aviso"
+                />
 
-              <motion.div
-                className={styles.formFooter}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                exit={{ opacity: 0 }}
-              >
-                <button className={styles.btn}>Cadastrar</button>
-              </motion.div>
-            </Form>
-          </main>
-        </>
-      )}
+                <motion.div
+                  className={styles.formFooter}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <button className={styles.btn}>Cadastrar</button>
+                </motion.div>
+              </Form>
+            </main>
+          </>
+        )}
       {!!todos.length && (
         <div className={styles.avisos} ref={avisosRef}>
           <h1>Avisos</h1>
@@ -858,7 +905,7 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
           <div className={styles.avisosContainer}>
             {todos.map(
               (
-                { title, body, createdBy, createdAt, _id, editedBy, editedAt },
+                { title, body, screenTime, createdBy, createdAt, _id, editedBy, editedAt },
                 i
               ) => {
                 return (
@@ -942,14 +989,18 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                           setBodyEdit("");
                         }
                       }}
-                      // dangerouslySetInnerHTML={{
-                      //   __html: nmd(body),
-                      // }}
+                    // dangerouslySetInnerHTML={{
+                    //   __html: nmd(body),
+                    // }}
                     >
                       <Markdown>{body}</Markdown>
                     </p>
 
+
                     <div className={styles.logs}>
+                      <span>
+                        {screenTime}
+                      </span>
                       {createdBy && (
                         <motion.div
                           className={styles.createdBy}
@@ -1026,33 +1077,33 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
                         data.username === userDataServer.username &&
                         data.isAdmin === true
                     ) && (
-                      <div className={styles.avisosItemFooter}>
-                        <button
-                          style={{
-                            bottom: "0px",
-                            right: "25px",
-                            backgroundColor:
-                              messageIdEdit === _id ? "#282a36" : "#282a36",
-                          }}
-                          onClick={() => {
-                            if (messageIdEdit === _id) {
-                              handleEditMessage(_id);
-                            } else {
-                              setTitleDelete(title);
-                              setmMessageIdDelete(_id);
-                              setDeleteMessageVisible(true);
-                            }
-                          }}
-                          className={`${styles.btn} exclude`}
-                        >
-                          {messageIdEdit === _id ? (
-                            <FiSave size={20} color="#fff" />
-                          ) : (
-                            <FiTrash2 size={20} color="#fff" />
-                          )}
-                        </button>
-                      </div>
-                    )}
+                        <div className={styles.avisosItemFooter}>
+                          <button
+                            style={{
+                              bottom: "0px",
+                              right: "25px",
+                              backgroundColor:
+                                messageIdEdit === _id ? "#282a36" : "#282a36",
+                            }}
+                            onClick={() => {
+                              if (messageIdEdit === _id) {
+                                handleEditMessage(_id);
+                              } else {
+                                setTitleDelete(title);
+                                setmMessageIdDelete(_id);
+                                setDeleteMessageVisible(true);
+                              }
+                            }}
+                            className={`${styles.btn} exclude`}
+                          >
+                            {messageIdEdit === _id ? (
+                              <FiSave size={20} color="#fff" />
+                            ) : (
+                              <FiTrash2 size={20} color="#fff" />
+                            )}
+                          </button>
+                        </div>
+                      )}
                   </motion.div>
                 );
               }
@@ -1066,10 +1117,14 @@ export default function Dashboard({ todosBack }: { todosBack: Todos[] }) {
 
 export async function getStaticProps(context: GetStaticProps) {
   const { data: todosBack } = await api.get("/messages");
+  const { data: screenTimeServer } = await api.get("/screentime");
+
+  console.log(screenTimeServer);
 
   return {
     props: {
       todosBack,
+      screenTimeServer
     },
     revalidate: 60,
   };

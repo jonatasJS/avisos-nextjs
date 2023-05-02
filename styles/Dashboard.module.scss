@@ -78,6 +78,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   position: relative;
   padding: 0;
   border: 0;
+  z-index: 99999;
 
   textarea {
     resize: none;
@@ -665,5 +666,35 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
       margin-top: 0;
       margin-left: 0;
     }
+  }
+}
+
+.screeTimeContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  color: #f8f8f2;
+  width: 100%;
+  height: auto;
+  left: 0%;
+  padding: 1.5rem;
+  top: 20%;
+  
+  input {
+    z-index: 999;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    -webkit-appearance: none;
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  span {
+    z-index: 999;
   }
 }

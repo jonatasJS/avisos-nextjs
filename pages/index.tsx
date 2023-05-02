@@ -26,10 +26,11 @@ async function getTodos(setTodos: any) {
   setTodos(data);
 }
 
-const Home = ({ todosBack }: { todosBack: Todos[] }) => {
+const Home = ({ todosBack, screenTimeServer }: { todosBack: Todos[]; screenTimeServer: number }) => {
   const [todos, setTodos] = useState<Todos[]>(todosBack);
   const [todo, setTodo] = useState(0);
   const [version, setVersion] = useState(0);
+  const [screenTime, setScreenTime] = useState(screenTimeServer || 0)
 
   socket.on("addNewTodo", (data: Todos) => {
     getTodos(setTodos);
@@ -38,6 +39,10 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
   socket.on("deleteTodo", (data: Todos) => {
     getTodos(setTodos);
   });
+
+  socket.on("changeTime", (time: number) => {
+    setScreenTime(time)
+  })
 
   useEffect(() => {
     const interval = setInterval(
@@ -80,7 +85,7 @@ const Home = ({ todosBack }: { todosBack: Todos[] }) => {
         setTodos(data);
       },
       // 30000
-      process.env.NODE_ENV === "development" ? 6000 : 30000
+      process.env.NODE_ENV === "development" ? 6000 : screenTime <= 0 ? screenTimeServer : screenTime
     );
     return () => clearInterval(interval);
   }, []);
@@ -189,10 +194,12 @@ export default Home;
 
 export async function getStaticProps(context: GetStaticProps) {
   const { data: todosBack } = await api.get("/messages");
+  const { data: screenTimeServer } = await api.get("/screentime");
 
   return {
     props: {
       todosBack,
+      screenTimeServer
     },
     revalidate: 60,
   };
