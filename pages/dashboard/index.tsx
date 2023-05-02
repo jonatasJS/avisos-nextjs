@@ -57,7 +57,6 @@ interface Todos {
 }
 
 socket.on("addNewTodo", (data: string) => {
-  console.log("Dashboard out:", data);
   toastContainer(
     `Um novo aviso criado por "${data[0].toUpperCase() + data.substring(1)
     }" com sucesso!`,
@@ -99,6 +98,7 @@ socket.on("editTodo", (data: string) => {
 
 // logout
 socket.on("logout", (data: string) => {
+  if (data == null) return;
   console.log("Dashboard out:", data);
   toastContainer(
     `${data ? "Usuario \"" + data[0].toUpperCase() + data.substring(1) : "Alguém"}" saiu do sistema!`,
@@ -106,8 +106,23 @@ socket.on("logout", (data: string) => {
   );
 });
 
-socket.on("login", (data: Todos) => {
+socket.on("login", ({
+  data,
+  users
+}: {
+  data: Todos, users: UserDataProps[]
+}) => {
+  if (data == null) return;
   toastContainer(`${data} logado!`, "success");
+
+  Users = Users.map((user) => {
+    if (users.includes(user.username)) {
+      user.isOnline = true;
+    } else {
+      user.isOnline = false;
+    }
+    return user;
+  });
 });
 
 async function getTodos(setTodos: any) {
@@ -141,10 +156,15 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
   const [screenTimeValue, setScreenTimeValue] = useState(0);
   const [screenTimeServer_, setScreenTimeServer_] = useState(screenTimeServer || 0);
   const patternString = "\d{1,3}";
+  const [urlSong, setUrlSong] = useState("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isOnline, setIsOnline] = useState(false);
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
     console.log("Dashboard in:", data);
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
     // toastContainer(`Aviso criado por "${data}" com sucesso!`, "success");
     getTodos(setTodos);
   });
@@ -152,16 +172,30 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
   // quando o socket emitir o evento de deleteTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("deleteTodo", (data: Todos) => {
     getTodos(setTodos);
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
 
   // quando o socket emitir o evento de editTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("editTodo", (data: Todos) => {
     getTodos(setTodos);
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
 
   // quando o socket emitir o evento de login, ele vai modificar o state do todos os usuários com o data que é o username
-  socket.on("login", (data: string) => {
+  socket.on("login", ({
+    data,
+    users
+  }: {
+    data: Todos, users: UserDataProps[]
+  }) => {
+  if (data == null) return;
+    if (data == userDataLocal.username) return;
     console.log("login:", data);
+    console.log(audioRef.current);
+    setUrlSong("/audio/joinUser.mp3");
+    audioRef.current?.play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = true;
@@ -181,11 +215,23 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
         }
       }) as UserDataProps
     );
+
+    Users = Users.map((user) => {
+      if (users.includes(user.username)) {
+        user.isOnline = true;
+      } else {
+        user.isOnline = false;
+      }
+      return user;
+    });
   });
 
   // quando o socket emitir o evento de logout, ele vai modificar o state do todos os usuários com o data que é o username
   socket.on("logout", (data: string) => {
+  if (data == null) return;
     console.log("logout", data);
+    setUrlSong("/audio/joinUser.mp3");
+    audioRef.current?.play();
     Users = Users.map((user) => {
       if (user.username === data) {
         user.isOnline = false;
@@ -209,15 +255,42 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
     }
   }, []);
 
-  socket.on("newTodo", (todo: Todos) => {
+  socket.on("newTodo", async (todo: Todos) => {
     setTodos((oldTodos) => [...oldTodos, todo]);
+    setUrlSong("/audio/createSucess.mp3");
+    audioRef.current?.play();
   });
+
+  socket.on(
+    "usersOnline",
+    (
+      // users é uma string que vem do servidor e é convertida para um array de strings
+      users: string[]
+    ) => {
+  if (users == null) return;
+      console.log("usersOnline:", users);
+      // percorrer o array de usuários e verificar se o usuário foi encontrado no array de usuários online
+      Users = Users.map((user) => {
+        if (users.includes(user.username)) {
+          user.isOnline = true;
+        } else {
+          user.isOnline = false;
+        }
+        return user;
+      });
+    }
+  );
 
   useEffect(() => {
     async function getUserDatasFromLocalStorage() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       setUserDataServer(user);
       setUserDataLocal(user);
+
+      !isOnline && socket.emit("login", user.username);
+      !isOnline && socket.emit("usersOnline", user.username);
+
+      setIsOnline(true);
 
       socket.on(
         "usersOnline",
@@ -257,6 +330,8 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
       );
 
       if (!userIsAdmin) {
+        setUrlSong("/audio/err.mp3");
+        audioRef.current?.play();
         toastContainer(
           "Você não tem permissão para criar um novo aviso!",
           "info"
@@ -350,6 +425,9 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
 
       if (!userIsAdmin) {
         toastContainer("Você não tem permissão para deletar um aviso!", "info");
+
+        setUrlSong("/audio/err.mp3");
+        audioRef.current?.play();
         return;
       }
 
@@ -457,11 +535,6 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
 
   return (
     <>
-      <div
-        className={styles.fps}
-      >
-        <FPSStats></FPSStats>
-      </div>
       {/* modal to confirm delete todo */}
       <Modal
         show={deleteMessageVisible}
@@ -895,10 +968,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
               onChange={handleSearch}
               ref={searchRef}
             />
-            <button
-              className={styles.btn}
-              onClick={handleRefresh}
-            >
+            <button className={styles.btn} onClick={handleRefresh}>
               Atualizar
             </button>
           </div>
@@ -1111,6 +1181,8 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
           </div>
         </div>
       )}
+      <audio src={urlSong} autoPlay ref={audioRef} controls={false}></audio>
+      {console.log(urlSong)}
     </>
   );
 }
