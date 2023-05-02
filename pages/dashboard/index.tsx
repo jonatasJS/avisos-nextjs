@@ -900,7 +900,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
         className={styles.screeTimeContainer}
       >
         <input
-          value={screenTimeServer_ == screenTimeValue ? screenTimeServer_ : screenTimeValue}
+          value={screenTimeServer_ != screenTimeValue ? screenTimeValue : screenTimeServer_}
           onChange={e => setScreenTimeValue(e.target.value)}
           type="number"
           pattern={patternString}
