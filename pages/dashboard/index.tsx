@@ -556,16 +556,16 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
             //   __html: `${nmd(titleDelete)}`,
             // }}
             >
-              <Markdown>{titleDelete}</Markdown>
+              <Markdown>Aviso: {titleDelete}</Markdown>
               {/* {html2md(titleDelete)} */}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p
               dangerouslySetInnerHTML={{
-                __html: `Você está prestes a deletar ${
+                __html: `Você está prestes a deletar <strong>${
                   /*nmd(*/ titleDelete /*)*/
-                  }!`,
+                  }</strong>!`,
               }}
             />
             <p>Caso delete não tera como recuperá-lo!</p>
