@@ -414,7 +414,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
 
     socket.emit('changeTime', time);
     toastContainer(`Tempo do aviso mudado para ${time} segundos`, "success");
-    setUrlSong("/audio/err.mp3");
+    setUrlSong("/audio/createSucess.mp3");
     audioRef.current?.play();
     return setScreenTimeServer_((await api.get("/screentime")).data);
   }
