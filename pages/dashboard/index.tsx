@@ -559,7 +559,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
             //   __html: `${nmd(titleDelete)}`,
             // }}
             >
-              <Markdown>Aviso: {titleDelete}</Markdown>
+              <Markdown>{`Aviso:  ${titleDelete}`}</Markdown>
               {/* {html2md(titleDelete)} */}
             </Modal.Title>
           </Modal.Header>
