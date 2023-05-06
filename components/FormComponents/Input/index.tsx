@@ -45,6 +45,9 @@ export default function Input({
         placeholder={placeholder}
         autoComplete="off"
         {...rest}
+        style={{
+          textAlign: "center"
+        }}
       />
       <motion.label
         htmlFor="username"
