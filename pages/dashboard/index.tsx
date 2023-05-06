@@ -159,6 +159,7 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
   const [urlSong, setUrlSong] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isOnline, setIsOnline] = useState(false);
+  const [isScreenTimeSucess, setIsScreenTimeSucess] = useState("");
 
   // quando o socket emitir o evento de addNewTodo, ele vai receber o data e vai modificar o state de todos
   socket.on("addNewTodo", (data: string) => {
@@ -395,28 +396,35 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
 
 
   async function handleChangeTime(time: number) {
-    const userIsAdmin = users.find(
-      (data) =>
-        data.username === userDataLocal.username && data.isAdmin === true
-    );
-
-    if (!userIsAdmin) {
-      toastContainer(
-        "Você não tem permissão para criar um novo aviso!",
-        "info"
+    try {
+      const userIsAdmin = users.find(
+        (data) =>
+          data.username === userDataLocal.username && data.isAdmin === true
       );
-      return;
+
+      if (!userIsAdmin) {
+        toastContainer(
+          "Você não tem permissão para criar um novo aviso!",
+          "info"
+        );
+        return;
+      }
+
+      await api.post("/screentime", {
+        time
+      });
+
+      socket.emit('changeTime', time);
+      toastContainer(`Tempo do aviso mudado para ${time} segundos`, "success");
+      setUrlSong("/audio/createSucess.mp3");
+      audioRef.current?.play();
+      setIsScreenTimeSucess("sucess")
+      setTimeout(() => setIsScreenTimeSucess(""), 3000)
+      return setScreenTimeServer_((await api.get("/screentime")).data);
+    } catch (err) {
+      toastContainer("Algo deu errado. Atualize a página, se persistir contate o programador!", "error");
+      console.log(err)
     }
-
-    await api.post("/screentime", {
-      time
-    });
-
-    socket.emit('changeTime', time);
-    toastContainer(`Tempo do aviso mudado para ${time} segundos`, "success");
-    setUrlSong("/audio/createSucess.mp3");
-    audioRef.current?.play();
-    return setScreenTimeServer_((await api.get("/screentime")).data);
   }
 
   async function handleDelete(id: string) {
@@ -909,8 +917,11 @@ export default function Dashboard({ todosBack, screenTimeServer }: { todosBack: 
           pattern={patternString}
           max="999"
           placeholder="0"
+          className={`${isScreenTimeSucess == "" ? "" : isScreenTimeSucess}`}
         />
-        <span>
+        <span
+          className={`${isScreenTimeSucess == "" ? "" : isScreenTimeSucess}`}
+        >
           segundos{" "}
           {(screenTimeServer_ != screenTimeValue) ?
             <TbRefresh

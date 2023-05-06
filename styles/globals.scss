@@ -13,12 +13,12 @@
 /* https://stackoverflow.com/a/27935448 */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 svg {
@@ -64,4 +64,14 @@ body,
   -ms-hyphens: auto;
   hyphens: auto;
   background-color: transparent !important;
+}
+
+input.sucess {
+  border-color: #1db954 !important;
+  box-shadow: 0 0 10px #1db954 !important;
+  color: #59d183 !important;
+}
+
+span.sucess {
+  color: #59d183 !important;
 }

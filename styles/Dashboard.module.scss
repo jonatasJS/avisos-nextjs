@@ -649,9 +649,9 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   height: 100vh;
   width: 10vw;
   z-index: 9999999999999999999999999;
-  opacity: .5 !important;
-  transition: all .2s linear !important;
-  
+  opacity: 0.5 !important;
+  transition: all 0.2s linear !important;
+
   &:hover {
     opacity: 1 !important;
   }
@@ -661,7 +661,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   }
 
   // width: 100vw;
-  
+
   & div:first-child {
     position: fixed;
     margin-top: 100vw;
@@ -675,7 +675,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
       height: 29px;
       background: rgba(40, 40, 68, 0);
       box-sizing: border-box;
-      
+
       margin-top: 0;
       margin-left: 0;
     }
@@ -694,7 +694,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
   left: 0%;
   padding: 1.5rem;
   top: 20%;
-  
+
   input {
     z-index: 999;
     width: 50px;
@@ -705,9 +705,19 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
     border-radius: 10px;
     -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
     background-color: rgba(0, 0, 0, 0.5) !important;
+
+    &.sucess {
+      border-color: #1db954;
+      box-shadow: 0 0 10px #1db954;
+      color: #59d183;
+    }
   }
 
   span {
     z-index: 999;
+
+    &.sucess {
+      color: #59d183;
+    }
   }
 }
