@@ -40,6 +40,8 @@
 }
 
 .form {
+  width: 60%;
+  
   fieldset:first-child {
     margin-bottom: 20px;
   }
@@ -58,7 +60,7 @@ $base-font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica, Arial,
 }
 
 .container {
-  max-width: 60%;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px 16px 40px 16px;
   transform: translateZ(0);
